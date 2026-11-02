@@ -12,7 +12,7 @@ A document belongs to the item named by its path. Lakehouse data documents live 
 | Folder | `Lakehouse/<Item>/Files/<Schema>__<Object>.py` | Not supported |
 | View | `Lakehouse/<Item>/Tables/<Schema>.<Object>.sql` | `Warehouse/<Item>/<Schema>.<Object>.sql` |
 
-Python filenames use `Schema__Object.py`; SQL filenames use `Schema.Object.sql`. The metadata ID is always `Schema.Object`. Path, filename, ID and case must agree. For Python, the class must also be named `Schema__Object`.
+Python filenames use `Schema__Object.py`; SQL filenames use `Schema.Object.sql`. The first `__` separates schema from object, so `Agency__TitleMap__Historical.py` is `Agency.TitleMap__Historical`. An object name may contain `__`; a schema name may not. The metadata ID is always `Schema.Object`. Path, filename, ID and case must agree. For Python, the class must also be named `Schema__Object`.
 
 The full logical identity includes the owning item. A Lakehouse identity also includes `Tables` or `Files`, so a Table and Folder may share `Schema.Object`. Documents must be directly under the location above; nested declaration directories are invalid. Exact and case-only identity collisions are invalid. Schema `_` is reserved for Weaver in ordinary items.
 
