@@ -36,6 +36,8 @@ OWNERSHIP: tuple[tuple[str, str], ...] = (
     ("load", "docs/reference/python/operations.md"),
     ("test", "docs/reference/python/operations.md"),
     ("health", "docs/reference/python/operations.md"),
+    ("execute", "docs/reference/python/operations.md"),
+    ("ExecuteResult", "docs/reference/python/results.md"),
     ("deploy_catalogue_dashboard", "docs/reference/python/operations.md"),
     ("session", "docs/reference/python/session.md"),
     ("workflow", "docs/reference/python/session.md"),

@@ -191,6 +191,75 @@
       "synopsis": "weaver doctor [-h] [--json] --workspace WORKSPACE [--semantic-model NAME] [--non-interactive]"
     },
     {
+      "command": "execute",
+      "options": [
+        {
+          "help": "show this help message and exit",
+          "invocation": "-h, --help",
+          "required": false
+        },
+        {
+          "help": "The source to run.",
+          "invocation": "--command SOURCE",
+          "required": false
+        },
+        {
+          "help": "A file holding the source.",
+          "invocation": "--file PATH",
+          "required": false
+        },
+        {
+          "help": "Rows read from each result set. Defaults to 100.",
+          "invocation": "--limit N",
+          "required": false
+        },
+        {
+          "help": "Emit the result as JSON.",
+          "invocation": "--json",
+          "required": false
+        },
+        {
+          "help": "Do not read stdin, wait for a keypress or open browser sign-in. Missing authorisation or required input is an error.",
+          "invocation": "--non-interactive",
+          "required": false
+        },
+        {
+          "help": "Fabric Workspace name.",
+          "invocation": "--workspace WORKSPACE",
+          "required": false
+        },
+        {
+          "help": "Workspace configuration file.",
+          "invocation": "--workspace-config WORKSPACE_CONFIG",
+          "required": false
+        },
+        {
+          "help": "Fabric Environment name or Workspace/Environment reference.",
+          "invocation": "--environment ENVIRONMENT",
+          "required": false
+        }
+      ],
+      "positionals": [
+        {
+          "choices": [
+            "tsql",
+            "spark-sql",
+            "python",
+            "dax"
+          ],
+          "help": null,
+          "invocation": "{tsql,spark-sql,python,dax}",
+          "required": true
+        },
+        {
+          "help": "Warehouse/Name for tsql, Lakehouse/Name for spark-sql and python, SemanticModel/Name for dax.",
+          "invocation": "ITEM",
+          "required": true
+        }
+      ],
+      "synopsis": "weaver execute [-h] (--command SOURCE | --file PATH) [--limit N] [--json] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] {tsql,spark-sql,python,dax} ITEM"
+    },
+    {
       "command": "fabric capacity",
       "options": [
         {
@@ -1109,12 +1178,13 @@
       "synopsis": "weaver workflow [-h] [--file PATH] [--timings] [--yes] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] [--catalogue CATALOGUE] name"
     }
   ],
-  "leaf_count": 19,
+  "leaf_count": 20,
   "ownership": {
     "build": "docs/reference/cli/build.md",
     "catalogue-dashboard": "docs/reference/cli/catalogue-dashboard.md",
     "check": "docs/reference/cli/check.md",
     "doctor": "docs/reference/cli/doctor.md",
+    "execute": "docs/reference/cli/execute.md",
     "fabric capacity": "docs/reference/cli/fabric-capacity.md",
     "fabric environment publish": "docs/reference/cli/fabric-environment.md",
     "fabric notebook push": "docs/reference/cli/fabric-notebook.md",
@@ -1131,6 +1201,6 @@
     "wipe": "docs/reference/cli/wipe.md",
     "workflow": "docs/reference/cli/workflow.md"
   },
-  "page_count": 17,
+  "page_count": 18,
   "schema_version": 1
 }

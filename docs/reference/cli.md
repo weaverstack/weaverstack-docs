@@ -20,6 +20,7 @@ Run `weaver <command> --help` for the exact options in the installed version. Th
 | [`load [ITEM ...]`](cli/load.md) | Run installed loadable objects for the selected logical items. |
 | [`test [ITEM ...]`](cli/test.md) | Run installed Tests and Assumptions for the selected logical items. |
 | [`health`](cli/health.md) | Report load, test and build health for installed items. |
+| [`execute ENGINE ITEM`](cli/execute.md) | Run T-SQL, Spark SQL, Python or DAX against one item, recording nothing. |
 | [`wipe [TARGET ...]`](cli/wipe.md) | Empty physical source items/reset semantic definitions, with the settled catalogue disposition. |
 | [`unbind TARGET ...`](cli/unbind.md) | Remove catalogue claims without changing physical items. |
 | [`mirror`](cli/mirror.md) | Fork another catalogue's installed estate into the current workspace's catalogue. |

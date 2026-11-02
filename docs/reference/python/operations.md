@@ -11,6 +11,7 @@ A Session fixes the Fabric workspace. Operation arguments may supply a catalogue
 - `load` runs installed Table/Folder work and semantic-model refresh. `items` is a hard boundary; `names` is whole-name case-insensitive regex selection. Optional `ancestors`/`descendants` expand the original seeds separately within that boundary. Without a catalogue only explicit semantic-model refresh is available.
 - `test` runs installed validations or source/file validations with `files=` or no catalogue. `names=` filters by repeated whole-name regex; `source=` supplies project context. It returns the completed report even for findings or invalid validations; inspect `succeeded` and `status`.
 - `health` reads catalogue and physical state. `inventories=False` omits physical inventory reads.
+- `execute` runs ad hoc T-SQL, Spark SQL, Python or DAX against one item and records nothing. See [`weaver execute`](../cli/execute.md).
 
 The operation model and state transitions are in [Build, Load and Test](../../core-concepts/build-load-and-test.md). For command output, interaction policy and exit status, use the [CLI reference](../cli.md).
 
@@ -46,6 +47,12 @@ weaver.check_mirror(plan: MirrorPlan, *, session=None) -> ResolvedMirror
 
 ```python
 weaver.deploy_catalogue_dashboard(*, catalogue: str | Sequence[str] | None=None, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, session=None) -> CatalogueDashboardResult
+```
+
+### `weaver.execute`
+
+```python
+weaver.execute(engine: str, item: str, command: str | None=None, *, file: str | Path | None=None, workspace: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, limit: int=DEFAULT_LIMIT, session=None) -> ExecuteResult
 ```
 
 ### `weaver.health`

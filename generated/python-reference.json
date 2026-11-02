@@ -1,5 +1,5 @@
 {
-  "export_count": 59,
+  "export_count": 61,
   "exports": [
     {
       "kind": "class",
@@ -24,6 +24,10 @@
     {
       "kind": "class",
       "name": "ExampleOutcome"
+    },
+    {
+      "kind": "class",
+      "name": "ExecuteResult"
     },
     {
       "kind": "class",
@@ -192,6 +196,11 @@
     },
     {
       "kind": "function",
+      "name": "execute",
+      "signature": "(engine: str, item: str, command: str | None=None, *, file: str | Path | None=None, workspace: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, limit: int=DEFAULT_LIMIT, session=None) -> ExecuteResult"
+    },
+    {
+      "kind": "function",
       "name": "health",
       "signature": "(items: str | Sequence[str] | None=None, *, as_of: str | datetime | None=None, workspace: str | None=None, catalogue: str | None=None, workspace_config: str | Path | None=None, inventories: bool=True, session=None) -> HealthReport"
     },
@@ -263,6 +272,7 @@
     "CommandError": "docs/reference/python/errors.md",
     "ConfigError": "docs/reference/python/errors.md",
     "ExampleOutcome": "docs/reference/python/results.md",
+    "ExecuteResult": "docs/reference/python/results.md",
     "FabricItemOutcome": "docs/reference/python/results.md",
     "Folder": "docs/reference/python/objects.md",
     "HealthFinding": "docs/reference/python/results.md",
@@ -303,6 +313,7 @@
     "current_workspace": "docs/reference/python/session.md",
     "default_lakehouse": "docs/reference/python/session.md",
     "deploy_catalogue_dashboard": "docs/reference/python/operations.md",
+    "execute": "docs/reference/python/operations.md",
     "health": "docs/reference/python/operations.md",
     "initialise": "docs/reference/python/operations.md",
     "lakehouse_for": "docs/reference/python/session.md",
