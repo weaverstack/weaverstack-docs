@@ -7,7 +7,7 @@ Run Lakehouse Python/Spark SQL, Warehouse SQL and semantic-model DAX validations
 ## Synopsis
 
 ```text
-weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] [--concurrency N] [--dry-run] [--json] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] [--catalogue CATALOGUE] [ITEM ...]
+weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] [--concurrency N] [--stale] [--dry-run] [--json] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] [--catalogue CATALOGUE] [ITEM ...]
 ```
 
 ## Positional arguments
@@ -34,6 +34,9 @@ weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] 
 
 `--concurrency N`
 : Limit total simultaneous execution for this invocation; retain resource limits.
+
+`--stale`
+: Run only the validations whose test health is not green: never run, failed, or passed before an object they read was loaded or built.
 
 `--dry-run`
 : Show the test plan without running it.

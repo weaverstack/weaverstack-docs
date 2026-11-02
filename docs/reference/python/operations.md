@@ -9,7 +9,7 @@ A Session fixes the Fabric workspace. Operation arguments may supply a catalogue
 - `initialise` validates and creates a project and its requested Fabric items. Environment publication is optional.
 - `build` reads project source and normally deploys it. `dry_run=True` returns the canonical read-only preview with no retained bundle; `bundle_only=True` retains a destination-bound bundle without installation. They cannot be combined. Build sources and Power BI items in separate calls.
 - `load` runs installed Table/Folder work and semantic-model refresh. `items` is a hard boundary; `names` is whole-name case-insensitive regex selection. Optional `ancestors`/`descendants` expand the original seeds separately within that boundary. Without a catalogue only explicit semantic-model refresh is available.
-- `test` runs installed validations or source/file validations with `files=` or no catalogue. `names=` filters by repeated whole-name regex; `source=` supplies project context. It returns the completed report even for findings or invalid validations; inspect `succeeded` and `status`.
+- `test` runs installed validations or source/file validations with `files=` or no catalogue. `names=` filters by repeated whole-name regex; `stale=True` runs only installed validations Health does not call Green; `source=` supplies project context. It returns the completed report even for findings or invalid validations; inspect `succeeded` and `status`.
 - `health` reads catalogue and physical state. `inventories=False` omits physical inventory reads.
 
 The operation model and state transitions are in [Build, Load and Test](../../core-concepts/build-load-and-test.md). For command output, interaction policy and exit status, use the [CLI reference](../cli.md).
@@ -93,7 +93,7 @@ weaver.plan_wipe(targets: str | Iterable[str]=(), *, workspace: str | None=None,
 ### `weaver.test`
 
 ```python
-weaver.test(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport
+weaver.test(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, stale: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport
 ```
 
 ### `weaver.unbind`

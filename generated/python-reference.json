@@ -238,7 +238,7 @@
     {
       "kind": "function",
       "name": "test",
-      "signature": "(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport"
+      "signature": "(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, stale: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport"
     },
     {
       "kind": "function",

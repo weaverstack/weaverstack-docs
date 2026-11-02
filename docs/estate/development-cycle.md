@@ -26,11 +26,11 @@ If the preview is the intended change, install and operate that selection:
 ```bash
 weaver build --item Lakehouse/Landing --item Warehouse/Operations --workspace-config workspace-development.yml
 weaver load --stale --workspace-config workspace-development.yml
-weaver test --workspace-config workspace-development.yml
+weaver test --stale --workspace-config workspace-development.yml
 weaver health --workspace-config workspace-development.yml
 ```
 
-Build reconciles source against installed state, including changed definitions and affected descendants inside its selected items. Changed loadable work begins with non-Green current state. `load --stale` selects installed loadables needing work; it leaves omitted Green producers alone. Test runs installed validations, then Health shows Load, Tests and Build together.
+Build reconciles source against installed state, including changed definitions and affected descendants inside its selected items. Changed loadable work begins with non-Green current state. `load --stale` selects installed loadables needing work; it leaves omitted Green producers alone. `test --stale` then runs the installed validations that are new, failed, or read something the load just changed, and Health shows Load, Tests and Build together. Drop `--stale` to run every validation.
 
 Load and catalogue-mode Test use installed definitions, not your edited source files. A data-only source change needs Load, not another Build; a declaration change must cross Build first. Source/file Tests are an alternative authoring check and do not write installed Test history.
 

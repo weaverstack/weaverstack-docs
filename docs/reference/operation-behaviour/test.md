@@ -59,7 +59,24 @@ Diagnostic rows are collected only for `--name` and `--file`. They remain on the
 
 An executed installed run appends one Log row and updates current TestStatus for every selected validation, then flushes those writes before returning. TestStatus records the validation kind, result, workflow and available failure count. A failed Test records missing plus unexpected rows; a failed Assumption records violations; an invalid validation records an error without presenting a failure count.
 
-Build sets rebuilt validations to pending. Health reports a never-rerun validation or a previously passing validation whose managed data dependency was established later as Amber. Test has no stale-selection mode: item-wide and named runs execute what was selected regardless of current Green, Amber or Red state. A rerun replaces current TestStatus for reached validations and appends new history; untouched validations retain their earlier current state.
+Build sets rebuilt validations to pending. Health reports a never-rerun validation or a previously passing validation whose managed data dependency was established later as Amber. Without `--stale`, item-wide and named runs execute what was selected regardless of current Green, Amber or Red state. A rerun replaces current TestStatus for reached validations and appends new history; untouched validations retain their earlier current state.
+
+## Stale selection
+
+`--stale` (Python `stale=True`) runs only the selected validations that Health's Tests section does not call Green:
+
+| Current state | Selected |
+| --- | --- |
+| never run since it was built, or Pending | yes |
+| failed, invalid or blocked | yes, whether or not anything it reads has changed |
+| passed, then a managed object it reads was loaded or built again | yes |
+| passed, and nothing it reads has changed since | no |
+
+Failure and staleness are separate questions, and either selects a validation, as `load --stale` reruns a failed load. Time alone never makes a result stale, so there is no `--as-of`. A mirrored ancestor's load is read from the Mirror source catalogue.
+
+Items and `--name` bound the selection first: every `--name` pattern must still match an installed validation, and only the non-Green matches run. A selection with nothing stale runs nothing and succeeds.
+
+Stale selection reads recorded results, so it needs catalogue mode. It is refused with `--file`, and without a catalogue. A dry run reports what would run.
 
 Source/file and dry-run invocations write no installed TestStatus or Log evidence. Test publishes no definitions or certification.
 
