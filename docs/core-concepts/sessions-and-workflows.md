@@ -24,6 +24,8 @@ Each entry keeps its normal selection, validation, state changes and failure beh
 
 The sequence runs in one Session and one workspace configuration. A mixed project uses a source-item Build followed by a separate Power BI Build; a Workflow can coordinate both without combining their Build selection modes. Weaver can prepare the combined capabilities needed by the commands before the first entry, then reuse them across the sequence. Load and Test evidence produced during the sequence also shares a workflow identifier, making related outcomes easier to correlate.
 
+In Python, `with weaver.workflow():` is the same composition. Operations inside it use the workflow's Session and configuration without `session=`, and Load and Test record under its workflow identifier. Python code decides the order and what a finding means: Test returns its report inside a workflow as it does outside one. See [Workflows](../reference/python/session.md#workflows).
+
 ## Composition does not create a transaction
 
 Commands still complete one at a time. An execution error stops later commands, but changes made by earlier commands remain. Test/Health commands that return findings let the sequence continue; the completed workflow then exits unsuccessfully. A query/command exception is not a finding. Partial state left by the failing command is governed by that command's own behaviour. A Workflow does not add operation-wide rollback around the sequence.

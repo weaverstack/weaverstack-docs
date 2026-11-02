@@ -1,6 +1,6 @@
 # Python operations
 
-Call operations as functions on `weaver`. Each call resolves one workspace and returns a result or report object. Pass `session=` to reuse an open Session; without it, the operation opens and closes the Session it needs. A supplied Session remains open after the call.
+Call operations as functions on `weaver`. Each call resolves one workspace and returns a result or report object. Pass `session=` to reuse an open Session; without it, the operation opens and closes the Session it needs. A supplied Session remains open after the call. Inside [`weaver.workflow()`](session.md#workflows), an operation given no `session=` uses the workflow's Session and configuration.
 
 A Session fixes the Fabric workspace. Operation arguments may supply a catalogue or Environment within that workspace, but cannot move the Session to another workspace. See [Session and workspace helpers](session.md) for reuse and discovery.
 
