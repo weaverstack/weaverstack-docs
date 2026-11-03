@@ -27,7 +27,7 @@ Arguments may be positional in that order or named. `shortcut_type`, `target_typ
 | `table` | `Schema__Object` | `physical` | `<ItemType>/<FabricItem>/[Tables/]Schema.Object`; `workspace` may name another workspace. |
 | `folder` | `Schema__Object` | `logical` | Full project Folder identity: `Lakehouse/<Item>/Files/Schema.Object`. |
 | `folder` | `Schema__Object` | `physical` | `Lakehouse/<FabricItem>/Files/<relative/path>`; `workspace` may name another workspace. |
-| `schema` | Bare destination schema | `physical` only | `<ItemType>/<FabricItem>/<source-schema>`; `workspace` may name another workspace. |
+| `schema` | Bare destination schema, without `__` | `physical` only | `<ItemType>/<FabricItem>/<source-schema>`; `workspace` may name another workspace. |
 
 A physical table or schema source may be a Lakehouse or Warehouse. A folder source must be a Lakehouse because Warehouses have no `Files` area. A physical target without `workspace` uses the configured workspace.
 
