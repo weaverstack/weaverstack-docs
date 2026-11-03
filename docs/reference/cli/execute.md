@@ -18,9 +18,9 @@ Give exactly one of `--command` and `--file`. The item is a Weaver item. Its tar
 | `python` | `Lakehouse/Name` | the source in Fabric, with `spark` attached to that Lakehouse | what it printed |
 | `dax` | `SemanticModel/Name` | one query, through the Power BI `executeQueries` API | its rows |
 
-Python always runs in Fabric, never in the local process. Unqualified Spark names resolve against the attached Lakehouse. From a desktop, a session whose Spark is already attached to another Lakehouse refuses the command; in a notebook, the notebook's own Lakehouse must be the one named.
+Python always runs in Fabric, never in the local process, as `__main__`, so an `if __name__ == "__main__":` block runs. Tracebacks name the file. `__file__` is not set, because the file is not in Fabric. `sys.exit()` or `sys.exit(0)` is a success. Unqualified Spark names resolve against the attached Lakehouse. From a desktop, a session whose Spark is already attached to another Lakehouse refuses the command. In a notebook, the attached Lakehouse must be the named one, compared by workspace and item ID, not display name.
 
-Each result is read to `--limit` rows (default 100) where it runs, and the output says when a result had more. Python output is kept to its first 100,000 characters. Power BI returns a whole DAX result, subject to its own limits, and the limit applies to what is kept.
+Each result is read to `--limit` rows (default 100) where it runs, and the output says when a result had more. Python keeps only the first 100,000 characters it prints, however much it prints. Power BI returns a whole DAX result, subject to its own limits, and the limit applies to what is kept.
 
 Execute records nothing in the catalogue. It moves no bookmark and leaves Load and Test state as it was, whatever the source changes. A request whose response is lost may have run; Execute reports that and does not send it again.
 
