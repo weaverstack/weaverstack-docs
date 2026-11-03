@@ -38,6 +38,8 @@ OWNERSHIP: tuple[tuple[str, str], ...] = (
     ("health", "docs/reference/python/operations.md"),
     ("deploy_catalogue_dashboard", "docs/reference/python/operations.md"),
     ("session", "docs/reference/python/session.md"),
+    ("workflow", "docs/reference/python/session.md"),
+    ("Workflow", "docs/reference/python/session.md"),
     ("Lakehouse", "docs/reference/python/session.md"),
     ("default_lakehouse", "docs/reference/python/session.md"),
     ("lakehouse_for", "docs/reference/python/session.md"),

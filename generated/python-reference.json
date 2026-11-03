@@ -1,5 +1,5 @@
 {
-  "export_count": 57,
+  "export_count": 59,
   "exports": [
     {
       "kind": "class",
@@ -158,6 +158,10 @@
       "name": "WipeResult"
     },
     {
+      "kind": "class",
+      "name": "Workflow"
+    },
+    {
       "kind": "value",
       "name": "__version__"
     },
@@ -245,6 +249,11 @@
       "kind": "function",
       "name": "wipe",
       "signature": "(targets: str | Iterable[str]=(), *, plan: WipePlan | None=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, unbind: bool=False, catalogue_action: str | None=None, preserve_data_source: bool | None=None, dry_run: bool=False, session=None) -> WipeResult"
+    },
+    {
+      "kind": "function",
+      "name": "workflow",
+      "signature": "(*, session: 'Session | None'=None, workspace: str | None=None, workspace_config: str | Path | None=None, catalogue: str | None=None, environment: str | None=None, mirror: str | None=None, execution: 'ExecutionSettings | Mapping[str, Any] | None'=None, targets: Mapping[Any, Any] | None=None, data_sources: Mapping[str, str] | None=None, catalogue_dashboard: str | None=None, credential: Any=None) -> Iterator[Workflow]"
     }
   ],
   "ownership": {
@@ -287,6 +296,7 @@
     "WipePlan": "docs/reference/python/results.md",
     "WipeReport": "docs/reference/python/results.md",
     "WipeResult": "docs/reference/python/results.md",
+    "Workflow": "docs/reference/python/session.md",
     "__version__": "docs/reference/python/index.md",
     "build": "docs/reference/python/operations.md",
     "check_mirror": "docs/reference/python/operations.md",
@@ -304,7 +314,8 @@
     "session": "docs/reference/python/session.md",
     "test": "docs/reference/python/operations.md",
     "unbind": "docs/reference/python/operations.md",
-    "wipe": "docs/reference/python/operations.md"
+    "wipe": "docs/reference/python/operations.md",
+    "workflow": "docs/reference/python/session.md"
   },
   "page_count": 7,
   "schema_version": 1

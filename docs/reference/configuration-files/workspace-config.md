@@ -125,22 +125,29 @@ No catalogue or Environment is required for this Power BI deployment configurati
 
 ## Workspace resolution and precedence
 
-An operation resolves its base workspace in this order:
+A Python operation resolves its base workspace in this order:
 
-1. an explicit `--workspace` and/or `--workspace-config`;
-2. the Workspace already owned by a supplied Session;
+1. an explicit `workspace` and/or `workspace_config`;
+2. the active workflow's configuration, when the operation runs on the workflow's Session; otherwise the Workspace of a supplied Session;
 3. `workspace-config.yml` in the current working directory;
-4. the current Fabric notebook workspace;
-5. an error if no workspace can be resolved.
+4. the current Fabric notebook's workspace;
+5. an error naming what is missing.
+
+A CLI command follows steps 1, 3 and 5. It has no notebook step, and outside `weaver session` and `weaver workflow` it has no Session to inherit.
 
 The details are consequential:
 
-- `--workspace-config FILE` loads `FILE` and bypasses automatic discovery.
-- `--workspace NAME` without `--workspace-config` bypasses automatic discovery and creates a workspace with no configured catalogue, Environment, Mirror source, execution settings or targets.
+- `workspace_config` / `--workspace-config FILE` loads `FILE` and bypasses automatic discovery.
+- `workspace` / `--workspace NAME` without a configuration file bypasses automatic discovery and creates a workspace with no configured catalogue, Environment, Mirror source, execution settings or targets.
 - Supplying both uses the file as the base and replaces only its `workspace` value.
-- Explicit `--catalogue` and `--environment` values replace the corresponding value on whichever base won, including a Session-owned Workspace.
-- A Session is considered only when neither an explicit workspace nor an explicit configuration was supplied.
+- Explicit `catalogue` / `--catalogue` and `environment` / `--environment` values replace the corresponding value on whichever base won, including a Session's or workflow's.
+- In Python, naming the Session's own workspace keeps the Session's configuration. Naming another workspace or a configuration file resolves that instead.
 - A discovered file is considered before Fabric notebook context. Discovery is not based on the project directory passed to `build SOURCE`.
+- Notebook context supplies the workspace name only, never a catalogue, Environment or targets.
+
+Inside `weaver session` and `weaver workflow`, the Session's workspace is fixed. A command's `--workspace` or `--workspace-config` must name that workspace, or it is refused; only the name is read from such a file, and the Session's configuration stays. `--catalogue` and `--environment` apply to that command alone.
+
+`weaver.workflow()` takes the same arguments as these steps. For its operations it can also replace `mirror` and `catalogue_dashboard`, change individual `execution` limits, and change individual `targets` and `data_sources` entries. See [Session and workspace helpers](../python/session.md#workflow-configuration).
 
 Health has no Environment argument because it executes no authored Spark work. Check reads project source locally and does not resolve this configuration.
 
