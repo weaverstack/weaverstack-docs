@@ -16,7 +16,7 @@ Repeatable `--file` selects files, directories or quoted glob patterns and force
 
 Installed planning reads the catalogue before acquiring target execution capabilities. A declared validation whose generated procedure or module is absent is selected but becomes `invalid` when it cannot run; it is not treated as a pass.
 
-Warehouse validation executes over TDS and does not require a Fabric Environment. A non-dry-run Lakehouse validation started from a desktop requires a configured Fabric Environment with Weaver installed; this check occurs after item bindings are read and before dispatch. Inside a Fabric session, Test uses that session. Dry runs require no Environment.
+Warehouse validation executes over TDS and does not require a Fabric Environment. A non-dry-run Lakehouse validation started from a desktop requires a configured Fabric Environment with Weaver installed; this check occurs after validations are selected and before dispatch, so a run that selects no Lakehouse validation needs no Environment. Inside a Fabric session, Test uses that session. Dry runs require no Environment.
 
 A source/file run parses the project/selected files before dispatch. Warehouse SQL runs as a generated batch without leaving a procedure behind; Lakehouse source mode also supports Python validation classes. Semantic DAX Assumptions query the model; DAX Tests also read their supported Expected Lakehouse/Warehouse. Those sources and permissions remain required in file mode. See [DAX validations](../power-bi/validations.md).
 
@@ -74,7 +74,7 @@ Build sets rebuilt validations to pending. Health reports a never-rerun validati
 
 Failure and staleness are separate questions, and either selects a validation, as `load --stale` reruns a failed load. Time alone never makes a result stale, so there is no `--as-of`. A mirrored ancestor's load is read from the Mirror source catalogue.
 
-Items and `--name` bound the selection first: every `--name` pattern must still match an installed validation, and only the non-Green matches run. A selection with nothing stale runs nothing and succeeds.
+Items and `--name` bound the selection first: every `--name` pattern must still match an installed validation, and only the non-Green matches run. A selection with nothing stale runs nothing and succeeds, and starts no Spark session.
 
 Stale selection reads recorded results, so it needs catalogue mode. It is refused with `--file`, and without a catalogue. A dry run reports what would run.
 
