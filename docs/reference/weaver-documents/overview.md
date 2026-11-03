@@ -30,7 +30,7 @@ A Lakehouse `lib/` tree and each item shortcut file are supporting source, not i
 | [Schema metadata](schema-metadata.md) | YAML in `schemas/` | YAML in `schemas/` |
 | [Warehouse programmable](warehouse-programmable.md) | Not supported | T-SQL in `programmables/` |
 
-Python object and validation filenames are `Schema__Object.py`; SQL filenames are `Schema.Object.sql`. The metadata ID is `Schema.Object`. Filename, ID, kind-specific directory and directly declared Weaver class must agree exactly, including case. Duplicate identities and case-only collisions are errors.
+Python object and validation filenames are `Schema__Object.py`; SQL filenames are `Schema.Object.sql`. The first `__` separates schema from object, and a schema name cannot contain `__`. The metadata ID is `Schema.Object`. Filename, ID, kind-specific directory and directly declared Weaver class must agree exactly, including case. Duplicate identities and case-only collisions are errors.
 
 The owning item selects the SQL dialect: Lakehouse `.sql` is Spark SQL; Warehouse `.sql` is T-SQL. A suffix does not select another dialect.
 
