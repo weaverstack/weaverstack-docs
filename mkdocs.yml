@@ -214,6 +214,7 @@ nav:
           - Test: reference/cli/test.md
           - Health: reference/cli/health.md
           - Catalogue Dashboard: reference/cli/catalogue-dashboard.md
+          - Execute: reference/cli/execute.md
           - Session: reference/cli/session.md
           - Workflow: reference/cli/workflow.md
           - Wipe: reference/cli/wipe.md

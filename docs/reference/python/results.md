@@ -11,6 +11,7 @@ The constructors below describe the returned shape and are useful in tests. Norm
 - `weaver.BuildResult` — class
 - `weaver.CatalogueDashboardResult` — class
 - `weaver.ExampleOutcome` — class
+- `weaver.ExecuteResult` — class
 - `weaver.FabricItemOutcome` — class
 - `weaver.HealthFinding` — class
 - `weaver.HealthReport` — class
