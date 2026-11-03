@@ -147,7 +147,7 @@ The details are consequential:
 
 Inside `weaver session` and `weaver workflow`, the Session's workspace is fixed. A command's `--workspace` or `--workspace-config` must name that workspace, or it is refused; only the name is read from such a file, and the Session's configuration stays. `--catalogue` and `--environment` apply to that command alone.
 
-`weaver.workflow()` takes the same arguments as these steps and can also replace `mirror`, `execution`, `targets`, `data_sources` and `catalogue_dashboard` whole for its operations. See [Session and workspace helpers](../python/session.md#workflow-configuration).
+`weaver.workflow()` takes the same arguments as these steps. For its operations it can also replace `mirror` and `catalogue_dashboard`, change individual `execution` limits, and change individual `targets` and `data_sources` entries. See [Session and workspace helpers](../python/session.md#workflow-configuration).
 
 Health has no Environment argument because it executes no authored Spark work. Check reads project source locally and does not resolve this configuration.
 

@@ -61,11 +61,23 @@ The workflow resolves its configuration once, as an operation does; see [workspa
 | Argument | Effect |
 | --- | --- |
 | `workspace`, `workspace_config` | Resolve that workspace or file instead of the Session's own configuration. |
-| `catalogue`, `environment` | Replace the resolved value. |
-| `mirror`, `execution`, `targets`, `data_sources`, `catalogue_dashboard` | Replace the resolved value whole. Values take workspace configuration shapes and are validated as configuration is. |
+| `catalogue`, `environment`, `mirror`, `catalogue_dashboard` | Replace the resolved value. |
+| `execution` | Change only the concurrency settings it names. |
+| `targets`, `data_sources` | Change only the entries they name. |
 | `credential` | Applies to a Session the workflow opens; refused beside `session=`. |
 
-Replacement is whole: `targets={"Lakehouse/Landing": "Landing_Test"}` leaves only that binding, and `execution={"run": {"spark_concurrency": 2}}` returns every other limit to its default. An empty mapping replaces too; `None` leaves the resolved value.
+Values take workspace configuration shapes and are validated as configuration is. Everything not named keeps its resolved value:
+
+```python
+with weaver.workflow(
+    execution={"run": {"spark_concurrency": 8}},
+    targets={"Lakehouse/Landing": "Landing_Test"},
+):
+    weaver.load()
+    weaver.test()
+```
+
+This changes the Run Spark limit and the `Lakehouse/Landing` binding. Every other limit, target and data source stays as configured. A typed `ExecutionSettings` is complete, so it replaces every limit. An empty mapping and `None` change nothing; to remove a target or data source, edit the configuration.
 
 An argument given to an operation inside the workflow applies to that call only. It does not change the workflow, the Session or the next operation.
 
