@@ -16,7 +16,7 @@ Repeatable `--file` selects files, directories or quoted glob patterns and force
 
 Installed planning reads the catalogue before acquiring target execution capabilities. A declared validation whose generated procedure or module is absent is selected but becomes `invalid` when it cannot run; it is not treated as a pass.
 
-Warehouse validation executes over TDS and does not require a Fabric Environment. A non-dry-run Lakehouse validation started from a desktop requires a configured Fabric Environment with Weaver installed; this check occurs after item bindings are read and before dispatch. Inside a Fabric session, Test uses that session. Dry runs require no Environment.
+Warehouse validation executes over TDS and does not require a Fabric Environment. A non-dry-run Lakehouse validation started from a desktop requires a configured Fabric Environment with Weaver installed; this check occurs after validations are selected and before dispatch, so a run that selects no Lakehouse validation needs no Environment. Inside a Fabric session, Test uses that session. Dry runs require no Environment.
 
 A source/file run parses the project/selected files before dispatch. Warehouse SQL runs as a generated batch without leaving a procedure behind; Lakehouse source mode also supports Python validation classes. Semantic DAX Assumptions query the model; DAX Tests also read their supported Expected Lakehouse/Warehouse. Those sources and permissions remain required in file mode. See [DAX validations](../power-bi/validations.md).
 
@@ -59,7 +59,24 @@ Diagnostic rows are collected only for `--name` and `--file`. They remain on the
 
 An executed installed run appends one Log row and updates current TestStatus for every selected validation, then flushes those writes before returning. TestStatus records the validation kind, result, workflow and available failure count. A failed Test records missing plus unexpected rows; a failed Assumption records violations; an invalid validation records an error without presenting a failure count.
 
-Build sets rebuilt validations to pending. Health reports a never-rerun validation or a previously passing validation whose managed data dependency was established later as Amber. Test has no stale-selection mode: item-wide and named runs execute what was selected regardless of current Green, Amber or Red state. A rerun replaces current TestStatus for reached validations and appends new history; untouched validations retain their earlier current state.
+Build sets rebuilt validations to pending. Health reports a never-rerun validation or a previously passing validation whose managed data dependency was established later as Amber. Without `--stale`, item-wide and named runs execute what was selected regardless of current Green, Amber or Red state. A rerun replaces current TestStatus for reached validations and appends new history; untouched validations retain their earlier current state.
+
+## Stale selection
+
+`--stale` (Python `stale=True`) runs only the selected validations that Health's Tests section does not call Green:
+
+| Current state | Selected |
+| --- | --- |
+| never run since it was built, or Pending | yes |
+| failed, invalid or blocked | yes, whether or not anything it reads has changed |
+| passed, then a managed object it reads was loaded or built again | yes |
+| passed, and nothing it reads has changed since | no |
+
+Failure and staleness are separate questions, and either selects a validation, as `load --stale` reruns a failed load. Time alone never makes a result stale, so there is no `--as-of`. A mirrored ancestor's load is read from the Mirror source catalogue.
+
+Items and `--name` bound the selection first: every `--name` pattern must still match an installed validation, and only the non-Green matches run. A selection with nothing stale runs nothing and succeeds, and starts no Spark session.
+
+Stale selection reads recorded results, so it needs catalogue mode. It is refused with `--file`, and without a catalogue. A dry run reports what would run.
 
 Source/file and dry-run invocations write no installed TestStatus or Log evidence. Test publishes no definitions or certification.
 

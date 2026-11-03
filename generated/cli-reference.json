@@ -885,6 +885,11 @@
           "required": false
         },
         {
+          "help": "Run only the validations whose test health is not green: never run, failed, or passed before an object they read was loaded or built.",
+          "invocation": "--stale",
+          "required": false
+        },
+        {
           "help": "Show the test plan without running it.",
           "invocation": "--dry-run",
           "required": false
@@ -927,7 +932,7 @@
           "required": false
         }
       ],
-      "synopsis": "weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] [--concurrency N] [--dry-run] [--json] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] [--catalogue CATALOGUE] [ITEM ...]"
+      "synopsis": "weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] [--concurrency N] [--stale] [--dry-run] [--json] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] [--catalogue CATALOGUE] [ITEM ...]"
     },
     {
       "command": "unbind",
