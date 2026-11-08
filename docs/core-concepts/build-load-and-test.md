@@ -36,7 +36,7 @@ Load reads installed items and bindings. It runs Table and Folder work and regis
 
 Load does not reopen project source. If a Table document changed after the last Build, Load still runs the previously installed work until another Build succeeds.
 
-Views, Tests, Assumptions, Shortcuts, Warehouse programmables and schema metadata do not have their own Load step. They may still supply structure or data used by loadable work. Reports have definitions, not a Load or Test target; refresh and validate their model.
+Views, Tests, Assumptions, Shortcuts, Warehouse programmables and schema metadata do not have their own Load step. They may still supply structure or data used by loadable work. Reports have definitions but no Load or Test target of their own. Refresh and validation belong to their semantic model.
 
 ## Test runs installed validations
 
@@ -55,7 +55,7 @@ Health is not another materialising stage. It runs no authored load or validatio
 
 ## Each operation has its own boundary
 
-Build selects project items and resolves their configured physical targets. Load and Test select from the installed estate and use the bindings recorded by Build. Catalogue-free operations use their documented configuration/source rules instead. Dependencies can determine affected work and execution order, but selection remains an operation-specific boundary. Build Lakehouse/Warehouse definitions first, then semantic models and Reports in a separate call against the same project; a workflow can contain both steps.
+Build selects project items and resolves their configured physical targets. Load and Test select from the installed estate and use the bindings recorded by Build. Catalogue-free operations use their documented configuration/source rules instead. Dependencies can determine affected work and execution order, but selection remains an operation-specific boundary. Lakehouse and Warehouse definitions are built before semantic models and Reports, using separate calls against the same project. A workflow can contain both steps.
 
 ## Sessions and workflows { #a-workflow-composes-ordinary-operations }
 

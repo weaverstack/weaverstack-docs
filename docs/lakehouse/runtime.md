@@ -1,6 +1,6 @@
 # Running Python in Fabric
 
-Publish the Python packages once, then keep editing and building your project. The Fabric Environment supplies Weaver to hosted Spark work; it is separate from the Lakehouse and catalogue bindings in your workspace configuration.
+Python and Spark SQL work runs in Fabric Spark, so it needs Weaver's packages in a published Fabric Environment. That runtime changes less often than your project: editing a Table or validation normally needs Check and Build, not another Environment publication. The Environment binding is separate from the Lakehouse and catalogue bindings in your workspace configuration.
 
 The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. Use this page when setting up that runtime or changing its packages. The [incremental extension](incremental.md) uses this same published Environment and Landing binding.
 
@@ -51,9 +51,9 @@ weaver fabric environment publish Weaver
 
 Run that command from the same project root so the workspace is discovered from its configuration. [Fabric Environment definition](../reference/configuration-files/fabric-environment.md) owns local-directory shape, libraries and existing-Environment authority. A Notebook already in Fabric needs the matching package in its attached runtime, not another remote Spark session.
 
-## Keep the runtime and project changes separate
+## Runtime updates and project updates {#keep-the-runtime-and-project-changes-separate}
 
-Republish after changing Environment libraries or the Weaver package mode/version. Editing a Python Table, Folder, Test or Assumption does not itself require republication: Check and Build install project changes. Adding a Spark SQL transformation follows the same project loop.
+Changes to Environment libraries or the Weaver package mode/version require republication. Editing a Python Table, Folder, Test or Assumption does not itself require republication: Check and Build install project changes. Adding a Spark SQL transformation follows the same project loop.
 
 Build checks matching Weaver version, supported plan format, writer version and required executor capabilities before mutation.
 

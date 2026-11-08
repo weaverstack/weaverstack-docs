@@ -1,8 +1,8 @@
 # Run and inspect an estate
 
-After changing a project or repairing a source problem, use Health to see which work needs attention. Build installs your source changes; Load processes data and refreshes models; Test runs the installed validations. Check Health again after the work completes.
+After a project change or a source repair, the next operation depends on the state that remains. Health brings installation, processing and validation findings together so you can distinguish an uninstalled edit from stale data or an out-of-date test result. This guide uses those findings to choose the work, then checks whether it resolved them.
 
-Keep the project from the [development loop](development-cycle.md). The Landing/Operations commands below use `workspace-development.yml`. If you added [source-backed models](../semantic-models/managed-sources.md), retain their targets in this same configuration. Run from the same project root throughout.
+The examples use the Landing/Operations project from the [development loop](development-cycle.md), with commands run from its root using `workspace-development.yml`. Any [source-backed models](../semantic-models/managed-sources.md) already added to that configuration remain part of the same estate.
 
 ## 1. Inspect the starting state
 

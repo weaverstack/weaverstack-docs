@@ -1,10 +1,10 @@
 # Add a custom model annotation
 
-Set a native measure's display folder with one small Python handler. Use a custom annotation when declarative TMDL and built-ins do not express the convention you need.
+A modelling convention that declarative TMDL and built-ins cannot express can live in a custom Python annotation handler. Here, a small handler reads an annotation on a native measure and sets its display folder in the deployed definition.
 
 ## Before you start
 
-Continue [shared modelling standards](shared-policy.md) with the same Parcel model, policy and local format override. Add the handler and annotation below; keep Delivery, Depot, their partitions and your workspace configuration. For direct entry, complete that task first.
+The example starts after [shared modelling standards](shared-policy.md), with the same Parcel model, policy and local format override. The handler and annotation extend those conventions; Delivery, Depot, their partitions and the workspace configuration stay unchanged. That task provides the starting state for direct entrants.
 
 **Annotation files are trusted executable Python.** Weaver loads them while parsing a project, including Check. Do not Check or Build an untrusted project. They are not sandboxed metadata, and Power BI Desktop does not execute them.
 
@@ -149,9 +149,9 @@ The handler calls `error` for an empty value. The diagnostic identifies the decl
 
 ## Choose a phase only when needed
 
-The supported handler base and native objects come from `weaver.semantic_models`; use that public API rather than compiler internals. `self.error(...)` reports a located failure and stops the transformation.
+`weaver.semantic_models` supplies the supported public handler base and native objects; compiler internals are outside that API. `self.error(...)` reports a located failure and stops the transformation.
 
-The default `post_schema` phase sees columns after managed-source completion. This folder handler uses that default. Use `phase = "schema"` only when a handler introduces structure or a managed-source declaration needed for generation. Adding a new managed source during `post_schema` is refused. Composition merges raw bases before handlers run once on the final model.
+The default `post_schema` phase sees columns after managed-source completion. This folder handler uses that default. A handler that introduces structure or a managed-source declaration needed for generation instead needs `phase = "schema"`, so that structure exists when generation begins. Adding a new managed source during `post_schema` is refused. Composition merges raw bases before handlers run once on the final model.
 
 If the next question is where Delivery comes from, [connect a managed Fabric source](managed-sources.md); if it is whether the measure is right, [validate the model](validation.md). Both keep the modelling conventions you have added.
 

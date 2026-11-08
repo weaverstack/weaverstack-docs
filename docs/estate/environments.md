@@ -1,8 +1,8 @@
 # Workspace and environment mappings
 
-Where should the same project deploy? Keep its documents and logical item names unchanged. A workspace configuration selects the physical workspace, catalogue and targets; selecting another file changes where the same source is installed.
+Development and production usually need the same project in different destinations, not separate copies of its SQL, Python and model definitions. A workspace configuration maps the project's logical item names to a physical workspace, catalogue and targets. Selecting another file changes where the same source is installed.
 
-Choose the configuration for the deployment destination and a published Fabric Environment for the Python packages Spark work uses. Configure a model’s native data connections separately from its target name.
+These settings have different jobs. The workspace configuration selects the deployment destination; its Environment binding selects a published runtime for Spark's Python packages. A model's native data connections are configured separately from its deployment target name.
 
 ## Bind the project to Fabric
 

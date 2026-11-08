@@ -1,8 +1,8 @@
 # Loading changes and bookmarks
 
-Update one carrier file, remove another, and Load the installed pipeline again. The Folder records what changed; the incremental Table uses its own bookmark to read those changes and apply updates and explicit deletes.
+Once a carrier feed changes, reprocessing every file is not always necessary. A Folder records which files changed, and an incremental Table uses its own bookmark to read the changes since its last clean Load. This example follows an updated file and a removed file through to a Table update and an explicit deletion, without rebuilding the pipeline.
 
-Continue the [Landing project](tests.md) in the same folder. Keep Events, Event, CurrentStatus and their validations. Add a separate `Parcel.StatusFiles` Folder and incremental `Parcel.LiveStatus` Table for changing carrier snapshots. The original constant example stays available and unchanged.
+The starting point is the working [Landing project](tests.md), with Events, Event, CurrentStatus and their validations. The example adds a separate `Parcel.StatusFiles` Folder and incremental `Parcel.LiveStatus` Table in the same project folder. The original constant example stays available and unchanged.
 
 ## Let the consumer remember its progress
 

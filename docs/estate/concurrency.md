@@ -1,10 +1,10 @@
 # Control concurrency
 
-Can this run use less simultaneous work? Add `--concurrency 2` to limit it to two scheduled nodes. Leave the setting out when the normal configured limits are appropriate.
+Independent branches can run at the same time, but they also share service and compute resources. An invocation's concurrency cap limits how many nodes Weaver schedules simultaneously; it does not make dependent work parallel or provision more compute. The example below uses a cap of two, without changing the project's normal configured limits.
 
 ## Limit one run
 
-Continue the Landing/Operations project from [selective runs](selective-runs.md), keeping `workspace-development.yml`. Cap its Landing Load at two scheduled nodes:
+The example uses the Landing/Operations project from [selective runs](selective-runs.md) and its existing `workspace-development.yml`. This command caps the Landing Load at two scheduled nodes:
 
 ```bash
 weaver load Lakehouse/Landing --concurrency 2 --workspace-config workspace-development.yml

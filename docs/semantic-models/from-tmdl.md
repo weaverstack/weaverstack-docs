@@ -4,7 +4,7 @@ A standalone named TMDL file can supply a model without a native `.SemanticModel
 
 ## 1. Write one complete model
 
-Continue the [generated Parcel project](native-tmdl.md) and add `PowerBI/Parcel/ParcelSummary.tmdl`. Keep its existing native model and Report:
+The [generated Parcel project](native-tmdl.md) supplies the workspace configuration for this example. ParcelSummary is an additional model; the existing native model and Report stay in place. Create `PowerBI/Parcel/ParcelSummary.tmdl`:
 
 ```tmdl
 model Model
@@ -37,7 +37,7 @@ Add this binding under `targets` in the existing `workspace-config.yml`, keeping
   SemanticModel/ParcelSummary: ParcelSummary
 ```
 
-Use the [ordinary service licensing and permissions](native-tmdl.md). The inline Import partition needs no managed source, catalogue or Fabric Environment.
+The [ordinary service licensing and permissions](native-tmdl.md) apply. The inline Import partition needs no managed source, catalogue or Fabric Environment.
 
 ## 2. Deploy and refresh
 
@@ -96,7 +96,7 @@ If the project has a [shared policy](shared-policy.md), it applies here too: Par
 
 A table without an authored partition can obtain its columns and partition from managed-source metadata. This is a different route with additional prerequisites: a compatible catalogue, built/loaded supported Lakehouse or Warehouse source, resolved endpoints/metadata, and permissions and connections for the model's chosen mode.
 
-Keep the same project and the loaded source from [Managed sources](managed-sources.md). Direct entrants complete that source setup once. Instead of replacing ParcelSummary’s inline table, add a distinctly named `PowerBI/Parcel/ParcelSourceSummary.tmdl`:
+This variation starts with the loaded Warehouse source from [Managed sources](managed-sources.md) in the same project; that task provides the source setup for direct entrants. A distinctly named model leaves ParcelSummary’s inline table unchanged. Create `PowerBI/Parcel/ParcelSourceSummary.tmdl`:
 
 ```tmdl
 model Model

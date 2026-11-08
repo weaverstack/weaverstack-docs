@@ -5,11 +5,11 @@ hide:
 
 # Catalogue Dashboard
 
-After you build and load a project, use the Catalogue Dashboard to see what is installed, what has run and what needs attention. Run `weaver catalogue-dashboard` to deploy its Power BI semantic model and Report over one catalogue or several teams' catalogues.
+The Catalogue Dashboard brings installed work, run history and Health findings into Power BI. It can show one project's catalogue or several teams' catalogues together, so a failed run can be investigated alongside the work that depends on it. The `weaver catalogue-dashboard` command deploys its semantic model and Report.
 
-Start with Workspaces or Items to see how the work connects. Use Health and Orchestration to investigate a failure or dependency. Performance, Gantt, Entity dictionary and Semantic model show timings, workflow timelines, table relationships and semantic models. The Dashboard reads the catalogue records Weaver already maintains; it needs no separate monitoring database.
+Workspaces and Items show how the estate connects. Health and Orchestration provide the findings and dependencies behind a failure. Performance, Gantt, Entity dictionary and Semantic model show timings, workflow timelines, table relationships and semantic models. These views read the catalogue records Weaver already maintains; they need no separate monitoring database.
 
-The Dashboard reads the catalogues in their existing workspaces. Manage its semantic model and Report separately with `weaver catalogue-dashboard` and the Fabric interface.
+The Dashboard reads the catalogues in their existing workspaces. Its semantic model and Report are managed separately from the projects those catalogues describe, through `weaver catalogue-dashboard` and the Fabric interface.
 
 It is an ordinary semantic model and Report. Change it to fit your needs, or build your own over the catalogue.
 

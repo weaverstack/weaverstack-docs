@@ -8,7 +8,7 @@ Weaver gives you a consistent set of commands for that work. You can check your 
 edit → check → Build preview → Build → Load → Test → Health → repeat
 ```
 
-Continue the working [Landing → Operations project](connected-items.md) with `workspace-development.yml`, as selected on the mapping and Health pages. You will correct the depot on an earlier carrier event, install that change and check that the latest parcel statuses still agree with the expected rows. Use the connection task first if those items are not yet installed.
+The example starts with the working [Landing → Operations project](connected-items.md) and `workspace-development.yml` from the mapping and Health pages. It corrects the depot on an earlier carrier event, then checks both the correction and the latest parcel statuses that should remain unchanged. The connection task sets up these items if they are not yet installed.
 
 For another source-data estate, select its actual changed items in the same loop. A Warehouse-only reader can use `--item Warehouse/Operations` with the [StatusEvent project](../warehouse/tests.md). If you have added the native Parcel model and managed-source models to this project, use [the model-inclusive loop](#include-semantic-models-and-reports) below.
 
@@ -61,7 +61,7 @@ Build reconciles source against installed state, including changed definitions a
 
 Load and catalogue-mode Test use installed definitions. After changing source data, run Load; after changing a project declaration, run Build first. Source/file Tests offer an authoring check against edited validations, returning results separately from installed Test history.
 
-Use an item-wide run by default. Plain named Load does not add or order dependencies. [Run part of an estate](selective-runs.md) teaches deliberate seed expansion and a preview when item-wide work is too broad. Completed changes remain in place after a later failure; inspect failed steps for partial changes and follow [Recovery](recovery.md) against the state that remains.
+An item-wide run is usually the simplest starting point because it follows the installed item's dependency graph. Plain named Load has a narrower purpose: it selects matching objects without automatically adding or ordering dependencies. [Run part of an estate](selective-runs.md) explains deliberate seed expansion and its preview when item-wide work is too broad. Completed changes remain in place after a later failure; [Recovery](recovery.md) explains how to inspect partial changes and work from the state that remains.
 
 ## Include semantic models and Reports
 

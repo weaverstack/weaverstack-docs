@@ -1,8 +1,8 @@
 # Share native modelling standards
 
-Apply the same formatting and calculation structure to several models without copying the convention into each native project. Shared policy is TMDL; custom Python is not required.
+Several models can share formatting and calculation conventions while retaining local exceptions. A shared TMDL policy holds those declarations in one place, without custom Python. In this example, Parcel inherits measure formats and a calculation group, then overrides one format locally.
 
-Continue the [native Parcel model](native-tmdl.md#hide-relationship-foreign-keys): Delivery, Depot, the relationship and the same-name foreign-key overlay are already working. Add only the policy and format override below, keeping your workspace configuration. For direct entry, complete the [native model task](native-tmdl.md) first; then add the policy below.
+The starting point is the [native Parcel model](native-tmdl.md#hide-relationship-foreign-keys), with Delivery, Depot, their relationship and the same-name foreign-key overlay already working. The policy and format override extend that model; its workspace configuration stays the same. For direct entry, the [native model task](native-tmdl.md) establishes this starting state.
 
 ## 1. Add the shared policy
 

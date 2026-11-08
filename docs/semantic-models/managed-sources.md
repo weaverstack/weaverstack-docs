@@ -1,10 +1,10 @@
 # Connect a managed Fabric source
 
-Extend the existing Parcel project from [Power BI-only operation into a Catalogue-managed Fabric estate](index.md#two-ways-to-use-weaver-with-power-bi). Add a Warehouse, then use `Weaver.Source` to connect its data to a model. The walkthrough below creates a separate model; you can also [connect the existing native model](#connect-the-existing-native-model) and keep its linked Report.
+When a model needs managed Warehouse data rather than inline samples, Weaver can connect its definition to the source recorded in the Catalogue. This extends Parcel from [Power BI-only operation into a Catalogue-managed Fabric estate](index.md#two-ways-to-use-weaver-with-power-bi). The walkthrough adds a Warehouse and a separate source-backed model using `Weaver.Source`; the alternative below [connects the existing native model](#connect-the-existing-native-model) while keeping its linked Report.
 
 ## Before you start
 
-Continue the [native Parcel project](native-tmdl.md) in the same workspace, retaining its configuration and overlays. That starting path has no Catalogue; adding the Warehouse below introduces one. The workspace now needs Fabric capacity that supports Warehouse work, Warehouse create/alter/load and SELECT rights, Catalogue access, and model deployment, refresh and query permissions. Source-backed Import refresh also needs an existing supported service connection with SQL access. Weaver can bind a matching connection; adding a Catalogue does not create credentials or administer gateways.
+The starting point is the [native Parcel project](native-tmdl.md) in the same workspace, with its existing configuration and overlays. That path has no Catalogue; adding the Warehouse below introduces one. The workspace now needs Fabric capacity that supports Warehouse work, Warehouse create/alter/load and SELECT rights, Catalogue access, and model deployment, refresh and query permissions. Source-backed Import refresh also needs an existing supported service connection with SQL access. Weaver can bind a matching connection; adding a Catalogue does not create credentials or administer gateways.
 
 ## 1. Configure destination and source separately
 

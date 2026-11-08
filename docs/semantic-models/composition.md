@@ -1,10 +1,10 @@
 # Compose two model variants
 
-Reuse a source foundation without deploying it as a physical base model. Give each output its own additions, Report and validations.
+Models for different audiences often share a foundation but differ in their measures, formatting or included tables. Composition merges a local base into each output's definition without requiring a deployed base model. Each output has its own additions, Report and validations.
 
 ## Before you start
 
-Continue the [native Parcel project](native-tmdl.md), keeping its working model, Report and overlays. Add a **copy** named ParcelBase as the source foundation for two audience variants. Nothing renames or removes Parcel.
+This example extends the [native Parcel project](native-tmdl.md) with two audience variants. A **copy** named ParcelBase supplies their source foundation; the working Parcel model, Report and overlays remain in place. Nothing renames or removes Parcel.
 
 From the project root, make the local source copies below. Existing destinations cause `copytree` to refuse rather than overwrite them:
 
@@ -203,7 +203,7 @@ Do not replace that Build selection with `PowerBI/Parcel`: the broad project sel
 
 Both models and Reports now exist, and each Report is bound to its own model. Both models return Delivery Count = 2. The deployed definitions differ as declared: ParcelOperations has Delivery Rate and the InternalCosts table; ParcelExecutive has no InternalCosts table and formats Delivery Count as `0 "delivered"`. Shared policy from the [previous task](shared-policy.md) applies to both. No ParcelBase item was deployed.
 
-For a second environment, create its configuration using [workspace mappings](../estate/environments.md), repeat the explicit four-item Build selection with that configuration, then refresh the two models. Do not edit the base merely to change destination names.
+A second environment changes the outputs' destinations, not their source foundation. Its [workspace mappings](../estate/environments.md) supply the physical names; the same explicit four-item Build selection deploys the outputs there, followed by a refresh of the two models. The base needs no edit for a destination change.
 
 ## 4. Diagnose a missing base
 

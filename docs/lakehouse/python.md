@@ -1,6 +1,6 @@
 # A first Lakehouse pipeline with Python
 
-Turn a carrier CSV export into a Delta Table using ordinary Python. Weaver manages the files and Table, discovers the dependency from your import and records each Load's result.
+A carrier export often needs a little Python before its rows are ready for a Delta Table. In this example, a Folder stages a small CSV export and a Python Table reads it. Weaver manages the files and Table, discovers the dependency from your import and records each Load's result.
 
 ## Create the project
 

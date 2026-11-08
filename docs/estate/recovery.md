@@ -1,8 +1,8 @@
 # Recover failed work
 
-Recovery is a new operation against the state that remains. Correct the cause, choose the smallest operation that expresses the intended result, and verify the estate afterward. Build, Load, Test and workflows do not roll back completed work when a later step fails.
+A failed run can leave some work complete and other work still pending. Build, Load, Test and workflows do not roll back completed work when a later step fails, so recovery starts from that remaining state rather than from the beginning of the failed run. The appropriate operation depends on what needs repair: installed definitions, data processing or validation. This guide explains those choices and how to verify the result.
 
-Use the same project and configuration as the run that failed. The examples use the Parcel estate and `workspace-development.yml`; if you only have the Warehouse project, use `workspace-config.yml` instead. Named examples use `Parcel.StatusEvent`, the Operations Table; Views have no Load of their own.
+Recovery uses the project and configuration of the failed run. The examples below use the Parcel estate and `workspace-development.yml`; the Warehouse-only project uses `workspace-config.yml` instead. Named examples use `Parcel.StatusEvent`, the Operations Table; Views have no Load of their own.
 
 Start with Health. It shows source data, model refreshes and validations together:
 

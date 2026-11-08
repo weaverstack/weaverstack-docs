@@ -1,14 +1,14 @@
 # Catalogue and Health
 
-What happened after the last run? Read Health to find the data work, validation or installation that needs attention. The catalogue keeps installed definitions and operation results together, so a source Table, its model refresh and a DAX validation can be judged against the same dependency history.
+The last command's result is only part of an estate's current state. A Table may have loaded successfully while its validations are now stale, or a model may still need a refresh after its source changed. The catalogue keeps installed definitions and operation results together. Health uses those records and dependencies to explain which work needs attention.
 
-Continue the [mapped Landing/Operations project](environments.md#bind-the-project-to-fabric), using the same `workspace-development.yml`. Keep its installed state; inspecting it does not require another Load or Test:
+The example uses the installed [mapped Landing/Operations project](environments.md#bind-the-project-to-fabric) and its `workspace-development.yml`. Health can inspect that state without another Load or Test:
 
 ```bash
 weaver health --workspace-config workspace-development.yml
 ```
 
-If you added models and Reports through [the estate mapping](environments.md#a-model-and-report-variation), keep the same `workspace-development.yml`; their installed refresh and validation results appear in this Health report. For a different working project, use its own configuration consistently. No return to the Warehouse starter is required.
+Models and Reports added through [the estate mapping](environments.md#a-model-and-report-variation) use that same configuration; their installed model-refresh and validation results appear in this Health report. Another working project can be inspected with its own configuration, without returning to the Warehouse starter.
 
 Without an item selector, Health covers the whole managed installed estate. It reads recorded state and, by default, compares installed claims with physical inventory. It does not read unbuilt source, load data or execute validations.
 

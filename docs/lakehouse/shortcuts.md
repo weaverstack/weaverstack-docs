@@ -1,6 +1,6 @@
 # Shortcuts and existing data
 
-Read existing Fabric data through a local Lakehouse name without copying it into another authored source Table. Use a physical Shortcut for externally owned data; use a logical Shortcut when another Weaver item owns the producer.
+Existing Fabric data does not need another authored source Table just to make it available locally. A Shortcut exposes it through a name in your Lakehouse. A physical Shortcut points to externally owned data; a logical Shortcut retains the producer's identity when another Weaver item owns it.
 
 The Landing pipeline remains unchanged. This optional task adds access to a separate carrier archive. The [incremental variation](incremental.md) uses this same physical boundary alongside the existing pipeline in `Lakehouse/Landing`, then snapshots the files and consumes their changes. Continue there if you want the complete loadable pipeline rather than access alone.
 

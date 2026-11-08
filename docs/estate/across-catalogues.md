@@ -1,6 +1,6 @@
 # Work across teams' catalogues
 
-When your tables depend on another team's data, give Health both teams' catalogues to assess the connected work. For Load or Test, also choose the items or workspaces to run. Each team keeps its own project and catalogue, while Weaver coordinates the selected work in dependency order.
+When your tables depend on another team's data, one team's catalogue cannot describe the whole connected estate. Health can read both catalogues and assess the work across that boundary. Load and Test can coordinate selected items or workspaces in dependency order, while each team keeps its own project and catalogue. Supplying catalogues makes the relationships available; selecting items or workspaces determines which work runs.
 
 Build stays within one catalogue. Each team builds its own items as usual; joining happens only when an operation reads several catalogues together.
 
@@ -40,7 +40,7 @@ weaver health \
   --catalogue "Depot Planning/Warehouse/Catalogue"
 ```
 
-In this example, Planning's Lakehouse Shortcut already identifies the Operations Table it reads. Give Weaver both catalogues and it matches that Shortcut to the Table recorded by Operations. Health can then follow Planning's dependency back to Operations and check the source Table's last Load result. You do not declare the relationship again in a separate configuration file. A Shortcut into an item that no supplied catalogue installs adds no managed producer to the joined graph.
+In this example, Planning's Lakehouse Shortcut already identifies the Operations Table it reads. With both catalogues supplied, Weaver matches that Shortcut to the Table recorded by Operations. Health can then follow Planning's dependency back to Operations and check the source Table's last Load result. The existing declarations supply the relationship; it needs no separate configuration file. A Shortcut into an item that no supplied catalogue installs adds no managed producer to the joined graph.
 
 The working workspace resolves as it does for one catalogue: `--workspace`, `--workspace-config`, or `workspace-config.yml` in the current directory. When nothing names one, the first catalogue's workspace is the working workspace. A catalogue given as `Warehouse/Name` is in the working workspace. Giving the same catalogue twice is an error.
 

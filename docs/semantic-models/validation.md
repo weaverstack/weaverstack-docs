@@ -15,9 +15,9 @@ With a Catalogue, Build can install authored validations. Installed Test runs re
 
 ## Start from the model you already deployed
 
-For the Assumption, continue the [native model](native-tmdl.md): Parcel has inline Import data, Delivery Count evaluates to 2, and its same-name overlay hides the relationship foreign key. Keep that overlay and your existing workspace configuration. You add one DAX file, not another project or deployment setup.
+The Assumption starts with the [native model](native-tmdl.md): Parcel has inline Import data, Delivery Count evaluates to 2, and its same-name overlay hides the relationship foreign key. One DAX file adds the check; the overlay and workspace configuration stay unchanged, with no new project or deployment setup.
 
-If you are starting here, generate and deploy the [native Parcel example](native-tmdl.md#before-you-start), then add the Assumption below. Keep any existing overlay.
+For direct entry, the [native Parcel example](native-tmdl.md#before-you-start) provides the deployed model for the Assumption below.
 
 DAX queries need model Read and Build permissions and an identity permitted by the tenant’s Execute Queries setting. Reconciliation also needs SELECT access to the Warehouse source. Use existing permissions; do not change tenant settings for this exercise.
 
@@ -195,7 +195,7 @@ Test summary
 
 ## Compare DAX with source SQL
 
-Use the already loaded [managed-source model](managed-sources.md) in this same project. **ParcelWarehouse** reads Operations’ CurrentStatus View; the native **Parcel** model remains inline. Do not compare the inline Delivery data with an unrelated Warehouse result.
+Reconciliation needs a model and SQL query that describe the same data. The already loaded [managed-source model](managed-sources.md), **ParcelWarehouse**, reads Operations’ CurrentStatus View in this project; the native **Parcel** model remains inline. Do not compare the inline Delivery data with an unrelated Warehouse result.
 
 Add a measure to the existing `CurrentStatus` declaration in `PowerBI/Parcel/ParcelWarehouse.tmdl`. Its complete contents become:
 

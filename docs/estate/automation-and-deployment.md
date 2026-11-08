@@ -1,8 +1,8 @@
 # Workflows and controlled deployment
 
-Reuse one Session while you develop a command sequence, then record the accepted sequence as a workflow. When installation needs a reviewed handoff, plan a destination-specific bundle instead of asking the installer to reopen and reinterpret source.
+A development sequence often becomes the sequence a scheduled job needs to run. A workflow records those Weaver commands and runs them through one Session, reusing connections and other capabilities as needed. A reviewed installation handoff has a different requirement: a destination-specific bundle freezes the planned work so the installer does not reopen and reinterpret source. This guide works through both cases.
 
-Continue the working Landing/Operations project and `workspace-development.yml`. If you added the native model, Report and source-backed models, retain those bindings too; the Power BI Build below operates those local definitions. Omit that Build when your project has no Power BI items.
+The examples use the working Landing/Operations project and `workspace-development.yml`. The Power BI Build below is for projects that also include the native model, Report or source-backed models, with their existing bindings; it is unnecessary when the project has no Power BI items.
 
 ## Open one Session
 

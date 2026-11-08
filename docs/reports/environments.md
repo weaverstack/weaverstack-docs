@@ -1,8 +1,8 @@
 # Development and production Reports
 
-Use the same native Report and model in both workspaces. The selected workspace configuration changes their physical names and the Report's deployed model binding; it does not change their logical names or authored files.
+Development and production copies of a Report need different service bindings, not different native definitions. The selected workspace configuration changes the model and Report's physical names and the Report's deployed model binding; their logical names and authored files stay the same.
 
-Continue from [Deploy a native Report](deploy.md) in the same `parcel` project. If you are starting here, that page generates and deploys the pair. Keep your model overlays and source bindings.
+This example starts with the linked pair from [Deploy a native Report](deploy.md) in the same `parcel` project, including any existing model overlays and source bindings. That page generates and deploys the pair for direct entrants. The two configurations below change destinations without changing the model's content.
 
 ## Select the two destinations
 
@@ -183,7 +183,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-Each model returns Delivery Count = 2, so open each Report and its card shows **2**. Model refresh and Report rendering are separate checks from Build and binding; there is no Report Load or Test.
+Each model returns Delivery Count = 2, and each Report's card shows **2**. Those observations establish that the refreshed data reaches the Report, separately from Build's definition and binding checks. There is no Report Load or Test.
 
 An unrelated authored `byConnection` with no local model association stays as authored. Weaver does not reverse-map that external connection to a development or production model. The linked-pair behaviour above applies to the local association; [Report binding rules](../reference/power-bi/requirements-and-compatibility.md#report-binding) also describe same-name model precedence and the catalogue-backed Report-only case.
 

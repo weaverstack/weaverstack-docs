@@ -1,6 +1,6 @@
 # Lakehouse
 
-Write ordinary Python or Spark SQL. Weaver builds the managed files and Tables, orders their dependencies and records what each Load processed.
+Lakehouse transformations start with ordinary Python or Spark SQL. Weaver builds the managed files and Tables around that code, orders their dependencies and records what each Load processed.
 
 [Start with a Folder feeding a Table](python.md). The Python import connects the two; you keep the transformation code rather than writing another scheduler around it.
 
