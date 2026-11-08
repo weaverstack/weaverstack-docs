@@ -1,6 +1,8 @@
 # The development cycle
 
-Edit a working definition, check it, inspect the Build preview, install the change, catch up data and validate the result. Use the same configuration throughout so each report describes the estate you changed.
+A typical development cycle involves editing a query or transformation, trying the change against development data and checking the result before releasing it. In Fabric, you may also need to update dependent tables, refresh a model and check whether earlier test results still apply to the changed data.
+
+Weaver gives you a consistent set of commands for that work. You can check your files locally, review the deployment before applying it, then load and test the installed change. Health brings the results together so you can see what still needs attention. This guide takes one small correction through the loop and shows you how to check both the changed data and the results that should stay the same.
 
 ```text
 edit → check → Build preview → Build → Load → Test → Health → repeat
