@@ -203,6 +203,9 @@ The workspaces and items the catalogues describe, drawn as a network of what eac
 
 The tiles count workspaces, items and the dependencies between them. Select a workspace or item to list its items or the items it is connected to, with the dependencies in and out and each item's load state. Workspaces or items that read from one another, directly or through others, are listed as loops. Load state here is each item's last loads and validations, not a Health assessment.
 
+<div class="dashboard-demo"><iframe src="../../assets/catalogue-dashboard/workspaces.html" title="Catalogue Dashboard demo: Workspaces" loading="lazy"></iframe></div>
+<p class="dashboard-demo-open" markdown>[Open the Workspaces page full size](../assets/catalogue-dashboard/workspaces.html){ target="_blank" }</p>
+
 ### Items
 
 Installed items by kind, with their object counts, a status bar and when work was last processed, grouped by workspace when there is more than one. The tiles summarise Load, Tests and Build health and the workflows of the last 7 days; significant findings and recent workflows are listed below.
