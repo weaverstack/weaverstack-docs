@@ -176,6 +176,7 @@ nav:
       - Workflows and controlled deployment: estate/automation-and-deployment.md
   - Reference:
       - reference/index.md
+      - Permissions: reference/permissions.md
       - Weaver documents:
           - Overview: reference/weaver-documents/overview.md
           - Common metadata: reference/weaver-documents/common-metadata.md
