@@ -1,10 +1,12 @@
 # Permissions
 
-You do not need to be a Fabric tenant administrator for ordinary Weaver development. Run Weaver with your own Fabric sign-in or a service principal, from your computer or a Fabric notebook. Weaver uses the permissions of that running identity. Tenant settings and Azure capacity permissions are separate from workspace access.
+Run Weaver with your Fabric sign-in or a service principal. For most Build and Load work, the identity needs Contributor access to the destination workspace and read access to its sources. The table below lists the additional requirements for individual operations.
+
+Ordinary Weaver development does not require Fabric tenant administration. Tenant settings and Azure capacity permissions are separate from workspace access.
 
 ## Workspace roles
 
-For most Build and Load tasks, give the running identity Contributor access to the workspace where the work runs, plus read access to source data and catalogues elsewhere. Fabric workspace roles are Admin, Member, Contributor and Viewer; the table lists additional requirements for individual tasks.
+Fabric workspace roles are Admin, Member, Contributor and Viewer.
 
 | Command | What it does in Fabric | Role in the workspace it changes | Elsewhere |
 | --- | --- | --- | --- |
@@ -12,7 +14,7 @@ For most Build and Load tasks, give the running identity Contributor access to t
 | `weaver doctor` | Lists workspaces and items, and probes OneLake, the SQL endpoint and Spark. | Contributor, for the Spark and OneLake probes | None |
 | `weaver initialise` | Creates the catalogue Warehouse, the Environment, Lakehouses and Warehouses that are missing. | Contributor | The workspace must already exist. |
 | `weaver fabric environment publish` | Publishes Weaver into a Fabric Environment. | Contributor | Updating the contents of an Environment selected as the workspace default requires workspace Admin, as does changing that default. Using the published Environment does not require Admin. |
-| `weaver build` | Creates and replaces objects in Lakehouses and Warehouses, creates missing semantic models and Reports, and records them in the catalogue. | Contributor | Read access to the data a [shortcut](weaver-documents/shortcut.md) points at. Binding semantic-model connections requires model ownership and access to the existing connection; Contributor alone is not ownership. |
+| `weaver build` | Creates and replaces objects in Lakehouses and Warehouses, creates missing semantic models and Reports, and records them in the catalogue. | Contributor | Read access to the data a [shortcut](weaver-documents/shortcut.md) points at. Binding semantic-model connections requires model ownership and access to the existing connection. |
 | `weaver load`, `weaver test` | Runs Spark through the Livy API, runs Warehouse procedures, refreshes semantic models and records results in the catalogue. | Contributor | Read access to source data. Across [several catalogues](../estate/catalogue-and-health.md), Contributor in each workspace whose objects run; a catalogue read only for context needs read access. |
 | `weaver health` | Reads the catalogue over T-SQL and lists Lakehouse storage. | Viewer for the catalogue; Contributor to list Lakehouse storage | Read access to each further catalogue given. |
 | `weaver execute` | Runs one T-SQL, Spark SQL, Python or DAX request against one item. | Viewer for a T-SQL `SELECT`; Contributor for anything that writes or runs Spark | DAX needs model Read and Build permissions and the Execute Queries setting below. |
