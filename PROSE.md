@@ -4,7 +4,7 @@ This guide governs public documentation in this repository. It complements the p
 
 ## Default
 
-Write for an engineer trying to complete a task, understand Weaver or look up an exact interface. Preserve only the context needed for that job. Put implementation design in the Weaver source repository and maintenance planning in root-level repository files.
+Write for an engineer trying to complete a task, understand Weaver or look up an exact interface. Give enough context, reasons and examples to help the reader succeed. Put implementation design in the Weaver source repository and maintenance planning in root-level repository files.
 
 ## Principles
 
@@ -13,7 +13,7 @@ Write for an engineer trying to complete a task, understand Weaver or look up an
 3. **Give each page one job.** Getting started offers setup; item tasks produce one useful result; estate tasks coordinate working items; Reference owns exact interfaces and behaviour. Retained concept/deep-dive pages explain decisions at the point of use.
 4. **Lead with actions and outcomes.** In task pages, state the prerequisite, action and observable result before mechanism detail.
 5. **Put precision with its owner.** Link to Reference for syntax, defaults, selection, state transitions, outcomes and failure boundaries instead of repeating partial contracts.
-6. **Separate fact types.** Say when behaviour is host-specific, an example is illustrative, a format is merely current output or a guarantee is intentionally absent.
+6. **Define meaningful scope once.** Distinguish host-specific behaviour, examples and versioned interfaces where the distinction changes a decision. Describe the supported scope directly; keep review provenance in maintainer evidence.
 7. **Prefer defaults and inference.** Examples should omit fields that merely restate defaults and should let Weaver infer dependencies where supported. Keep declarations required by current source.
 8. **Keep examples small and neutral.** Use parcel and logistics names. Never publish production project, tenant, workspace or item identifiers.
 9. **Keep the real constraint.** Succinctness must not remove destructive scope, ordering, rollback limits, partial-state consequences or the action needed to recover.
@@ -25,13 +25,23 @@ Begin guides with a recognisable situation: a failed load, a shared table, a dev
 
 Name who acts where it matters. Prefer ordinary verbs and one relationship per sentence to nominalisations or compressed slash-separated concepts. Do not mechanically add pronouns, split every sentence or ban punctuation. Keep meaningful mechanisms rather than replacing them with assurances.
 
-Put requirements beside the operation that needs them, with exact detail linked to Reference. Correct an overbroad sentence instead of appending a wall of caveats. Keep reset/deletion scope explicit at the action. A configuration is destination selection, not access control; confirmation flags answer specific prompts, not all possible writes.
+Put requirements beside the operation that needs them, with exact detail linked to Reference. Correct an overbroad sentence instead of appending a wall of caveats. Keep reset/deletion scope explicit at the action. Explain the division of responsibility: configuration chooses destinations, identity permissions control access and confirmation flags approve specific plans.
 
-Distinguish source inspection, offline tests, historical captures and live measurements. Do not turn recorded operational success into proof of business correctness or a scale guarantee. Preserve historical capture provenance; regenerate interfaces with their tools rather than editing generated facts.
+Support claims with source inspection, offline tests, historical captures or live measurements as appropriate. Give measurements their workload and timing context. Explain authored validations where readers need to check business rules. Preserve historical capture provenance; regenerate interfaces with their tools rather than editing generated facts.
+
+## Match the surface
+
+**Confident explanation.** Lead public pages with the task, capability or result. State what the reader provides and what Weaver does. Prefer a supported action or requirement to a defensive rebuttal. Keep clear warnings for destructive actions and real security or compatibility limits. Reference owns detailed semantics; maintainer evidence owns review history.
+
+**Persuasion through substance.** Product pages and organisational articles should explain why capabilities matter. Concrete benefits, examples and considered recommendations are welcome. Support claims with mechanisms or evidence; avoid slogans and unsupported superlatives.
+
+**Enough explanation to teach.** Optimise guides for reader understanding and successful action, not maximum information density or minimum word count. Use named actors, reasons and examples where they help. Preserve concise passages that already work.
+
+Source comments and CLI diagnostics have a narrower job. Comments preserve non-obvious invariants and engineering reasons. Help states an option’s effect; errors identify the condition, affected thing and known next action. Keep those surfaces concise rather than importing their brevity into explanatory guides.
 
 ## Language
 
-Write as one senior engineer to another. Use direct sentences and concrete nouns. Avoid assurance and sales language such as “powerful”, “seamless”, “robust”, “safe”, “predictable” and “enterprise-grade”; state the mechanism that would justify the adjective.
+Write as one senior engineer to another. Use direct sentences and concrete nouns. Support recommendations and benefits with mechanisms or evidence rather than unsupported adjectives such as “powerful”, “seamless”, “robust”, “safe”, “predictable” and “enterprise-grade”.
 
 Do not use “current versions of Weaver” unless a real version distinction matters. Do not say readers “can rely on” a behaviour; define the behaviour or recorded state. Avoid history and arguments against hypothetical alternatives unless compatibility or migration depends on them.
 
@@ -97,7 +107,7 @@ the question. Stable URLs are useful; relocating everything is not a goal.
 
 ### Reference
 
-Be terse, complete and searchable. Specify accepted syntax, defaults, precedence, selection, ordering, state changes, outcomes and failures where relevant. Record current machine representations without promising compatibility that Weaver does not provide.
+Be economical, complete and searchable. Specify accepted syntax, defaults, precedence, selection, ordering, state changes, outcomes and failures where relevant. Include examples or explanations when they make the contract easier to use. Record exact compatibility boundaries alongside current machine representations.
 
 ## Examples and code
 

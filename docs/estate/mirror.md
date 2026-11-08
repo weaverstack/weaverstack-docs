@@ -152,7 +152,7 @@ weaver load Warehouse/Operations --stale --workspace-config workspace-mirror.yml
 
 Reference.Service becomes a local Table in OperationsDev, and its `_.Mirror` row is marked deleted. Reference.Depot stays borrowed, and the source Operations Warehouse keeps its original value.
 
-Warehouse borrowed Tables/Views are presented through local Views. Lakehouse stored Tables/Folders use shortcuts, with local wrapper Views for source Views. Health reads borrowed current Load state from the source catalogue and local state from development. A mixed estate is an ordinary result, not evidence that every object has been copied.
+Warehouse borrowed Tables/Views are presented through local Views. Lakehouse stored Tables/Folders use shortcuts, with local wrapper Views for source Views. Health reads borrowed current Load state from the source catalogue and local state from development. Development can therefore combine borrowed and locally materialised objects.
 
 Selected changed or impacted protected Tables/Folders use preserving materialisation rather than empty reconstruction: Warehouse CTAS, Delta shallow clone or native recursive Folder copy. That path retains the established bookmark but is not an atomic estate snapshot; shallow clones require source file retention. Protection does not protect against Wipe or deliberate re-mirroring. Keep irreplaceable source data outside ordinary managed target ownership. See [Protecting data](../advanced/protecting-data.md).
 

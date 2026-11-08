@@ -2,7 +2,7 @@
 
 Where should the same project deploy? Keep its documents and logical item names unchanged. A workspace configuration selects the physical workspace, catalogue and targets; selecting another file changes where the same source is installed.
 
-Three controls do different jobs: the configuration binds the estate, the selected file chooses development or production, and a published Fabric Environment supplies the Python packages used by Spark work. A target rename neither changes a model’s native data connection nor publishes a runtime.
+Choose the configuration for the deployment destination and a published Fabric Environment for the Python packages Spark work uses. Configure a model’s native data connections separately from its target name.
 
 ## Bind the project to Fabric
 
@@ -29,7 +29,7 @@ weaver health --workspace-config workspace-development.yml
 
 The logical Shortcut has no Load, but the additional Operations LakehouseCurrentStatus Table does. Item-wide Load orders selected source work across the boundary. Test runs the generated Lakehouse and Warehouse validations; they remain beside their original pipelines.
 
-Build reads `targets` and records settled physical bindings. Catalogue-backed Load, Test and Health use those recorded bindings, not replacement values in an edited configuration. Changing `targets` does not retarget installed work until Build installs it.
+Build reads `targets` and records settled physical bindings. Catalogue-backed Load, Test and Health use those recorded bindings. After editing `targets`, run Build to install the intended bindings; see [Build behaviour](../reference/operation-behaviour/build.md) for existing-target and replacement rules.
 
 The exact filename `workspace-config.yml` is discovered only in the process’s current working directory. Other names, including the one above, require `--workspace-config`; filenames do not confer development or production semantics. See [Workspace configuration](../reference/configuration-files/workspace-config.md) for all keys and precedence.
 
@@ -105,6 +105,6 @@ A Lakehouse target uses the same logical-to-physical mapping. For the existing [
 
 An `environment` binding selects an existing published Fabric Environment for Spark work. It does not create or publish that Environment. Desktop Lakehouse Build/Load/Test, including generated Spark SQL work, needs the matching hosted Weaver runtime; a Spark-backed Build checks compatibility before mutation even though it does not call authored `read()` methods. Pure Warehouse T-SQL and standalone Power BI avoid that Spark prerequisite. [Running Python in Fabric](../lakehouse/runtime.md) owns publication and attached-notebook runtime setup.
 
-A `mirror` binding selects a source catalogue, in this workspace or another, for deliberate [Mirror](mirror.md). Loading the file does not run Mirror; ordinary development needs no mirrored baseline.
+A `mirror` binding selects a source catalogue, in this workspace or another, for deliberate [Mirror](mirror.md). Run Mirror when you want to reset development to that baseline; use the [development cycle](development-cycle.md) for ordinary edits.
 
 With one configuration selecting the intended estate, [read Catalogue and Health](catalogue-and-health.md) to see what was installed and what happened there. [Logical and physical items](../core-concepts/logical-and-physical-items.md) explains why the project keeps its identities while physical bindings change.

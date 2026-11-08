@@ -83,7 +83,9 @@ Health never writes current state or history. It reports partial state left by o
 
 ## Remote mirrored catalogues
 
-When a supplied catalogue still borrows objects, run Health from that mirror's own workspace configuration, with its `mirror:` source set. In joined Health, a catalogue in another workspace loses that configuration during workspace resolution. It can remain unassessed even when you also supply its production source with `--catalogue`. The joined report records the read error and is incomplete; it does not establish that the remote mirror is current. Assess each mirror from its own configuration until that runtime boundary is corrected.
+### Limitation and workaround
+
+To assess borrowed objects, run Health using the mirror's own workspace configuration with its `mirror:` source set. Joined Health currently leaves a remote mirrored catalogue unassessed, even when its production catalogue is also supplied. Use the mirror's own configuration for that assessment; the joined report identifies the incomplete scope.
 
 ## Several catalogues
 

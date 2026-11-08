@@ -32,9 +32,9 @@ weaver health --workspace-config workspace-development.yml
 
 Build reconciles source against installed state, including changed definitions and affected descendants inside its selected items. Changed loadable work begins with non-Green current state. `load --stale` selects installed loadables needing work; it leaves omitted Green producers alone. `test --stale` then runs the installed validations that are new, failed, or read something the load just changed, and Health shows Load, Tests and Build together. Drop `--stale` to run every validation.
 
-Load and catalogue-mode Test use installed definitions, not your edited source files. A data-only source change needs Load, not another Build; a declaration change must cross Build first. Source/file Tests are an alternative authoring check and do not write installed Test history.
+Load and catalogue-mode Test use installed definitions. After changing source data, run Load; after changing a project declaration, run Build first. Source/file Tests offer an authoring check against edited validations, returning results separately from installed Test history.
 
-Use an item-wide run by default. Plain named Load does not add or order dependencies. [Run part of an estate](selective-runs.md) teaches deliberate seed expansion and a preview when item-wide work is too broad. Completed work is not rolled back after a later failure; follow [Recovery](recovery.md) against the state that remains.
+Use an item-wide run by default. Plain named Load does not add or order dependencies. [Run part of an estate](selective-runs.md) teaches deliberate seed expansion and a preview when item-wide work is too broad. Completed changes remain in place after a later failure; inspect failed steps for partial changes and follow [Recovery](recovery.md) against the state that remains.
 
 ## Include semantic models and Reports
 
@@ -53,7 +53,7 @@ weaver test --workspace-config workspace-development.yml
 weaver health --workspace-config workspace-development.yml
 ```
 
-This iteration loop assumes the model and Report targets have already been deployed; a Build preview does not provision missing Power BI items. The `PowerBI/Parcel` selection covers the inline model and linked Report alongside the additional source-backed models. Preview each changed Build before applying it. `--bind-data-sources` requests binding to an existing connection; it does not create credentials. Estate Load coordinates selected source work and model refreshes; a source change can make the dependent model stale even if its definition is unchanged. DAX validations are part of Test. **Reports have only a Build/deployment lifecycle, not Load or Test.** Inspect their actual binding and rendering through the [Report task](../reports/deploy.md).
+Use this iteration loop after deploying the model and Report targets; Build preview requires those existing items. The `PowerBI/Parcel` selection covers the inline model and linked Report alongside the additional source-backed models. Preview each changed Build before applying it. `--bind-data-sources` requests binding to an existing connection; it does not create credentials. Estate Load coordinates selected source work and model refreshes; a source change can make the dependent model stale even if its definition is unchanged. DAX validations are part of Test. **Reports have only a Build/deployment lifecycle, not Load or Test.** Inspect their actual binding and rendering through the [Report task](../reports/deploy.md).
 
 ## Optional: establish a mirrored development baseline
 

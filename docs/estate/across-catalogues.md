@@ -1,6 +1,6 @@
 # Work across teams' catalogues
 
-Does another team's table feed yours? Keep each team in its own workspace with its own catalogue, and give Health, Load or Test both catalogues. Weaver joins them where one team's physical Shortcut reads the other team's object, so one Health report shows when your work is behind theirs, and one Load runs both teams' work in dependency order.
+When your tables depend on another team's data, give Health both teams' catalogues to assess the connected work. For Load or Test, also choose the items or workspaces to run. Each team keeps its own project and catalogue, while Weaver coordinates the selected work in dependency order.
 
 Build stays within one catalogue. Each team builds its own items as usual; joining happens only when an operation reads several catalogues together.
 
@@ -68,7 +68,7 @@ A catalogue given only for context is not inventoried.
 
 ## Load or Test across catalogues
 
-Choose the work as well as the context. `--catalogue` supplies records for the joined graph; it does not select every team for execution. This complete command selects both workspaces for one Load:
+Catalogues provide dependency context. Item and workspace selectors choose execution. Other catalogues can supply upstream state while you run your own team's work. This command selects both workspaces for one Load:
 
 ```bash
 weaver load "Parcel Operations" "Depot Planning" \
@@ -81,7 +81,7 @@ Items decide what runs. A bare workspace name selects every item in that workspa
 - Each catalogue is read once before any work starts. If one cannot be read, the run is refused.
 - Every object runs in its own workspace, with the working workspace's Environment. Cross-workspace Spark attachment requires Read access to that Environment and the same capacity and network security settings; see [shared runtime setup](../lakehouse/runtime.md#use-a-shared-environment).
 - Every object is recorded in its own catalogue, and every record in the run carries one workflow ID.
-- A catalogue whose items you did not name runs nothing. When your run reads one of its Warehouse Tables without loading it, Weaver waits until OneLake has published that Table's last successful load.
+- When a context catalogue supplies a Warehouse Table that your run reads without loading it, Weaver waits until OneLake has published that Table's last successful load.
 
 With no items, the run covers the working workspace's catalogue: its configured catalogue if you gave it, otherwise the one catalogue you gave in the working workspace. Several catalogues in the working workspace, none of them configured, is an error; name the items instead.
 

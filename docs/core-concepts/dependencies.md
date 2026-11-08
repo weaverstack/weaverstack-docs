@@ -14,7 +14,7 @@ Within a logical item, dependencies establish the document graph. Build uses tha
 
 > **Design background:** [Load dependencies](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/load-dependencies/) treats every dependency as coupling: reuse and consistent logic come with paths for upstream change and failure to propagate. Weaver records dependencies to order Build and Load work, but whether a dependency is valuable and appropriately scoped remains a design decision.
 
-Physical relation names can point outside the managed project estate. Weaver preserves such references, but they do not identify a managed producer that Build can select or Load can order.
+Physical relation names can point outside the managed project estate. Weaver preserves such references; Build-time project inference uses logical relationships to identify managed producers.
 
 ## Item dependencies
 
@@ -36,7 +36,7 @@ source document → logical Shortcut → consuming document
 
 That extra step lets Build materialise the Shortcut after its source and before consumers. It also lets Load preserve the managed producer-consumer order across physical engines when both sides are in scope.
 
-A physical Shortcut or directly qualified physical relation has no managed project producer. Weaver cannot infer project ordering from that external address.
+Physical addresses do not establish Build-time dependencies between separate projects. For Health, Load and Test, Weaver can connect physical Shortcuts to managed sources recorded in the catalogues you supply. See [Work across teams’ catalogues](../estate/across-catalogues.md).
 
 ## Semantic model dependencies
 

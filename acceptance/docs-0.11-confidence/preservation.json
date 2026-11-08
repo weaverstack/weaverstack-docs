@@ -1,0 +1,74 @@
+[
+  {
+    "file": "docs/core-concepts/dependencies.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/across-catalogues.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/catalogue-dashboard.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/development-cycle.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/environments.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/index.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/mirror.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/estate/operate.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/reference/ai-agents.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/reference/cli/catalogue-dashboard.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/reference/operation-behaviour/health.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  },
+  {
+    "file": "docs/reference/permissions.md",
+    "shell_blocks": true,
+    "historical_captures": true,
+    "generated_sections": true
+  }
+]

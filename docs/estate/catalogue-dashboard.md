@@ -9,7 +9,7 @@ After you build and load a project, use the Catalogue Dashboard to see what is i
 
 Start with Workspaces or Items to see how the work connects. Use Health and Orchestration to investigate a failure or dependency. Performance, Gantt, Entity dictionary and Semantic model show timings, workflow timelines, table relationships and semantic models. The Dashboard reads the catalogue records Weaver already maintains; it needs no separate monitoring database.
 
-Each catalogue is read where it is, in its own workspace, and never written. Nothing about the Dashboard is recorded in a catalogue, and Initialise, Build, Wipe and Mirror never touch it.
+The Dashboard reads the catalogues in their existing workspaces. Manage its semantic model and Report separately with `weaver catalogue-dashboard` and the Fabric interface.
 
 It is an ordinary semantic model and Report. Change it to fit your needs, or build your own over the catalogue.
 
@@ -17,11 +17,13 @@ It is an ordinary semantic model and Report. Change it to fit your needs, or bui
 
 Each page is drawn by the HTML Content custom visual (the Regular edition, from AppSource). Where a tenant allows only certified visuals, a Fabric administrator must add HTML Content as an organisational visual before the pages render. The semantic model works without it, and [exported pages](#export-static-pages) do not use it.
 
-The Report is best effort. We aim to replace or supplement it with Fabric Apps.
+See the command reference for the Report’s [support status](../reference/cli/catalogue-dashboard.md#support-and-compatibility).
 
 ## Deploy the Dashboard
 
-Each catalogue the Dashboard reads must hold every table and column it reads. A catalogue that lacks one is refused before anything changes, with the missing tables or columns named; build a project into it with the same version of Weaver. Give the deployment identity Contributor access to the Dashboard workspace and read access to each catalogue. Binding connections requires model ownership and access to those connections; see [permissions](../reference/permissions.md). Continuing the [Parcel estate](catalogue-and-health.md), name the Dashboard and deploy it:
+Bring the source catalogues up to date by building their projects with the Weaver version used for Dashboard deployment. The deployment command checks the required catalogue tables and columns and identifies any that need updating before applying changes.
+
+Give the deployment identity Contributor access to the Dashboard workspace and read access to each catalogue. Binding connections requires model ownership and access to those connections; see [permissions](../reference/permissions.md). Continuing the [Parcel estate](catalogue-and-health.md), name the Dashboard and deploy it:
 
 ```bash
 weaver catalogue-dashboard --name "Catalogue Dashboard" --workspace-config workspace-development.yml

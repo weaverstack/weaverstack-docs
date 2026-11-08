@@ -1,6 +1,6 @@
 # Run and inspect an estate
 
-What needs to run again? Use Health to decide, then Load or Test the intended installed work. Health brings Lakehouse and Warehouse state together with registered model refreshes and validations; Load and Test operate that work without a second set of model-specific procedures.
+After changing a project or repairing a source problem, use Health to see which work needs attention. Build installs your source changes; Load processes data and refreshes models; Test runs the installed validations. Check Health again after the work completes.
 
 Keep the project from the [development loop](development-cycle.md). The Landing/Operations commands below use `workspace-development.yml`. If you added [source-backed models](../semantic-models/managed-sources.md), retain their targets in this same configuration. Run from the same project root throughout.
 
@@ -12,7 +12,7 @@ weaver health --workspace-config workspace-development.yml
 
 Without an item selector, Health covers the whole installed estate. It is read-only and reports Load, Tests and Build state as Green, Amber or Red, naming findings that need attention. By default it also compares installed claims with physical inventory.
 
-Use the findings to decide whether the estate needs data work, validation or Build recovery. Health does not read unbuilt source or run Load or Test for you. Its findings describe the assessed operational state, not the correctness of every business calculation.
+Use the findings to decide whether the estate needs data work, validation or Build recovery.
 
 For changed definitions, [Check, preview and Build](development-cycle.md) before this installed-state sequence. Source-data and model/Report definitions require separate Build calls. Reports participate in Build only; they have no independent Load or Test.
 
@@ -24,7 +24,7 @@ For the normal item-wide run:
 weaver load --workspace-config workspace-development.yml
 ```
 
-Load selects the installed Table and Folder work and registered semantic-model refreshes. Managed dependencies order selected source work before model refreshes. Reports use the model’s data rather than having their own Load. Load reads installed definitions and bindings from the catalogue. It does not read edited project source; run Build first when source has changed.
+Load selects the installed Table and Folder work and registered semantic-model refreshes. Managed dependencies order selected source work before model refreshes. Reports use the model’s data rather than having their own Load. Load uses the definitions and destinations installed in the catalogue. After editing project files, run Build before loading them.
 
 For routine catch-up after Build or when Health reports pending or stale load work, narrow the run to non-Green loadable objects:
 
@@ -34,7 +34,7 @@ weaver load --stale --workspace-config workspace-development.yml
 
 `--stale` uses the same Load-health assessment as Health. It preserves dependency ordering among selected item-wide work but does not pull Green upstream work into the run. An empty stale selection succeeds without changing the estate.
 
-A Load can leave partial state when work fails. Completed work is not rolled back. Use its per-object outcomes and then follow [Recover failed work](recovery.md).
+Completed changes remain in place when a run fails. Inspect the failed steps for partial changes, correct the cause, then use [Recover failed work](recovery.md) to rerun the work that needs attention.
 
 ## 3. Run installed validations
 
@@ -42,7 +42,7 @@ A Load can leave partial state when work fails. Completed work is not rolled bac
 weaver test --workspace-config workspace-development.yml
 ```
 
-Test runs the installed Tests and Assumptions across Lakehouse Python/Spark SQL, Warehouse SQL and semantic-model DAX. A model-owned Test can compare its measure with SQL calculated independently from the source. A failed validation found data discrepancies or violations; a validation that could not run is an execution problem. In catalogue mode, edited validation source takes effect after Build installs it. Source/file mode reads authored validations and records no catalogue status/history.
+Define Tests and Assumptions for the business rules you want to verify. Health includes the recorded results of those validations alongside load and deployment findings. Test runs the installed Tests and Assumptions across Lakehouse Python/Spark SQL, Warehouse SQL and semantic-model DAX. A model-owned Test can compare its measure with SQL calculated independently from the source. A failed validation found data discrepancies or violations; a validation that could not run is an execution problem. In catalogue mode, edited validation source takes effect after Build installs it. Source/file mode reads authored validations and records no catalogue status/history.
 
 ## 4. Inspect the resulting state
 

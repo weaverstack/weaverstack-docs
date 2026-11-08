@@ -1,6 +1,6 @@
 # `weaver catalogue-dashboard`
 
-Catalogue Dashboard creates or updates the Catalogue Dashboard's SemanticModel and Report, both under one name, in the workspace the command runs against, and refreshes the model. Each catalogue given is read in its own workspace and never written, and nothing about the Dashboard is recorded in a catalogue.
+Catalogue Dashboard creates or updates the Catalogue Dashboard's SemanticModel and Report, both under one name, in the workspace the command runs against, and refreshes the model. Each catalogue given is read in its own workspace and never written, and nothing about the Dashboard is recorded in a catalogue. Initialise, Build, Wipe and Mirror do not manage the Dashboard’s model or Report.
 
 ```bash
 weaver catalogue-dashboard --name "Catalogue Dashboard" --workspace-config workspace-development.yml
@@ -13,6 +13,10 @@ Refused before any change: a catalogue given twice, a catalogue that cannot be r
 `export` writes the deployed Dashboard's pages as static HTML to `--path`, a local folder or a OneLake `abfss://` location: `index.html` and one file per page. It reads the model through the Power BI `executeQueries` API, so it needs the deployed Dashboard and the tenant's Semantic Model Execute Queries REST API setting. See [permissions](../permissions.md).
 
 See [Catalogue Dashboard](../../estate/catalogue-dashboard.md) for what the pages show, the Filters pane and the HTML Content requirement.
+
+## Support and compatibility
+
+The Report is provided on a best-effort basis. Its pages require the HTML Content custom visual; the [deployment guide](../../estate/catalogue-dashboard.md#the-html-content-visual) explains tenant setup and static export as an alternative.
 
 <!-- BEGIN GENERATED CLI -->
 
