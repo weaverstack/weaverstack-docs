@@ -7,7 +7,7 @@ image_alt: Weaver logo.
 
 # Weaver
 
-**Making Fabric easier to use.**
+**Making Fabric easier to use, and safer to scale.**
 
 Keep writing Python, SQL and native model definitions. Weaver handles the installation, load work and recorded results around them. Start with the item you are working on.
 
