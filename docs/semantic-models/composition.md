@@ -91,7 +91,7 @@ Composition does not copy a base’s validations. Under `targets` in the existin
   Report/ParcelExecutive: ParcelExecutive
 ```
 
-Keep the existing Parcel and source bindings. No ParcelBase target is needed because this task deploys only the two outputs.
+These four targets extend the existing Parcel and source bindings. ParcelBase contributes local source to the outputs; it needs no target because this task does not deploy it as a service model.
 
 ## 2. Select only the outputs
 
@@ -197,11 +197,11 @@ Test summary
 </figure>
 <!-- /cli-capture -->
 
-Do not replace that Build selection with `PowerBI/Parcel`: the broad project selector includes the base. This configuration deliberately has no base target, so that broader request refuses. Source composition does not itself select a base for deployment.
+The explicit Build selection separates the outputs from their source foundation. A broad `PowerBI/Parcel` selector also includes the base, which has no target in this configuration, so Weaver refuses that broader request. Source composition does not itself select a base for deployment.
 
 ## 3. Inspect the outputs
 
-Both models and Reports now exist, and each Report is bound to its own model. Both models return Delivery Count = 2. The deployed definitions differ as declared: ParcelOperations has Delivery Rate and the InternalCosts table; ParcelExecutive has no InternalCosts table and formats Delivery Count as `0 "delivered"`. Shared policy from the [previous task](shared-policy.md) applies to both. No ParcelBase item was deployed.
+Both models and Reports now exist, and each Report is bound to its own model. Both models return Delivery Count = 2. The deployed definitions differ as declared: ParcelOperations has Delivery Rate and the InternalCosts table; ParcelExecutive has no InternalCosts table and formats Delivery Count as `0 "delivered"`. If you added [shared policy](shared-policy.md), it applies to both outputs. No ParcelBase item was deployed.
 
 A second environment changes the outputs' destinations, not their source foundation. Its [workspace mappings](../estate/environments.md) supply the physical names; the same explicit four-item Build selection deploys the outputs there, followed by a refresh of the two models. The base needs no edit for a destination change.
 

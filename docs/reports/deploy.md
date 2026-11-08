@@ -31,9 +31,9 @@ Open `PowerBI/Parcel/Parcel.pbip` in Desktop to inspect the Report. Its associat
 ```
 <!-- /initialise -->
 
-The path is relative to the `.Report` directory. Keep the complete native Report payload as well as this file; the example includes its page and card definitions. [Native project layout](../reference/power-bi/project-layout.md#report-discovery-and-association) describes discovery for your own project.
+The path is relative to the `.Report` directory. This file supplies the model association, while the rest of the native Report payload supplies the pages and visuals. The example includes both its page and card definitions; `definition.pbir` alone is not a complete Report. [Native project layout](../reference/power-bi/project-layout.md#report-discovery-and-association) describes discovery for your own project.
 
-This starts in [Power BI-only mode, without a Catalogue](../semantic-models/index.md#power-bi-only-without-a-catalogue). Native-only Initialise writes the linked pair, workspace configuration and supporting local project files; it creates no Catalogue Warehouse or Fabric Environment by default. This inline model and Report need no Lakehouse, Warehouse workload or Spark runtime. Use an existing, suitably licensed Power BI service workspace with the permissions described below.
+This starts in [Power BI-only mode, without a Catalogue](../semantic-models/index.md#power-bi-only-without-a-catalogue), in an existing Power BI service workspace with suitable licensing and the permissions described below. Native-only Initialise writes the linked pair, workspace configuration and supporting local project files; it creates no Catalogue Warehouse or Fabric Environment by default. This inline model and Report need no Lakehouse, Warehouse workload or Spark runtime.
 
 ## Choose the destination and Build
 

@@ -59,13 +59,13 @@ Expect `Accepted / East` at sequence 1 and `In transit / Central` at sequence 2.
 
 Build reconciles source against installed state, including changed definitions and affected descendants inside its selected items. Changed loadable work begins with non-Green current state. `load --stale` selects installed loadables needing work; it leaves omitted Green producers alone. `test --stale` then runs the installed validations that are new, failed, or read something the load just changed, and Health shows Load, Tests and Build together. Drop `--stale` to run every validation.
 
-Load and catalogue-mode Test use installed definitions. After changing source data, run Load; after changing a project declaration, run Build first. Source/file Tests offer an authoring check against edited validations, returning results separately from installed Test history.
+Load and catalogue-mode Test use installed definitions. A source-data change needs another Load, while a changed project declaration needs Build before the installed work can use it. Source/file Tests offer an authoring check against edited validations, returning results separately from installed Test history.
 
 An item-wide run is usually the simplest starting point because it follows the installed item's dependency graph. Plain named Load has a narrower purpose: it selects matching objects without automatically adding or ordering dependencies. [Run part of an estate](selective-runs.md) explains deliberate seed expansion and its preview when item-wide work is too broad. Completed changes remain in place after a later failure; [Recovery](recovery.md) explains how to inspect partial changes and work from the state that remains.
 
 ## Include semantic models and Reports
 
-For the [managed-source Parcel extension](../semantic-models/managed-sources.md), retain the working Landing/Operations pipelines, the native inline `Parcel` model and its linked Report, and the separate `ParcelWarehouse` model that reads Operations `Parcel.CurrentStatus`. Keep `workspace-development.yml` with the additional model and Report targets described in [workspace mappings](environments.md#a-model-and-report-variation). Source-backed Import refresh requires an existing supported SQL connection.
+The [managed-source Parcel extension](../semantic-models/managed-sources.md) adds model work to the same loop. Its starting state includes the working Landing/Operations pipelines, the native inline `Parcel` model and linked Report, and the separate `ParcelWarehouse` model over Operations `Parcel.CurrentStatus`. The model and Report targets are already in `workspace-development.yml`, as described in [workspace mappings](environments.md#a-model-and-report-variation). Source-backed Import refresh requires an existing supported SQL connection.
 
 Build source-data definitions first, then changed model/Report definitions separately:
 
@@ -84,6 +84,6 @@ Use this iteration loop after deploying the model and Report targets; Build prev
 
 ## Optional: establish a mirrored development baseline
 
-Once the ordinary loop works, [develop using Mirror](mirror.md) if development should borrow existing source data rather than load every unchanged object locally. It requires existing destination items, reads a source in this workspace or another, and empties the destination catalogue plus selected targets. Re-mirror only for a fresh baseline, not for each edit.
+[Mirror](mirror.md) provides an optional baseline for the ordinary development loop: development borrows existing source data rather than loading every unchanged object locally. It requires existing destination items, reads a source in this workspace or another, and empties the destination catalogue plus selected targets. Re-mirroring is a reset to a fresh baseline, not part of each edit.
 
 [Run, test and inspect the estate](operate.md) is the installed-state path when no source change needs Build. [Build, Load and Test](../core-concepts/build-load-and-test.md) explains the operation boundaries behind both paths.

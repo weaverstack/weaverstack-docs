@@ -170,7 +170,7 @@ Test has no rollback step. A failed validation remains the current finding until
 
 ## Recover a model or Report
 
-Keep this same project. If you added the [native and source-backed models](../semantic-models/managed-sources.md), use their existing bindings in `workspace-development.yml`; do not replace the independent pipelines or native model.
+Model recovery uses the same project and the existing bindings in `workspace-development.yml`. In a project with [native and source-backed models](../semantic-models/managed-sources.md), those models remain alongside the independent pipelines; the recovery does not require a replacement project or native model.
 
 A semantic-model refresh is Load work. Fix its source, connection or refresh condition, then rerun Load. A DAX finding is validation work: correct the model, data or query, then rerun Test. Their installed results appear in the same Health report as Lakehouse and Warehouse work.
 

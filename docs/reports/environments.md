@@ -6,7 +6,9 @@ This example starts with the linked pair from [Deploy a native Report](deploy.md
 
 ## Select the two destinations
 
-Create `workspace-development.yml` and `workspace-production.yml` for two existing disposable workspaces. If you already have these files from the [estate pages](../estate/environments.md), add the two targets to each instead. These inline-model destinations need no source workload. For an estate with Lakehouse or Warehouse items, copy the working configuration instead, retain its catalogue, runtime and source bindings, and change only the intended destinations. A production-labelled example is not a reason to use a real production workspace.
+The two configurations below describe an inline-model project in two existing disposable workspaces; neither destination needs a source workload. An estate with Lakehouse or Warehouse items also needs its working catalogue, runtime and source bindings. In that case, a copy of the working configuration provides the starting point, with only the intended destinations changed.
+
+Create `workspace-development.yml` and `workspace-production.yml` as shown below for the inline project. If these files already exist from the [estate pages](../estate/environments.md), add the two targets to each instead of replacing the files. Use disposable workspaces: the production label here illustrates a destination mapping, not a live release.
 
 ```yaml title="workspace-development.yml"
 workspace: Parcel Development
@@ -138,7 +140,7 @@ Installation
 
 Each Build ran in its own workspace and selected the linked model with the Report, as a catalogue-free project requires. If the development pair is already deployed, only the production Build is new work.
 
-Check each Report's actual service binding, including the workspace, not just the displayed item names:
+The expected service bindings are below. Both the workspace and model name matter: a matching display name alone would not establish that a Report points to the intended destination.
 
 | Configuration | Workspace | Report | Linked semantic model |
 | --- | --- | --- | --- |

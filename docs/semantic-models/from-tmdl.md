@@ -1,6 +1,6 @@
 # Author a model from TMDL
 
-A standalone named TMDL file can supply a model without a native `.SemanticModel` directory. Choose this when you want to author the definition directly; existing PBIP projects do not need to convert.
+A standalone named TMDL file can supply a model without a native `.SemanticModel` directory. A small hand-authored model can hold its complete definition in that file rather than a directory tree. Existing PBIP projects do not need to convert.
 
 ## 1. Write one complete model
 
@@ -29,7 +29,7 @@ table Delivery
                 Source
 ```
 
-The filename declares `SemanticModel/ParcelSummary`. There is no Report in this example. If a same-name native `ParcelSummary.SemanticModel` exists, this file instead overlays it; do not mistake that for two independent definitions.
+The filename declares `SemanticModel/ParcelSummary`. There is no Report in this example. If a same-name native `ParcelSummary.SemanticModel` exists, this file instead overlays it: the two sources contribute to one model rather than declaring independent definitions.
 
 Add this binding under `targets` in the existing `workspace-config.yml`, keeping all existing entries:
 
@@ -116,11 +116,11 @@ weaver build --item SemanticModel/ParcelSourceSummary --bind-data-sources
 weaver load SemanticModel/ParcelSourceSummary
 ```
 
-Inspect its generated CurrentStatus columns, Import partition and resolved source expression. Managed Parcel Count should be 2 after source Load and model refresh. The inline Parcel and ParcelSummary models remain independent. Weaver uses an existing supported connection, not new credentials.
+The deployed CurrentStatus definition now has columns and an Import partition derived from the managed source, with a resolved source expression. Managed Parcel Count should be 2 after source Load and model refresh. The inline Parcel and ParcelSummary models remain independent. Refresh uses an existing supported connection; Weaver does not create credentials.
 
 With `defaultMode: import`, generation supplies an M navigation partition. Otherwise this generation path supplies Direct Lake entity partitions, which retain their source, service and capacity prerequisites. Source housekeeping audit/signature columns are omitted unless explicitly authored. Native descriptions win over source metadata; unsupported source types fail.
 
-A table **with** an authored partition retains that partition and its authored column types. Adding `Weaver.Source` to it is lineage/refinement, not permission to overwrite its query or generate all columns. Use the [managed-source task](managed-sources.md) to add source-backed functionality without changing the original partition.
+A table **with** an authored partition retains that partition and its authored column types. Adding `Weaver.Source` to it supplies lineage and refinement, not a replacement query or a full set of generated columns. The [managed-source task](managed-sources.md) demonstrates this distinction by adding a source-backed model alongside the original inline model.
 
 Build deploys the native definition while leaving the authored TMDL in the project unchanged.
 

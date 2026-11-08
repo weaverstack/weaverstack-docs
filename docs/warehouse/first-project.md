@@ -1,6 +1,6 @@
 # A first Warehouse Table and View
 
-Keep the transformation as a T-SQL SELECT. A metadata comment tells Weaver which Table to maintain; Build generates its load work, and Load applies the rows and records the result. Here, three parcel events feed a View showing each parcel's latest status.
+A Warehouse transformation can stay a T-SQL SELECT rather than a hand-written loading procedure. A metadata comment tells Weaver which Table to maintain; Build generates its load work, and Load applies the rows and records the result. Here, three parcel events feed a View showing each parcel's latest status.
 
 You need [Weaver installed](../getting-started/installation.md) and a Fabric workspace on running capacity where you can create Warehouses. The example uses a workspace called `Parcel Development`; substitute your own. Use a disposable workspace for the tutorials: Build owns the Warehouses it manages and removes objects you did not declare there.
 
@@ -143,7 +143,7 @@ from (values
 ```
 <!-- /initialise -->
 
-The key identifies one event. Keep the SQL as a SELECT; the declaration describes the Table that should receive it.
+The key identifies one event. The SELECT supplies the rows, while the declaration describes the Table that receives them; the authored query needs no INSERT or MERGE statement.
 
 ## Read the latest event through a View
 

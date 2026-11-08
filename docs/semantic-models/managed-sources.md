@@ -57,7 +57,7 @@ FROM Parcel.CurrentStatus
 ORDER BY [Parcel ID];
 ```
 
-Expect P-1001 / In transit / Central and P-1002 / Delivered / South. The Warehouse’s StatusEvent Table and CurrentStatus View remain the same independent pipeline introduced in the Warehouse journey.
+CurrentStatus returns two parcels: P-1001 / In transit / Central and P-1002 / Delivered / South. These are the rows the source-backed model will read. The Warehouse’s StatusEvent Table and CurrentStatus View remain the same independent pipeline introduced in the Warehouse journey.
 
 ## 3. Create the connection
 
@@ -129,7 +129,7 @@ Installation
 </figure>
 <!-- /cli-capture -->
 
-Build generated CurrentStatus from the Warehouse View, deployed the model, bound it to the connection whose server and database match, and recorded it in the catalogue. Without a matching connection, Build still deploys but warns `no connection has that path`, and refresh later fails with "uses a default data connection without explicit connection credentials". If more than one connection reaches the same endpoint, Build refuses and names them; keep one.
+Build generated CurrentStatus from the Warehouse View, deployed the model, bound it to the connection whose server and database match, and recorded it in the catalogue. Without a matching connection, Build still deploys but warns `no connection has that path`, and refresh later fails with "uses a default data connection without explicit connection credentials". If more than one connection reaches the same endpoint, Weaver cannot choose between them: Build refuses and names the matches. Binding needs one unambiguous matching connection.
 
 Refresh the source and model together:
 

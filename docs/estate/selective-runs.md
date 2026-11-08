@@ -110,7 +110,7 @@ Plan
 | Ancestors | Folder `Parcel.Events`, then Table `Parcel.Event` |
 | Descendants | Table `Parcel.Event`, then Table `Parcel.CurrentStatus` |
 
-Expansion uses the **installed** dependencies, not edited source files. It restores dependency ordering within the selected graph. It never adds an unnamed item: Operations remains outside these requests, and the Shortcut itself has no Load; its consuming Table is selected only when Operations is named. A descendant run omits the Folder, so keep its staged CSV current.
+Expansion uses the **installed** dependencies, not edited source files. It restores dependency ordering within the selected graph. It never adds an unnamed item: Operations remains outside these requests, and the Shortcut itself has no Load; its consuming Table is selected only when Operations is named. A descendant run omits the Folder and therefore relies on its staged CSV already being current.
 
 ## Run the selection you inspected
 

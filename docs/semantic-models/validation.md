@@ -1,6 +1,6 @@
 # Validate a semantic model
 
-A successful refresh says the model ran, not that its measure is right. Add an Assumption to the working Parcel model, then reconcile the additional source-backed model with independent Warehouse SQL.
+A successful refresh says the model ran, not that its measure is right. A DAX Assumption checks a rule about the model's result; a reconciliation Test compares that result with independent source SQL. Parcel demonstrates both: a positive delivery count in the inline model, then a matching parcel count in the source-backed model.
 
 In [Power BI-only mode, without a Catalogue](index.md#two-ways-to-use-weaver-with-power-bi), DAX validations run directly against the selected model using source/file mode. Results return to the caller; Weaver records no installed Test history.
 
@@ -10,8 +10,8 @@ With a Catalogue, Build can install authored validations. Installed Test runs re
 
 ## Choose the model you are checking
 
-- **ParcelWarehouse already reads the managed Warehouse:** go straight to [Compare DAX with source SQL](#compare-dax-with-source-sql). Keep the source and model you just loaded; no inline-data setup or new provisioning is needed.
-- **You are checking the native inline Parcel model:** [add the DAX Assumption](#start-from-the-model-you-already-deployed) to that existing model and retain your overlay.
+- **ParcelWarehouse already reads the managed Warehouse:** [Compare DAX with source SQL](#compare-dax-with-source-sql) starts from that loaded source and model, with no inline-data setup or new provisioning.
+- **You are checking the native inline Parcel model:** [the DAX Assumption](#start-from-the-model-you-already-deployed) extends that existing model without changing its overlay.
 
 ## Start from the model you already deployed
 
@@ -61,9 +61,7 @@ Test summary
 </figure>
 <!-- /cli-capture -->
 
-The Assumption passed with zero violations and exit 0. You do not need Build merely to edit a source query: this run evaluates the new file against the already deployed model.
-
-The file is evaluated against the model you already deployed. This source run does not install a validation or write catalogue history. [Test modes](../reference/cli/test.md) explains installing a validation when you want recorded estate results.
+The Assumption passed with zero violations and exit 0. This run evaluates the new file against the already deployed model, so an edit to the source query needs no Build. It does not install a validation or write catalogue history. [Test modes](../reference/cli/test.md) explains installing a validation when you want recorded estate results.
 
 <details markdown="1">
 <summary>Optional: make the measure fail, then restore your model</summary>
@@ -195,7 +193,7 @@ Test summary
 
 ## Compare DAX with source SQL
 
-Reconciliation needs a model and SQL query that describe the same data. The already loaded [managed-source model](managed-sources.md), **ParcelWarehouse**, reads Operations’ CurrentStatus View in this project; the native **Parcel** model remains inline. Do not compare the inline Delivery data with an unrelated Warehouse result.
+Reconciliation needs a model and SQL query that describe the same data. The already loaded [managed-source model](managed-sources.md), **ParcelWarehouse**, reads Operations’ CurrentStatus View in this project. Its model count and a SQL count over that View describe the same parcels. The native **Parcel** model's inline Delivery events are a different dataset, so their count would not establish agreement with the Warehouse.
 
 Add a measure to the existing `CurrentStatus` declaration in `PowerBI/Parcel/ParcelWarehouse.tmdl`. Its complete contents become:
 
@@ -223,7 +221,7 @@ Expected SQL: |
 EVALUATE ROW("ParcelCount", [Managed Parcel Count])
 ```
 
-Build installs this model’s measure and Test; refresh it, then compare the model count with independent SQL. Both should return 2:
+Build installs this model’s measure and Test. The following Load refreshes the model from the Warehouse, and Test compares its count with independent SQL. Both counts should be 2:
 
 ```bash
 weaver check
@@ -261,7 +259,7 @@ Test summary
 </figure>
 <!-- /cli-capture -->
 
-The Test ran the DAX query against the refreshed model and the `Expected SQL` against Operations, and both returned 2. Health now records the result:
+The Test ran the DAX query against the refreshed model and the `Expected SQL` against Operations, and both returned 2. Test recorded that result in the Catalogue; Health reads it alongside the source Load and model refresh results:
 
 ```bash
 weaver health
@@ -270,9 +268,9 @@ weaver health
 <details markdown="1">
 <summary>Inspect the recorded model and validation evidence</summary>
 
-This is installed mode. Inspect CurrentStatus under logical `SemanticModel/ParcelWarehouse` in `_.SemanticModelTable`, and the `_.Dependency` row whose authored `Dependency reference` is `Warehouse/Operations/Parcel.CurrentStatus`. Source mode/access belongs in the table metadata; source identity belongs in Dependency. This generated Import partition uses SQL access.
+This installed-mode run leaves evidence in the Catalogue. `_.SemanticModelTable` describes CurrentStatus under logical `SemanticModel/ParcelWarehouse`, including its source mode and access. The corresponding `_.Dependency` row identifies the source through the authored `Dependency reference`, `Warehouse/Operations/Parcel.CurrentStatus`. This generated Import partition uses SQL access.
 
-Inspect the installed validation in `_.SemanticModelTest` and its result in `_.TestStatus`. Model refresh and Test results sit beside Warehouse state in the same catalogue. With no item selector, Health covers the managed estate, not arbitrary workspace items.
+`_.SemanticModelTest` holds the installed validation, and `_.TestStatus` holds its result. Model refresh and Test results sit beside Warehouse state in the same catalogue, which is why Health can assess them together. With no item selector, Health covers the managed estate, not arbitrary workspace items.
 
 </details>
 

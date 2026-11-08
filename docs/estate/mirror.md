@@ -1,12 +1,12 @@
 # Develop using Mirror
 
-Need to change a Table against existing data without copying the whole estate? Mirror establishes a development baseline that borrows unchanged data. Keep your project files, point a separate configuration at development targets, then Build the objects you change into local data.
+Development sometimes needs an estate's existing data without a separate load of every unchanged object. Mirror establishes a baseline that borrows that data, using the same project files with a separate configuration for development targets. Objects you change become local through Build, while unchanged objects can continue to borrow from the source.
 
 Use Mirror only after the [ordinary development loop](development-cycle.md) is understood. **It empties and reconstructs the destination catalogue and every selected destination target**, including local materialisations there. Source items remain untouched. It is a baseline reset, not an iteration command.
 
 ## Prepare existing destinations in the same workspace
 
-This first baseline keeps source and destination in one workspace; [mirror from another workspace](#mirror-from-another-workspace) covers a separate development workspace. Keep the [connected Landing/Operations project](connected-items.md) and its installed estate: the `Catalogue` Warehouse, the `Operations` Warehouse it records, and Landing supplying the connected `Parcel.LakehouseCurrentStatus` Table. Mirror needs existing empty destination Warehouses for the catalogue and Operations; it does not create Fabric items.
+This first baseline keeps source and destination in one workspace; [mirror from another workspace](#mirror-from-another-workspace) covers a separate development workspace. The starting point is the [connected Landing/Operations project](connected-items.md) and its installed estate: the `Catalogue` Warehouse, the `Operations` Warehouse it records, and Landing supplying the connected `Parcel.LakehouseCurrentStatus` Table. Mirror needs existing empty destination Warehouses for the catalogue and Operations; it does not create Fabric items.
 
 1. In the Fabric portal, create two Warehouses in `Parcel Development`: `CatalogueDev` and `OperationsDev`.
 2. Add a separate configuration beside the project. Keep `workspace-development.yml` as it is; this file describes the mirrored copy:
@@ -139,7 +139,7 @@ See [Mirrors](../core-concepts/mirrors.md) for borrowed and local data. Exact Mi
 
 ## Change only the work that needs to become local
 
-After a successful Mirror, keep the same project source and pass `--workspace-config workspace-mirror.yml` to Build, Load, Test and Health. The [development cycle](development-cycle.md#edit-and-iterate) is unchanged.
+After a successful Mirror, the same project source and [development cycle](development-cycle.md#edit-and-iterate) apply. The difference is the destination: Build, Load, Test and Health use `--workspace-config workspace-mirror.yml` to operate the mirrored estate.
 
 Correct an earlier event's depot in the required `Warehouse/Operations/Parcel.StatusEvent.sql`. Replace this row:
 

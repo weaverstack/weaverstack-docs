@@ -40,7 +40,7 @@ model Model
     annotation 'Weaver.AutoHideForeignKeys' = true
 ```
 
-Keep the policy’s Delivery and Display sections below it. The next step retains that annotation locally too; once policy owns it, you can omit the duplicate local declaration.
+Only the policy's `model Model` section changes here; its Delivery and Display sections still supply the formats and calculation group. The next step includes the annotation locally so that its complete overlay also works without this optional policy change. When the policy supplies the annotation, the local duplicate is unnecessary.
 
 ## 2. Override one convention locally
 
@@ -109,7 +109,7 @@ weaver load SemanticModel/Parcel
 
 The deployed definition now contains the Display group with its Current item, `discourageImplicitMeasures`, `0 "deliveries"` on Delivery Count (the local override), `#,##0.00` on InternalCost (the policy) and a hidden `Delivery[DepotId]`. The original partitions and relationship are unchanged. Delivery Count still evaluates to 2 and now formats as `2 deliveries`.
 
-Authored native files still contain the declarations, not the transformed definition. Inspect the deployed definition through the service’s Get Definition API or a native model-definition tool.
+The service’s Get Definition API or a native model-definition tool exposes that merged result. The authored native files still contain their original declarations, so reading those files alone will not show what the policy and overlay changed in the deployed model.
 
 The same model can now take shared standards and a local exception. If a convention needs logic that TMDL cannot express, [add a custom annotation](custom-annotations.md) without replacing the policy or native project.
 

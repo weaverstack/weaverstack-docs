@@ -2,7 +2,7 @@
 
 Python and Spark SQL work runs in Fabric Spark, so it needs Weaver's packages in a published Fabric Environment. That runtime changes less often than your project: editing a Table or validation normally needs Check and Build, not another Environment publication. The Environment binding is separate from the Lakehouse and catalogue bindings in your workspace configuration.
 
-The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. Use this page when setting up that runtime or changing its packages. The [incremental extension](incremental.md) uses this same published Environment and Landing binding.
+The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. This page explains that runtime setup and later package changes. The [incremental extension](incremental.md) uses the same published Environment and Landing binding.
 
 ## Bind the runtime you will use
 
@@ -17,7 +17,7 @@ targets:
   Lakehouse/Landing: Landing
 ```
 
-Use your actual workspace and the bindings written by Initialise. `environment` selects the Fabric Environment to attach; it does not create or publish it. For development/production mappings of the whole project, use [Workspace and environment mappings](../estate/environments.md).
+In your project, the workspace and target names are the bindings written by Initialise. `environment` selects the Fabric Environment to attach; it does not create or publish it. [Workspace and environment mappings](../estate/environments.md) explains development and production destinations for the whole project.
 
 Local Check needs no Fabric runtime. Desktop Lakehouse Build, Load and Test use hosted Spark, including when their source is Spark SQL. Build checks the hosted runtime before mutation; not calling authored `read()` does not remove that prerequisite. Load imports your installed Table and Folder code; Test imports or executes installed validations.
 

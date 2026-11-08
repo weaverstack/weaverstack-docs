@@ -9,7 +9,7 @@ image_alt: Weaver logo.
 
 **Making Fabric easier to use, and safer to scale.**
 
-Keep writing Python, SQL and native model definitions. Weaver handles the installation, load work and recorded results around them. Start with the item you are working on.
+Weaver projects use ordinary Python, SQL and native model definitions. Weaver handles the installation and load work around those files, and records the results so you can see what ran and what needs attention. The guides begin with one Fabric item, then explain how several items work together.
 
 ## A Weaver project at a glance
 
@@ -118,10 +118,10 @@ A Weaver project is ordinary Python, SQL, TMDL and configuration files organised
 
 Dependencies connect the work; Weaver handles building, loading, testing and tracking its state. [Projects and estates](core-concepts/projects-and-estates.md) · [Connect items and dependencies](estate/connected-items.md).
 
-- [Lakehouse](lakehouse/index.md): turn files and Python or Spark SQL into managed Tables.
-- [Warehouse](warehouse/index.md): write a SELECT and let Weaver build the Table and its load machinery.
-- [Semantic models](semantic-models/index.md): deploy native TMDL, then add modelling conventions and DAX checks.
-- [Reports](reports/index.md): deploy native Reports with the right model in each workspace.
+- [Lakehouse](lakehouse/index.md): files and Python or Spark SQL transformations, with managed Tables and dependency ordering.
+- [Warehouse](warehouse/index.md): T-SQL SELECTs with the Table structure and load machinery generated around them.
+- [Semantic models](semantic-models/index.md): native TMDL deployment, modelling conventions and DAX validation.
+- [Reports](reports/index.md): native Report deployment and model bindings for each workspace.
 
 When those pieces need to work together, [Coordinate your estate](estate/index.md) covers dependencies, environments, Health and the development loop. Two items are enough to benefit.
 

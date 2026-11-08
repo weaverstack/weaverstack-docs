@@ -2,7 +2,7 @@
 
 Existing Fabric data does not need another authored source Table just to make it available locally. A Shortcut exposes it through a name in your Lakehouse. A physical Shortcut points to externally owned data; a logical Shortcut retains the producer's identity when another Weaver item owns it.
 
-The Landing pipeline remains unchanged. This optional task adds access to a separate carrier archive. The [incremental variation](incremental.md) uses this same physical boundary alongside the existing pipeline in `Lakehouse/Landing`, then snapshots the files and consumes their changes. Continue there if you want the complete loadable pipeline rather than access alone.
+The Landing pipeline remains unchanged. This optional task adds access to a separate carrier archive. The [incremental variation](incremental.md) uses this same physical boundary alongside the existing pipeline in `Lakehouse/Landing`, then snapshots the files and consumes their changes. That variation covers the complete loadable pipeline; this page explains the connection itself.
 
 ## Expose an external carrier archive
 
@@ -53,7 +53,7 @@ source_root = Parcel__StatusSource(self).path()
 
 ## Keep a managed source's logical identity
 
-When another Weaver item owns the data, retain its project identity instead of an external physical address. After you [add Operations to this project](../estate/connected-items.md), its generated `Warehouse/Operations/shortcuts.yml` presents Landing's Python Event under a separate View name. Inspect the existing declaration; do not replace the Warehouse's seeded StatusEvent Table:
+A logical Shortcut names a managed source by its project identity rather than an external physical address. In the [connected Operations project](../estate/connected-items.md), the generated `Warehouse/Operations/shortcuts.yml` presents Landing's Python Event under a separate View name. This is an additional connection, not a replacement for the Warehouse's seeded StatusEvent Table:
 
 <!-- initialise:Warehouse/Operations/shortcuts.yml -->
 

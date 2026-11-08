@@ -160,9 +160,9 @@ There is no `execution.test`, target-level `parallel_workers` setting or `--spar
 
 ## Measure before increasing a limit
 
-Use enough independent work for the cap to matter. A single dependency chain will not become parallel merely because the number increases.
+A cap affects elapsed time only when enough independent work is ready to use it. A single dependency chain will not become parallel merely because the number increases.
 
-Compare a fixed workload, record waits, outcomes and resource usage, and change one setting at a time. More concurrency can increase contention or throttling. The historical F64 benchmark used 24 Spark lanes and 12 per Warehouse; these are not defaults, small-capacity recommendations or hard maxima.
+For a fixed workload, waits, outcomes and resource usage show whether a higher limit helped or merely increased contention or throttling. Changing one setting at a time makes the comparison meaningful. The historical F64 benchmark used 24 Spark lanes and 12 per Warehouse; these are not defaults, small-capacity recommendations or hard maxima.
 
 ## Related tasks
 

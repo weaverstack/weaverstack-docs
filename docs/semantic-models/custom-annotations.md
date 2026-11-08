@@ -27,7 +27,7 @@ class Parcel__DisplayFolder(Annotation):
         target.displayFolder = self.value
 ```
 
-Use one self-contained subclass per file, with matching filename stem and class name. `__` separates namespace segments: `Parcel__DisplayFolder` becomes `Parcel.DisplayFolder`. `Weaver` is reserved for built-ins. `scopes` limits this handler to measures; `apply` changes the live native object and returns nothing.
+Weaver discovers one self-contained subclass per file, with a matching filename stem and class name. `__` separates namespace segments: `Parcel__DisplayFolder` becomes `Parcel.DisplayFolder`. `Weaver` is reserved for built-ins. Here, `scopes` limits the handler to measures; `apply` changes the live native object and returns nothing.
 
 ## 2. Declare its use
 
@@ -153,7 +153,7 @@ The handler calls `error` for an empty value. The diagnostic identifies the decl
 
 The default `post_schema` phase sees columns after managed-source completion. This folder handler uses that default. A handler that introduces structure or a managed-source declaration needed for generation instead needs `phase = "schema"`, so that structure exists when generation begins. Adding a new managed source during `post_schema` is refused. Composition merges raw bases before handlers run once on the final model.
 
-If the next question is where Delivery comes from, [connect a managed Fabric source](managed-sources.md); if it is whether the measure is right, [validate the model](validation.md). Both keep the modelling conventions you have added.
+A model over managed Warehouse data can carry these conventions too: the [managed-source task](managed-sources.md) adds one alongside Parcel. [Model validation](validation.md) checks the measures' results, independently of the conventions that shape their presentation.
 
 ## Related tasks
 
