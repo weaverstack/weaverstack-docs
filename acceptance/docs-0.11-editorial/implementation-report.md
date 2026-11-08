@@ -70,7 +70,7 @@ cd /Users/matthiaswong/dev/weaverstack-docs-editorial17
   /Users/matthiaswong/dev/.worktrees/weaverstack-011-editorial-site
 ```
 
-Result: **19 of 20 checks pass**; the one legacy fixture mismatch is detailed below, not hidden. Passing checks include:
+Final parent rerun: **20 of 20 checks pass**. The initial 19/20 result exposed a stale format assertion; the correction and boundary are detailed below. Passing checks include:
 
 - `python -m mkdocs build --strict`, with no broken-fragment diagnostics.
 - CLI/Python/catalogue/semantic `--check` against the frozen runtime. CLI/Python/catalogue were also run with `--write`; output was already current, no hand-edited generated facts.
@@ -109,7 +109,7 @@ Raw browser metrics are retained in the session browser workspace; `browser-revi
 ## Provenance and remaining blockers
 
 1. **T05 runtime defect:** confirmed and documented, not fixed. Own-configuration source resolution works; remote place loses `mirror` before assessment. No live Fabric rerun authorised.
-2. **Pre-existing fixture mismatch:** `tools/check_docs_refresh_examples.py` first required its documented `--runtime-revision efc046e7cf066daefd27f9268413ae05c3ed64e4` override. With the override it passes the early Power BI/validation/standards checks, then fails at line 255 because it expects Executive's `Delivery Count.formatString == "#,##0"`, while `examples/parcel-powerbi-variants/PowerBI/Parcel/ParcelExecutive.tmdl` already says `0 "delivered"` on the untouched starting remote. Neither file was changed. This gate is not green; fixture/expectation reconciliation remains a separate follow-up.
+2. **Pre-existing fixture mismatch resolved:** `tools/check_docs_refresh_examples.py` needs its documented `--runtime-revision efc046e7cf066daefd27f9268413ae05c3ed64e4` override. The initial run then failed at the Executive format assertion: it expected the base's `#,##0`, whereas the starting fixture deliberately overrides it with `0 "delivered"`. The parent corrected the exact assertion to require the authored Executive override. The fixture and runtime are unchanged, and the full 20-check bundle now passes. This verifies the documented composition rather than weakening the assertion or altering behaviour to suit it.
 3. **Historical capture:** `152-catalogue-dashboard` remains the actual single-catalogue deployment capture from runtime `afb5b31c36498aeb8b70927e7f723de054225d5e`, package `0.9.0.dev (checkout build)`, manifest provenance 16 October. It has not been relabelled as a new multi-catalogue run. The generated demo retains its fixed October dataset timestamp and uses the current renderer; no new live evidence is claimed.
 4. **Experiment evidence:** no 50-workspace counts/timings were introduced or independently reconciled by this docs-only subagent. Parent owns the article's evidence ledger and historical measurement decisions.
 5. **Publication dependency:** docs strict build does not execute the demo generator and does not require #275's helper. Regenerating/checking the demo does require that helper; local check used the integrated product worktree. Product #275 links to docs #17. Later authorised sequence: land the helper/product source and docs stack in a coordinated window; publish docs routes before product links become public, or coordinate both site publications. Do not equate helper availability with permission to merge/release.

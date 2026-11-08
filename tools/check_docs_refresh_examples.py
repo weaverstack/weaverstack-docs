@@ -251,8 +251,10 @@ def check_variants(root, expected):
     )
     assert "InternalCosts" in {t.name for t in operations.tables}
     assert "InternalCosts" not in {t.name for t in executive.tables}
+    # The Executive variant must override the base's numeric format, not inherit it.
     assert (
-        executive.tables["Delivery"].measures["Delivery Count"].formatString == "#,##0"
+        executive.tables["Delivery"].measures["Delivery Count"].formatString
+        == '0 "delivered"'
     )
     for name in expected["selected_models"]:
         validations = [
