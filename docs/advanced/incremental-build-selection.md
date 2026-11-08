@@ -71,7 +71,7 @@ After those consumers are rebuilt against the newer producer, another identical 
 
 ## Mirrored objects become local only when selected work needs them
 
-In a mirrored development estate, an unchanged borrowed object keeps its borrowed physical form. If Build selects that object as changed or impacted, successful installation replaces the borrowed form with the authored local form and removes its `_.Mirror` state. Unrelated borrowed objects remain borrowed.
+In a mirrored development estate, an unchanged borrowed object keeps its borrowed physical form. If Build selects that object as changed or impacted, successful installation replaces the borrowed form with the authored local form and marks its `_.Mirror` row deleted, retaining the record. Unrelated borrowed objects remain borrowed.
 
 This transition follows the same item boundary. Building a producer does not materialise consumers in an unselected item.
 

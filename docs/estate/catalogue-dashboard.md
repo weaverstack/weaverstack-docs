@@ -5,7 +5,9 @@ hide:
 
 # Catalogue Dashboard
 
-The Catalogue Dashboard is a Power BI semantic model and Report over one or more Weaver catalogues. One command deploys it. Its eight pages show the workspaces and items the catalogues describe and how they read one another, the installed items, Health, the Orchestration graph, when each run started and finished, recent workflows as a Gantt chart, an ER diagram with a metadata browser, and a bus matrix for each semantic model.
+After you build and load a project, use the Catalogue Dashboard to see what is installed, what has run and what needs attention. Run `weaver catalogue-dashboard` to deploy its Power BI semantic model and Report over one catalogue or several teams' catalogues.
+
+Start with Workspaces or Items to see how the work connects. Use Health and Orchestration to investigate a failure or dependency. Performance, Gantt, Entity dictionary and Semantic model show timings, workflow timelines, table relationships and semantic models. The Dashboard reads the catalogue records Weaver already maintains; it needs no separate monitoring database.
 
 Each catalogue is read where it is, in its own workspace, and never written. Nothing about the Dashboard is recorded in a catalogue, and Initialise, Build, Wipe and Mirror never touch it.
 
@@ -19,7 +21,7 @@ The Report is best effort. We aim to replace or supplement it with Fabric Apps.
 
 ## Deploy the Dashboard
 
-Each catalogue the Dashboard reads must hold every table and column it reads. A catalogue that lacks one is refused before anything changes, with the missing tables or columns named; build a project into it with the same version of Weaver. Continuing the [Parcel estate](catalogue-and-health.md), name the Dashboard and deploy it:
+Each catalogue the Dashboard reads must hold every table and column it reads. A catalogue that lacks one is refused before anything changes, with the missing tables or columns named; build a project into it with the same version of Weaver. Give the deployment identity Contributor access to the Dashboard workspace and read access to each catalogue. Binding connections requires model ownership and access to those connections; see [permissions](../reference/permissions.md). Continuing the [Parcel estate](catalogue-and-health.md), name the Dashboard and deploy it:
 
 ```bash
 weaver catalogue-dashboard --name "Catalogue Dashboard" --workspace-config workspace-development.yml
@@ -144,7 +146,7 @@ One Power BI measure returns a page, and a measure's text is limited to about 2 
 
 ## Export static pages
 
-`weaver catalogue-dashboard export` writes the deployed Dashboard's pages as static HTML files that open in a browser without Fabric or the HTML Content visual:
+`weaver catalogue-dashboard export` writes the deployed Dashboard's pages as static HTML snapshots of the model's data at export. Downloaded local files open in a browser without a running Fabric capacity or the HTML Content visual:
 
 ```bash
 weaver catalogue-dashboard export --path dashboard-pages --workspace-config workspace-development.yml
@@ -152,7 +154,7 @@ weaver catalogue-dashboard export --path dashboard-pages --workspace-config work
 
 The folder receives one file per page, named by the page, and `index.html`, the Workspaces page. A bar of links at the top of each page opens the others. The data is the deployed model's as it is when you export, with no Filters pane selection. Each page is joined outside Power BI, so it is not limited to the 2 million characters one measure returns. `--name` defaults to `catalogue_dashboard:`.
 
-`--path` is a local folder or a OneLake `abfss://` location. The export runs from a desktop or in a Fabric notebook, so a scheduled notebook can keep a copy in a Lakehouse:
+`--path` is a writable local folder or a OneLake `abfss://` location where the running identity can write. A file retained only in a Lakehouse still requires access to that storage; exporting it does not make an unavailable Lakehouse accessible. The export runs from a desktop or in a Fabric notebook, so a scheduled notebook can keep a copy in a Lakehouse:
 
 ```python
 import weaver

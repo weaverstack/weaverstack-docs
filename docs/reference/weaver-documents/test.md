@@ -27,7 +27,7 @@ For Python/SQL data-item Tests only these keys are accepted. DAX Tests additiona
 
 `Primary key` columns must be returned by both sides. At runtime each key must be non-null, non-blank and unique on each side. `_weaver_side` and `_weaver_sk` are reserved diagnostic column names and must not be returned by either side.
 
-Dependencies are inferred from Python object imports or SQL relation references when `Dependencies` is absent. This includes Spark SQL Tests; the explicit-dependency requirement for Spark SQL Tables and Views does not apply to validations. Declared dependencies replace inferred references and cannot name the Test itself or another Test or Assumption. Item graphs remain acyclic.
+Dependencies are inferred from Python object imports or SQL relation references when `Dependencies` is absent. This includes Spark SQL Tests; the explicit-dependency requirement for Spark SQL Tables and Views does not apply to validations. Declared dependencies replace inferred references and cannot name the Test itself or another Test or Assumption. Data dependency cycles use [deterministic ordering](../../estate/across-catalogues.md#cycles); physical mutation actions must not contain circular waits.
 
 ## Python body
 

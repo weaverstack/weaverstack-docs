@@ -40,7 +40,7 @@ weaver health \
   --catalogue "Depot Planning/Warehouse/Catalogue"
 ```
 
-Nothing else is declared for the join. Weaver reads each catalogue's physical Shortcuts and matches the Fabric item each one names to the catalogue whose installation binds that item; the Shortcut's path gives the object. That object becomes an ancestor of everything that reads the Shortcut. A physical Shortcut into an item that no given catalogue installs joins nothing.
+In this example, Planning's Lakehouse Shortcut already identifies the Operations Table it reads. Give Weaver both catalogues and it matches that Shortcut to the Table recorded by Operations. Health can then follow Planning's dependency back to Operations and check the source Table's last Load result. You do not declare the relationship again in a separate configuration file. A Shortcut into an item that no supplied catalogue installs adds no managed producer to the joined graph.
 
 The working workspace resolves as it does for one catalogue: `--workspace`, `--workspace-config`, or `workspace-config.yml` in the current directory. When nothing names one, the first catalogue's workspace is the working workspace. A catalogue given as `Warehouse/Name` is in the working workspace. Giving the same catalogue twice is an error.
 
@@ -68,7 +68,7 @@ A catalogue given only for context is not inventoried.
 
 ## Load or Test across catalogues
 
-One Load given several catalogues is one run over one graph:
+Choose the work as well as the context. `--catalogue` supplies records for the joined graph; it does not select every team for execution. This complete command selects both workspaces for one Load:
 
 ```bash
 weaver load "Parcel Operations" "Depot Planning" \
@@ -79,7 +79,7 @@ weaver load "Parcel Operations" "Depot Planning" \
 Items decide what runs. A bare workspace name selects every item in that workspace's catalogue, `Kind/Name` an item in the working workspace's catalogue, and `Workspace/Kind/Name` an item in another workspace's. The Operations Table loads first; Weaver then waits until OneLake publishes it, refreshes the `Inbound` SQL endpoint, and loads the `Capacity` Tables that read it.
 
 - Each catalogue is read once before any work starts. If one cannot be read, the run is refused.
-- Every object runs in its own workspace, with the working workspace's Environment.
+- Every object runs in its own workspace, with the working workspace's Environment. Cross-workspace Spark attachment requires Read access to that Environment and the same capacity and network security settings; see [shared runtime setup](../lakehouse/runtime.md#use-a-shared-environment).
 - Every object is recorded in its own catalogue, and every record in the run carries one workflow ID.
 - A catalogue whose items you did not name runs nothing. When your run reads one of its Warehouse Tables without loading it, Weaver waits until OneLake has published that Table's last successful load.
 
@@ -109,7 +109,7 @@ Teams that read one another's data can form a cycle: an object in one catalogue 
 
 Health and Load report each cycle once. Health lists cycles that span catalogues under **Cycles across catalogues**; a cycle within one catalogue is a Green finding in that catalogue's Build section. A Load report carries a `dag_cycle` message naming the members.
 
-Load runs each member once. It orders the members by target and name, the same way every run, and leaves out the edge into the first member. That member reads what the last member left in an earlier run, so it stays one load behind the other team's object.
+Load runs each selected member once per invocation in a deterministic order by target and name. It breaks the cyclic ordering constraints to form an executable plan; it does not iterate to convergence. Dependencies that close a cycle can therefore read results left by an earlier run.
 
 Health does not compare load times between members of a cycle, because each reads what another last loaded and one is always newer. A member that failed, is Pending or is older than `--as-of` is still reported, and a failed member's state reaches the others.
 

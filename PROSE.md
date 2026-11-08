@@ -19,6 +19,16 @@ Write for an engineer trying to complete a task, understand Weaver or look up an
 9. **Keep the real constraint.** Succinctness must not remove destructive scope, ordering, rollback limits, partial-state consequences or the action needed to recover.
 10. **Do not expose the maintenance process.** Public pages do not mention planned coverage, later phases, missing future pages or agent instructions.
 
+## Teach the task before the mechanism
+
+Begin guides with a recognisable situation: a failed load, a shared table, a development change or a release decision. Explain what the reader provides, what Weaver does and what happens next before introducing bindings, identities or persisted state. Continue a named example rather than restarting with an abstract taxonomy. Reference tables remain precise and economical.
+
+Name who acts where it matters. Prefer ordinary verbs and one relationship per sentence to nominalisations or compressed slash-separated concepts. Do not mechanically add pronouns, split every sentence or ban punctuation. Keep meaningful mechanisms rather than replacing them with assurances.
+
+Put requirements beside the operation that needs them, with exact detail linked to Reference. Correct an overbroad sentence instead of appending a wall of caveats. Keep reset/deletion scope explicit at the action. A configuration is destination selection, not access control; confirmation flags answer specific prompts, not all possible writes.
+
+Distinguish source inspection, offline tests, historical captures and live measurements. Do not turn recorded operational success into proof of business correctness or a scale guarantee. Preserve historical capture provenance; regenerate interfaces with their tools rather than editing generated facts.
+
 ## Language
 
 Write as one senior engineer to another. Use direct sentences and concrete nouns. Avoid assurance and sales language such as “powerful”, “seamless”, “robust”, “safe”, “predictable” and “enterprise-grade”; state the mechanism that would justify the adjective.

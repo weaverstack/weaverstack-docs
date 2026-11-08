@@ -12,7 +12,7 @@ weaver health --workspace-config workspace-development.yml
 
 Without an item selector, Health covers the whole installed estate. It is read-only and reports Load, Tests and Build state as Green, Amber or Red, naming findings that need attention. By default it also compares installed claims with physical inventory.
 
-Use the findings to decide whether the estate needs data work, validation or Build recovery. Health does not read unbuilt source or run Load or Test for you.
+Use the findings to decide whether the estate needs data work, validation or Build recovery. Health does not read unbuilt source or run Load or Test for you. Its findings describe the assessed operational state, not the correctness of every business calculation.
 
 For changed definitions, [Check, preview and Build](development-cycle.md) before this installed-state sequence. Source-data and model/Report definitions require separate Build calls. Reports participate in Build only; they have no independent Load or Test.
 

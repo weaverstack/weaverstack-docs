@@ -65,7 +65,7 @@ A project that holds only Reports, with no data items and no semantic model, get
 
 ### A shared Environment
 
-`--environment Workspace/Name` names an Environment in another workspace, such as one Weaver Environment several teams share. It must already exist there. Initialise writes the reference to the workspace configuration as given and does not create, copy, define or publish it; `--publish-environment` with a shared Environment is refused, because the project that defines it publishes it.
+`--environment Workspace/Name` names an Environment in another workspace, such as one Weaver Environment several teams share. It must already exist there, be shared with Read permission for the running identity, and use the same capacity and network security settings as the consuming workspace. The consuming workspace supplies pool and compute settings; see [shared runtime setup](../../lakehouse/runtime.md#use-a-shared-environment). Initialise writes the reference to the workspace configuration as given and does not create, copy, define or publish it; `--publish-environment` with a shared Environment is refused, because the project that defines it publishes it.
 
 ```bash
 weaver initialise \

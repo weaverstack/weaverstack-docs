@@ -19,7 +19,7 @@ Health reads:
 
 Older Log and LoadStatistic rows remain history but are not the current Health activity window. A partial run may leave current objects correlated with different workflows; blocked work can have current status without a LoadStatistic row.
 
-For borrowed objects, current Load state and matching statistics come from the configured source catalogue. The destination catalogue still supplies topology, validation and Build evidence. If borrowed objects exist but the source catalogue is absent or names another workspace, Health fails rather than using copied state as current.
+For borrowed objects, current Load state and matching statistics come from the configured source catalogue. The destination catalogue still supplies topology, validation and Build evidence. The configured source may be in another workspace. If borrowed objects exist but no source catalogue can be resolved, Health fails rather than using copied state as current.
 
 ## Inventory and host boundaries
 
@@ -81,6 +81,10 @@ The Python operation returns `HealthReport`; `is_healthy` is true only for Green
 
 Health never writes current state or history. It reports partial state left by other operations; rerunning Health only rereads that state and does not repair, retry or roll it back.
 
+## Remote mirrored catalogues
+
+When a supplied catalogue still borrows objects, run Health from that mirror's own workspace configuration, with its `mirror:` source set. In joined Health, a catalogue in another workspace loses that configuration during workspace resolution. It can remain unassessed even when you also supply its production source with `--catalogue`. The joined report records the read error and is incomplete; it does not establish that the remote mirror is current. Assess each mirror from its own configuration until that runtime boundary is corrected.
+
 ## Several catalogues
 
 Repeating `--catalogue` (Python `catalogue=[...]`) with more than one value reads those catalogues together. Each value is `Workspace/Warehouse/Name`; `Warehouse/Name` is in the working workspace. The working workspace resolves by the ordinary precedence and, when nothing names one, is the first catalogue's workspace. Giving one catalogue twice is a command error. Health needs read access to every catalogue given; see [Permissions](../permissions.md).
@@ -100,7 +104,7 @@ Repeating `--catalogue` (Python `catalogue=[...]`) with more than one value read
 
 Without `--item`, every catalogue is reported with its whole installed estate. With `--item`, only catalogues with a named item, and any catalogue that could not be read, are reported; the others are read for their graph and load state and are not inventoried.
 
-**Assessment.** Each reported catalogue is assessed as one catalogue is, with managed ancestry through the others: a foreign ancestor that failed, has not processed, or was established after the reader makes the reader Amber. Load times are not compared between members of a cycle, whichever catalogues hold them. A mirrored catalogue's load state comes from its source, as for one catalogue.
+**Assessment.** Each reported catalogue is assessed as one catalogue is, with managed ancestry through the others: a foreign ancestor that failed, has not processed, or was established after the reader makes the reader Amber. Load times are not compared between members of a cycle, whichever catalogues hold them. A mirrored catalogue's load state comes from its configured source. See [remote mirrored catalogues](#remote-mirrored-catalogues) for the working-configuration requirement.
 
 **Failures.** A catalogue that cannot be read, interpreted or assessed, or whose selected targets cannot be inventoried, keeps its place with the error and no report. It counts as Amber. An object that reads into a catalogue that could not be read, or whose load state could not be interpreted, has an Amber `load_ancestor_unobserved` finding: whether it is current is unverified. These are not command errors.
 

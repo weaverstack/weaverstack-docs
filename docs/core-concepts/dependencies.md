@@ -20,7 +20,9 @@ Physical relation names can point outside the managed project estate. Weaver pre
 
 When a relationship crosses logical items, it also creates an item dependency. Item dependencies determine a valid order for a multi-item Build and for item-wide Load work when both items are selected.
 
-The item graph must be acyclic. A project in which two items depend on each other has no valid Build order and is rejected. Explicit dependencies are not a way to enable a circular item graph.
+Items may read one another. Cyclic data dependencies use a deterministic order: Load runs each selected member once per invocation, not repeatedly to convergence. A dependency that closes a cycle can read results from an earlier run. Health suppresses relative load-time comparisons within the cycle but still carries failed, Pending and overdue states. See [Cycles](../estate/across-catalogues.md#cycles).
+
+The physical mutation action plan must still be free of circular waits; tolerance of data cycles does not make an impossible installation sequence executable.
 
 Document and item graphs answer different questions. The document graph identifies the affected and ordered work. The item graph ensures that physical item boundaries are crossed in a valid order.
 

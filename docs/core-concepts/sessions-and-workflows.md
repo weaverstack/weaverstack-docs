@@ -1,6 +1,6 @@
 # Sessions and workflows
 
-A Session and a Workflow solve related but different problems. A Session provides shared execution context. A Workflow gives ordinary Weaver commands a repeatable order.
+When several operations belong to one run, share their connections and configuration with a Session. Use a Workflow to give the sequence a repeatable order and correlate the Load and Test records it produces.
 
 ## A Session is shared execution context
 

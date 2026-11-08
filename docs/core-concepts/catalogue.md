@@ -1,6 +1,6 @@
 # Weaver catalogue
 
-The Weaver catalogue is a configured Fabric Warehouse that records the installed estate and its operational state. Its tables live in the `_` schema.
+When a load fails, the catalogue tells you what was installed, what ran and which work needs attention. Weaver keeps those records in a Fabric Warehouse, under the `_` schema. You choose that Warehouse in workspace configuration.
 
 Project source, workspace configuration and catalogue state answer different questions:
 

@@ -1,6 +1,6 @@
 # Mirrors
 
-A Mirror creates a development estate from another installed estate. It lets a project keep the same logical items and Weaver documents while development uses different physical Fabric items.
+To change one part of a project against existing data, use Mirror to establish a development baseline from an installed estate. Keep your project files and map its items to development targets: unchanged data stays borrowed until you build the parts you change. Lakehouse items can borrow across workspaces; Warehouse items must share the source workspace.
 
 The result is not simply a second copy of every dataset. Weaver can represent unchanged data as borrowed from the source and materialise only the parts that development changes.
 

@@ -23,7 +23,7 @@ Where an installed cross-engine path requires it, planning inserts SQL-endpoint 
 
 An unresolved installed dependency, ambiguous physical address, unknown name or unsupported reload selection is rejected during planning. `--reload` accepts Tables only; selecting a Folder rejects the whole request before execution, including in a dry run.
 
-A dependency cycle is not rejected. Load places the members of each cycle in a fixed order, by target kind, target name and logical identity, and leaves out the edge into the first member. Each member runs once; the first reads what the last member left in an earlier run. The report carries an info message with code `dag_cycle` naming the members. Health does not compare load times between members of a cycle.
+A dependency cycle is not rejected. Load places the members of each cycle in a fixed order, by target kind, target name and logical identity, and breaks cyclic ordering constraints for execution. Each selected member runs once per invocation, without convergence iteration; dependencies closing a cycle can read earlier-run results. The report carries an info message with code `dag_cycle` naming the members. Health does not compare load times between members of a cycle.
 
 ## Dry run
 

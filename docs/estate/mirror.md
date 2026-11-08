@@ -1,6 +1,6 @@
 # Develop using Mirror
 
-Borrow an installed estate’s data for development, then materialise only the objects your changes need. Keep the same project documents and logical identities while the development configuration selects different physical targets.
+Need to change a Table against existing data without copying the whole estate? Mirror establishes a development baseline that borrows unchanged data. Keep your project files, point a separate configuration at development targets, then Build the objects you change into local data.
 
 Use Mirror only after the [ordinary development loop](development-cycle.md) is understood. **It empties and reconstructs the destination catalogue and every selected destination target**, including local materialisations there. Source items remain untouched. It is a baseline reset, not an iteration command.
 
@@ -158,7 +158,7 @@ Selected changed or impacted protected Tables/Folders use preserving materialisa
 
 ## Mirror from another workspace
 
-A development workspace of its own can borrow from production directly. Mirror reads a source catalogue in another workspace and borrows its Lakehouses across the boundary. A Warehouse borrows through Views, which read only their own workspace, so the Warehouse is built in development instead.
+A separate development workspace can borrow production Lakehouse data directly. Mirror reads a source catalogue in another workspace and borrows its Lakehouses across the boundary. A Warehouse borrows through Views, which read only their own workspace, so the Warehouse is built in development instead.
 
 Suppose `Parcel Production` holds the estate from [workspace mappings](environments.md#keep-development-and-production-bindings-separate): the `ParcelCatalogue` catalogue, the `ParcelLanding` Lakehouse and the `ParcelOperations` Warehouse. In a separate workspace, `Parcel Sandbox`, create three empty items with the same names: Warehouses `ParcelCatalogue` and `ParcelOperations`, and Lakehouse `ParcelLanding`. Then describe the sandbox beside the project:
 
@@ -196,6 +196,8 @@ weaver health --workspace-config workspace-sandbox.yml
 ```
 
 Build installs Operations into the sandbox's `ParcelOperations` as a new item. Its logical Shortcut to `Lakehouse/Landing` resolves to the sandbox's `ParcelLanding`, so Operations reads production's Landing data through the borrowed Tables. Load runs Operations' work in the sandbox; Landing stays borrowed and is loaded in production. Health reads the borrowed Landing objects' state from `ParcelCatalogue` in `Parcel Production`. Nothing in `Parcel Production` changes.
+
+The shared Environment needs Read permission, and both workspaces must have the same capacity and network security settings. The sandbox supplies its own pool and compute settings; see [Running Python in Fabric](../lakehouse/runtime.md#use-a-shared-environment).
 
 From here the development cycle is the one above: a changed Landing object becomes local in the sandbox when Build selects it.
 

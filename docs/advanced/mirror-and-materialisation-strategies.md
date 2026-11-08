@@ -26,7 +26,7 @@ A catalogue-only branch can carry existing `_.Mirror` state because it does not 
 
 ## Mirror only the items that need development targets
 
-Selective mirroring rebinds named logical items and leaves every unselected installation source-bound. It avoids creating development copies for items that will not change.
+Selective mirroring rebinds named logical items. Within one workspace, unselected installations retain source bindings; installations left in another workspace are unclaimed by the destination catalogue. It avoids creating development copies for items that will not change.
 
 All selected destination bindings are settled before Weaver changes anything. Logical Shortcuts are recreated against those final bindings, and selected producer items are processed before selected consumers where recorded Shortcuts require it. A selected destination cannot overlap a source read by the same run or another selected destination.
 
@@ -42,7 +42,8 @@ Materialisation is therefore object-selective, not an automatic conversion of th
 unchanged object             → borrowed source data
 changed selected object      → local development data
 affected selected descendant → local development data
-unselected item              → copied source binding
+unselected same-workspace item → copied source binding
+unselected remote item         → unclaimed in destination
 ```
 
 The result is a mixed estate. Load can run local materialised objects; borrowed objects continue to take their Load state from the catalogue where their data is owned. Health uses the installation and mirror records to inspect the corresponding state.

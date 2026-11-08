@@ -251,7 +251,7 @@ The source identity in `shortcuts.yml` stays unchanged when [workspace mappings]
 
 ## Order selected work, not every related item
 
-Python imports and supported Warehouse SQL references normally supply document dependencies without a second authored graph. An explicit `Dependencies` declaration replaces inference, including an empty list. Spark SQL data documents still require that field explicitly. The item graph must be acyclic.
+Python imports and supported Warehouse SQL references normally supply document dependencies without a second authored graph. An explicit `Dependencies` declaration replaces inference, including an empty list. Spark SQL data documents still require that field explicitly. Items can read one another; [data cycles](across-catalogues.md#cycles) are ordered deterministically, while physical mutation actions must remain free of circular waits.
 
 For a connection with loadable work on both sides, select both logical items in an item-wide Load. Weaver orders selected producers before consumers and inserts supported OneLake-publication and SQL-endpoint readiness barriers where the installed cross-engine path requires them. The Shortcut View has no separate Load, but its consuming LakehouseCurrentStatus Table does. Name both Landing and Operations when you want that selected cross-item work ordered together.
 

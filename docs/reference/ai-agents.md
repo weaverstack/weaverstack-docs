@@ -1,6 +1,6 @@
 # Using Weaver with AI agents
 
-An AI coding agent can work on a Weaver project the way a developer does: edit the project's files, check them, preview a change, apply it in Fabric and read back what happened. Weaver gives it what that needs: plain source files, a local check, previews, one JSON document per command and no prompts when asked for none.
+An AI coding agent can work on a Weaver project the way a developer does: edit the project's files, check them, preview a change, apply it in Fabric and read back what happened. Weaver gives it what that needs: plain source files, a local check, previews, command-specific JSON results and no prompts when asked for none.
 
 This page sets up that loop and the boundaries to give an agent. It applies to any agent that can run shell commands, such as Claude Code, GitHub Copilot or Codex.
 
@@ -11,9 +11,9 @@ This page sets up that loop and the boundaries to give an agent. It applies to a
 - **Previews.** `--dry-run` on `initialise`, `build`, `load`, `test`, `wipe`, `unbind` and `catalogue-dashboard` reports what would happen and changes nothing.
 - **JSON results.** `--json` writes one JSON document to stdout and keeps progress off it. [JSON output](#json-output) below lists each command's fields and exit codes.
 - **No prompts.** `--non-interactive` makes a command fail with a message, instead of waiting, when it would need input or a confirmation.
-- **Explicit authorisation.** `wipe`, `unbind` and `mirror` ask before they empty or unbind anything, and `workflow` asks before such a step. `--yes` answers that question and does nothing else; under `--non-interactive`, a missing `--yes` is an error, so an agent that is not given it cannot empty a target.
-- **An acceptance check.** `weaver health --json` exits `0` only when the estate is Green, so an agent can tell whether its work left anything failed, stale or untested.
-- **Inspection.** `weaver execute` runs a T-SQL, Spark SQL, Python or DAX query against one item and records nothing, so an agent can look at data without changing state.
+- **Explicit authorisation.** `wipe`, `unbind` and `mirror` confirm their destructive or claim-removal scope; `workflow` confirms the whole sequence before running it. `--yes` answers those confirmation prompts. It is not access control: Build, Load and submitted SQL or Python can change data without that prompt.
+- **An acceptance check.** `weaver health --json` exits `0` only when the estate is Green, so an agent can check the assessed Build, Load and validation findings. Green does not prove every business calculation is correct.
+- **Ad hoc execution.** `weaver execute` submits T-SQL, Spark SQL, Python or DAX against one item. SQL and Python can change data. Execute does not automatically create Weaver Load/Test records or advance bookmarks; that bookkeeping distinction does not restrict what submitted code can do.
 
 ## The loop
 
@@ -21,12 +21,14 @@ A change usually runs through the same commands. Give them to the agent in this 
 
 ```bash
 weaver check --json
-weaver build --dry-run --json --non-interactive
-weaver build --json --non-interactive
-weaver load --stale --json --non-interactive
-weaver test --stale --json --non-interactive
-weaver health --json --non-interactive
+weaver build --dry-run --json --non-interactive --workspace-config workspace-config.dev.yml
+weaver build --json --non-interactive --workspace-config workspace-config.dev.yml
+weaver load --stale --json --non-interactive --workspace-config workspace-config.dev.yml
+weaver test --stale --json --non-interactive --workspace-config workspace-config.dev.yml
+weaver health --json --non-interactive --workspace-config workspace-config.dev.yml
 ```
+
+Run these commands from the project folder, with `workspace-config.dev.yml` naming your development workspace and targets. Check reads local source and accepts no `--workspace-config`. Commands that support it otherwise discover ordinary workspace configuration when the flag is omitted; omitting it is not protection against selecting another workspace.
 
 `check` runs after every edit. The dry run reports what Build would change. `--stale` loads and tests only what is now behind. Health exits `0` only when the estate is Green.
 
@@ -37,9 +39,9 @@ Select items with `--item` to keep each run to the part of the project the agent
 Run an agent against a development workspace, never production:
 
 - Give its identity Contributor in the development workspace, and in production only read access to the data it works from. [Permissions](permissions.md) lists what each command needs.
-- Give it real data with [Mirror](../estate/mirror.md): the development workspace borrows production's Lakehouse data through shortcuts, and only what is built there changes. Reading through a shortcut uses the reader's own access, so the agent can read production data but not change it.
-- Point every command at the development configuration with `--workspace-config`, so a missing flag cannot reach another workspace.
-- Sign the agent in as yourself on a desktop, or as a service principal in automation. [Unattended execution](../estate/automation-and-deployment.md) covers service principals.
+- Give it real data with [Mirror](../estate/mirror.md): the development workspace borrows production's Lakehouse data through shortcuts. Unchanged data stays borrowed while edited objects can become local. Give the effective source-reading identity read access only. Shortcut identity depends on the access path; see [shortcut permissions](permissions.md#workspace-roles).
+- Pass the development configuration explicitly to workspace operations that accept `--workspace-config`. Configuration chooses destinations, not permissions.
+- Choose a running identity with the intended permissions. Your own desktop sign-in retains its production write access if you have it; naming a development workspace does not remove that access. Use a service principal where appropriate for automation. [Unattended execution](../estate/automation-and-deployment.md) covers service principals.
 
 ## Instructions for the agent
 
@@ -48,12 +50,12 @@ Agents read standing instructions from a file in the project, such as `AGENTS.md
 ```markdown
 This is a Weaver project for Microsoft Fabric. Weaver documentation: https://docs.weaverstack.dev/
 
-- Use `--workspace-config workspace-config.dev.yml` on every command. Never use the production configuration.
-- Pass `--json --non-interactive` to every command and read the JSON on stdout.
+- Work from this project folder. For workspace operations that accept it, pass `--workspace-config workspace-config.dev.yml`. Never use the production configuration.
+- Use `--json --non-interactive` where supported and read the command-specific result. `check` accepts `--json` but not `--workspace-config`; `workflow` has no `--json` result mode.
 - Run `weaver check --json` after every edit.
 - Preview with `--dry-run` before `build` or `load`, and report the planned changes.
 - Never pass `--yes` to `wipe`, `unbind`, `mirror` or `workflow` without asking first.
-- Finish with `weaver health --json --non-interactive`. Exit code 0 means Green; report anything else.
+- Finish with `weaver health --json --non-interactive --workspace-config workspace-config.dev.yml`. Exit code 0 means the assessed scope is Green; report any findings and whether the intended scope was fully assessed. This is not proof of business correctness.
 ```
 
 ## Migrating a dbt project
