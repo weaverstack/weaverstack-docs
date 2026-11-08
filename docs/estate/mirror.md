@@ -6,7 +6,7 @@ Use Mirror only after the [ordinary development loop](development-cycle.md) is u
 
 ## Prepare existing destinations in the same workspace
 
-This first baseline keeps source and destination in one workspace; [mirror from another workspace](#mirror-from-another-workspace) covers a separate development workspace. Here the source is the estate you have been building: the `Catalogue` Warehouse and the `Operations` Warehouse it records. Mirror needs an empty destination for each, and it does not create Fabric items.
+This first baseline keeps source and destination in one workspace; [mirror from another workspace](#mirror-from-another-workspace) covers a separate development workspace. Keep the [connected Landing/Operations project](connected-items.md) and its installed estate: the `Catalogue` Warehouse, the `Operations` Warehouse it records, and Landing supplying the connected `Parcel.LakehouseCurrentStatus` Table. Mirror needs existing empty destination Warehouses for the catalogue and Operations; it does not create Fabric items.
 
 1. In the Fabric portal, create two Warehouses in `Parcel Development`: `CatalogueDev` and `OperationsDev`.
 2. Add a separate configuration beside the project. Keep `workspace-development.yml` as it is; this file describes the mirrored copy:
@@ -141,16 +141,33 @@ See [Mirrors](../core-concepts/mirrors.md) for borrowed and local data. Exact Mi
 
 After a successful Mirror, keep the same project source and pass `--workspace-config workspace-mirror.yml` to Build, Load, Test and Health. The [development cycle](development-cycle.md#edit-and-iterate) is unchanged.
 
-Build compares source with copied installed declarations. Unchanged borrowed objects stay borrowed. A changed selected object, or an affected selected descendant, becomes local after successful installation. Its `_.Mirror` row is marked deleted and stays as the record of the catalogue mirrored. Items outside the Build selection do not materialise just because another item changed. Load operates local materialisations; borrowed data continues to be loaded and owned at its source.
+Correct an earlier event's depot in the required `Warehouse/Operations/Parcel.StatusEvent.sql`. Replace this row:
 
-For example, if you added the [selection example's](selective-runs.md#explore-a-larger-branching-selection) `Reference.Service`, change its `ServiceName` constant and run:
-
-```bash
-weaver build --item Warehouse/Operations --workspace-config workspace-mirror.yml
-weaver load Warehouse/Operations --stale --workspace-config workspace-mirror.yml
+```sql
+    ('P-1001', 1, 'Accepted', 'North'),
 ```
 
-Reference.Service becomes a local Table in OperationsDev, and its `_.Mirror` row is marked deleted. Reference.Depot stays borrowed, and the source Operations Warehouse keeps its original value.
+with:
+
+```sql
+    ('P-1001', 1, 'Accepted', 'East'),
+```
+
+Keep the key, remaining rows and metadata intact. This changes event history, not P-1001's latest status. Check, preview and install it against the mirrored destinations:
+
+```bash
+weaver check
+weaver build --item Warehouse/Operations --dry-run --workspace-config workspace-mirror.yml
+weaver build --item Warehouse/Operations --workspace-config workspace-mirror.yml
+weaver load Warehouse/Operations --stale --workspace-config workspace-mirror.yml
+weaver test Warehouse/Operations --workspace-config workspace-mirror.yml
+```
+
+Review the preview before applying Build. In Fabric, query `Parcel.StatusEvent` in **OperationsDev** and **Operations**. P-1001's sequence 1 should now read `Accepted / East` in development and still `Accepted / North` at the source. Sequence 2 remains `In transit / Central` in both, so the generated current-status Test and known-status Assumption should still pass.
+
+Compare the connected `Parcel.LakehouseCurrentStatus` Table too: it stays borrowed, presented as a View in OperationsDev over the unchanged source data. You corrected one branch without copying or reloading that independent Table. Keep the [connected Landing/Operations project](connected-items.md) for this comparison.
+
+Build compares source with copied installed declarations. The changed StatusEvent and its affected selected CurrentStatus View become local after successful installation; unchanged borrowed objects stay borrowed. For each object made local, its `_.Mirror` row is marked deleted and remains as a record of the catalogue mirrored. Items outside the Build selection do not materialise just because another item changed. Load operates local materialisations; borrowed data continues to be loaded and owned at its source.
 
 Warehouse borrowed Tables/Views are presented through local Views. Lakehouse stored Tables/Folders use shortcuts, with local wrapper Views for source Views. Health reads borrowed current Load state from the source catalogue and local state from development. Development can therefore combine borrowed and locally materialised objects.
 

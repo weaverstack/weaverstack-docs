@@ -54,7 +54,9 @@ This is a Weaver project for Microsoft Fabric. Weaver documentation: https://doc
 - Use `--json --non-interactive` where supported and read the command-specific result. `check` accepts `--json` but not `--workspace-config`; `workflow` has no `--json` result mode.
 - Run `weaver check --json` after every edit.
 - Preview with `--dry-run` before `build` or `load`, and report the planned changes.
-- Ask for approval before running `wipe`, `unbind` or `mirror`, or confirming a workflow.
+- When investigating an unexpected result, start with a read-only Execute query against the intended development item. For example: `weaver execute tsql Warehouse/Operations --command "SELECT TOP 10 [Parcel ID], [Status], [Depot] FROM [Parcel].[CurrentStatus] ORDER BY [Parcel ID]" --workspace-config workspace-config.dev.yml --json --non-interactive`. Choose the engine and item for the actual task; do not query production by substituting its physical name.
+- Ask for approval before submitting SQL or Python that mutates data, as well as before `wipe`, `unbind`, `mirror` or confirming a workflow. Execute has no read-only or dry-run flag: review the submitted code and use identity permissions to enforce access. Keep only required read access to production sources; never write Weaver-owned catalogue rows.
+- If Execute reports an unknown outcome or loses its response, stop and inspect the resulting state before any retry. The request may already have run.
 - Finish by checking Health for the intended development scope with `weaver health --json --non-interactive --workspace-config workspace-config.dev.yml`. Report the status, any findings, and whether the full requested scope was assessed. Run the project’s Tests and Assumptions to check the declared data and business rules.
 ```
 

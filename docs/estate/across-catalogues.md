@@ -68,7 +68,29 @@ A catalogue given only for context is not inventoried.
 
 ## Load or Test across catalogues
 
-Catalogues provide dependency context. Item and workspace selectors choose execution. Other catalogues can supply upstream state while you run your own team's work. This command selects both workspaces for one Load:
+Suppose Operations has repaired and reloaded its source Table. As Planning, first catch up your own work using that upstream state:
+
+```bash
+weaver load "Depot Planning" --stale \
+  --catalogue "Parcel Operations/Warehouse/Catalogue" \
+  --catalogue "Depot Planning/Warehouse/Catalogue"
+```
+
+Only Planning's items run. Operations' catalogue supplies upstream state; including it does not reload Operations. `--stale` judges Planning's objects against their sources in both catalogues.
+
+Then validate Planning's changed data. Each validation runs in Planning's workspace and is recorded in Planning's catalogue; `test --stale` counts source loads in either catalogue:
+
+```bash
+weaver test "Depot Planning" --stale \
+  --catalogue "Parcel Operations/Warehouse/Catalogue" \
+  --catalogue "Depot Planning/Warehouse/Catalogue"
+```
+
+Check scoped Health again to see whether Planning has caught up. An upstream failure still needs Operations' attention.
+
+### Deliberately coordinate both teams
+
+When you are responsible for both teams' run and have write access to both, select both workspaces. The catalogues supply dependency context; the workspace selectors choose execution:
 
 ```bash
 weaver load "Parcel Operations" "Depot Planning" \
@@ -84,22 +106,6 @@ Items decide what runs. A bare workspace name selects every item in that workspa
 - When a context catalogue supplies a Warehouse Table that your run reads without loading it, Weaver waits until OneLake has published that Table's last successful load.
 
 With no items, the run covers the working workspace's catalogue: its configured catalogue if you gave it, otherwise the one catalogue you gave in the working workspace. Several catalogues in the working workspace, none of them configured, is an error; name the items instead.
-
-`--stale` judges each object against its sources in every catalogue given, so it selects your objects that are behind another team's load:
-
-```bash
-weaver load "Depot Planning" --stale \
-  --catalogue "Parcel Operations/Warehouse/Catalogue" \
-  --catalogue "Depot Planning/Warehouse/Catalogue"
-```
-
-Test works the same way. Each validation runs in its own workspace and is recorded in its own catalogue, and `test --stale` counts a load in any catalogue given:
-
-```bash
-weaver test "Depot Planning" --stale \
-  --catalogue "Parcel Operations/Warehouse/Catalogue" \
-  --catalogue "Depot Planning/Warehouse/Catalogue"
-```
 
 `--file` runs against one catalogue and is refused with several. [Load behaviour](../reference/operation-behaviour/load.md#several-catalogues) and [Test behaviour](../reference/operation-behaviour/test.md#several-catalogues) give the exact selection forms and failure rules.
 

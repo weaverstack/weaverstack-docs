@@ -319,7 +319,7 @@ Load summary
 
 The item-wide run loads the carrier Folder, Event and CurrentStatus in order. Its six inserted entries comprise one CSV file, three event rows and two current-status rows.
 
-Run the two generated validations, then read Health:
+Did the transformation keep the right latest event for each parcel, and does every event use a recognised status? The generated `CurrentStatusMatches` Test compares the two latest-status rows with expected values; the `EventStatusIsKnown` Assumption looks for null or unrecognised statuses. Run both, then read Health:
 
 ```bash
 weaver test Lakehouse/Landing

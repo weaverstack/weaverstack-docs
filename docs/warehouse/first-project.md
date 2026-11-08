@@ -302,7 +302,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-Run the two generated validations, then read Health, Weaver's summary of what is installed and what ran:
+Check the data as well as the successful Load. `CurrentStatusMatches` compares the View with the two expected latest-status rows; `StatusIsKnown` looks for null or unrecognised event statuses. Together they check that the View chose the right events and the source stayed within the allowed status vocabulary. Run both, then read Health, Weaver's summary of what is installed and what ran:
 
 ```bash
 weaver test Warehouse/Operations

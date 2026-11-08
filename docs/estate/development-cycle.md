@@ -6,13 +6,27 @@ Edit a working definition, check it, inspect the Build preview, install the chan
 edit → check → Build preview → Build → Load → Test → Health → repeat
 ```
 
-Keep the project and configuration you just inspected. The leading commands continue [Landing → Operations](connected-items.md) with `workspace-development.yml`, as selected on the mapping and Health pages. Edit a Landing declaration while leaving its logical names and Operations connection intact. Use the [connection task](connected-items.md) if those items are not yet installed.
+Continue the working [Landing → Operations project](connected-items.md) with `workspace-development.yml`, as selected on the mapping and Health pages. You will correct the depot on an earlier carrier event, install that change and check that the latest parcel statuses still agree with the expected rows. Use the connection task first if those items are not yet installed.
 
 For another source-data estate, select its actual changed items in the same loop. A Warehouse-only reader can use `--item Warehouse/Operations` with the [StatusEvent project](../warehouse/tests.md). If you have added the native Parcel model and managed-source models to this project, use [the model-inclusive loop](#include-semantic-models-and-reports) below.
 
 ## Edit and iterate
 
-After editing the source, check it locally and preview the intended installed change:
+Open `Lakehouse/Landing/Files/Parcel__Events.py`. In the `EVENTS` CSV constant, replace just this row:
+
+```csv
+P-1001,1,Accepted,North
+```
+
+with:
+
+```csv
+P-1001,1,Accepted,East
+```
+
+This corrects the first event's depot without changing its key or status. P-1001's later event is still `In transit` at `Central`, so its CurrentStatus should not change. Leave the logical names, imports and Operations connection intact.
+
+Check the edited project and preview the installation:
 
 ```bash
 weaver check
@@ -21,7 +35,7 @@ weaver build --item Lakehouse/Landing --item Warehouse/Operations --dry-run --wo
 
 Check catches declaration errors without contacting Fabric. Build preview reads existing targets and shows selected work and destructive consequences without changing the estate. Use ordinary Build for first deployment; previews require existing targets.
 
-If the preview is the intended change, install and operate that selection:
+Look for the changed `Parcel.Events` Folder and its affected descendants in Landing. Operations is still selected so Build can reconcile its connected definitions too. A preview does not load the corrected CSV; if it shows unexpected removals or different targets, stop and correct the source or configuration. Otherwise, install and operate that selection:
 
 ```bash
 weaver build --item Lakehouse/Landing --item Warehouse/Operations --workspace-config workspace-development.yml
@@ -29,6 +43,17 @@ weaver load --stale --workspace-config workspace-development.yml
 weaver test --stale --workspace-config workspace-development.yml
 weaver health --workspace-config workspace-development.yml
 ```
+
+Inspect Landing's SQL analytics endpoint after Load:
+
+```sql
+select [Parcel ID], [Event sequence], [Status], [Depot]
+from [Parcel].[Event]
+where [Parcel ID] = 'P-1001'
+order by [Event sequence];
+```
+
+Expect `Accepted / East` at sequence 1 and `In transit / Central` at sequence 2. Landing's `Parcel.CurrentStatus` and Operations' connected `Parcel.LakehouseCurrentStatus` should still show `In transit / Central` for P-1001. The correction reached the event history without changing which event is latest. The four Parcel validations should pass, and scoped Health should have no remaining findings if the estate was Green before the edit.
 
 Build reconciles source against installed state, including changed definitions and affected descendants inside its selected items. Changed loadable work begins with non-Green current state. `load --stale` selects installed loadables needing work; it leaves omitted Green producers alone. `test --stale` then runs the installed validations that are new, failed, or read something the load just changed, and Health shows Load, Tests and Build together. Drop `--stale` to run every validation.
 

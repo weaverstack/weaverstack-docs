@@ -203,7 +203,11 @@ The chooser picks what a page draws from the data it holds. To reduce the data i
 
 ### Workspaces
 
-The workspaces and items the catalogues describe, drawn as a network of what each supplies to and receives from the others. **Show** switches between workspaces and items; with one workspace, the page starts with its items. A dependency is one object reading another directly, and a shortcut is the dependency rather than whatever reads through it. Dependencies inside one item are left out, and an item that two catalogues record counts once.
+Which items depend on Operations? In the Parcel Dashboard, set **Show** to items and select **Operations**. Read the connected-item list to distinguish what supplies Operations from what reads it. Select a connected item's node, then choose that item on **Orchestration** to inspect the objects it reads and their last outcomes. If Operations has no downstream item yet, select Landing and follow its connection to Operations from the connected-items task.
+
+Use this path to narrow the investigation, not to conclude that every connected item needs a reload. Open **Health** for the selected item to read the recorded findings; use `weaver health` when you also need physical inventory or borrowed-source state. A successful last run alone does not show whether a later upstream load made the result stale.
+
+The network shows the workspaces and items the catalogues describe, with what each supplies to and receives from the others. **Show** switches between workspaces and items; with one workspace, the page starts with its items. A dependency is one object reading another directly, and a shortcut is the dependency rather than whatever reads through it. Dependencies inside one item are left out, and an item that two catalogues record counts once.
 
 The tiles count workspaces, items and the dependencies between them. Select a workspace or item to list its items or the items it is connected to, with the dependencies in and out and each item's load state. Workspaces or items that read from one another, directly or through others, are listed as loops. Load state here is each item's last loads and validations, not a Health assessment.
 

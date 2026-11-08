@@ -153,7 +153,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-In the workspace, open the deployed **Parcel** semantic model and choose **Write DAX queries**. Run:
+Check that the deployed measure counts the two delivered parcels, not all three events. This gives you a value to compare after applying the hiding rule. In the workspace, open the deployed **Parcel** semantic model and choose **Write DAX queries**. Run:
 
 ```dax
 EVALUATE
@@ -309,4 +309,4 @@ The rule hides the many-side key from the field list, not the one-side key.
 
 When this convention belongs on several models, [share it in `PowerBI/policy.tmdl`](shared-policy.md). The next task keeps Parcel and its local overlay, adding common formatting and a calculation group.
 
-[Validate the model](validation.md) to check its number, or [connect a managed Fabric source](managed-sources.md) by adding a source-backed model alongside this inline model. [Weaver documents](../core-concepts/weaver-documents.md#native-models-overlays-and-annotations) explains how overlays fit beside native definitions.
+[Validate the model](validation.md) to add a repeatable DAX Assumption that the delivery count stays positive, or [connect a managed Fabric source](managed-sources.md) by adding a source-backed model alongside this inline model. [Weaver documents](../core-concepts/weaver-documents.md#native-models-overlays-and-annotations) explains how overlays fit beside native definitions.
