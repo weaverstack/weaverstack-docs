@@ -82,4 +82,4 @@ A failure in catalogue rebuild or copy, target emptying, borrowed-form creation,
 
 Running Mirror again is a new reconstruction from the selected source. It empties the same settled destination scope again, so local materialisation inside that scope is replaced by a fresh borrowed baseline. This is a reset, not rollback or continuation of the earlier run.
 
-A successful result reports `status: succeeded`, the workspace and catalogue pair, emptied destinations, copied and uncopied catalogue tables, selected logical items, and kind-specific work counts. See [Machine-readable interfaces](../machine-readable-output.md) for the current unversioned JSON shape.
+A successful result reports `status: succeeded`, the workspace and catalogue pair, emptied destinations, copied and uncopied catalogue tables, selected logical items, and kind-specific work counts. See [JSON output](../ai-agents.md#json-output) for the current unversioned JSON shape.
