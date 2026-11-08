@@ -4,8 +4,6 @@ Use Reference to look up current public interfaces, exact representations and op
 
 ## Changes for 0.11
 
-This documentation previews 0.11 behaviour. The additions below require that release or a matching development build; installing from PyPI selects the published package, not unreleased source.
-
 - Keep separate team projects and [assess, load or test across their catalogues](../estate/across-catalogues.md). Supply catalogue context and select the work independently.
 - Use [Python workflows](python/session.md#workflows) to share a Session and configuration and correlate recorded Load/Test work. [Test stale validations](operation-behaviour/test.md#stale-selection) to rerun failed, invalid, Pending or stale results.
 - [Execute](cli/execute.md) submits commands or files in T-SQL, Spark SQL, Python and DAX without authoring a Weaver document. SQL and Python can change data.
