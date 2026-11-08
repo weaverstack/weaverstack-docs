@@ -82,7 +82,7 @@ Mirror establishes a development catalogue from another installed estate. Select
 | --- | --- | --- |
 | `_.Mirror` | Which installed objects still borrow data, where that data comes from and what presents it at the development target. | You need to distinguish borrowed objects from locally materialised objects or trace borrowed data to its source. |
 
-`_.Mirror` is created when borrowed state is first recorded, so an estate that has never borrowed data may not contain it. A development catalogue can describe a mixed estate: a Registry object with a corresponding Mirror row is borrowed; an installed object without one is local. Building a changed borrowed object locally removes its borrowed-state row after the installation succeeds.
+`_.Mirror` is created when borrowed state is first recorded, so an estate that has never borrowed data may not contain it. A development catalogue can describe a mixed estate: a Registry object with a corresponding live Mirror row is borrowed; an installed object without one is local. Building a changed borrowed object locally marks its Mirror row deleted after the installation succeeds; the row stays as the record of the catalogue mirrored.
 
 Current Load state for borrowed data remains with the source estate; work performed locally is recorded in the development catalogue. [Mirrors](mirrors.md) explains the user model.
 

@@ -72,7 +72,7 @@ weaver load [-h] [--item ITEM] [--name NAME] [--source SOURCE] [--concurrency N]
 : Fabric Environment name or Workspace/Environment reference.
 
 `--catalogue CATALOGUE`
-: Where the Weaver catalogue lives, for example Warehouse/Weaver.
+: Where the Weaver catalogue lives, for example Warehouse/Weaver. Repeat as Workspace/Warehouse/Name to plan one load across several catalogues. Items still decide what runs; Workspace/Kind/Name names an item in another catalogue, and a workspace name all of its items.
 
 <!-- END GENERATED CLI -->
 

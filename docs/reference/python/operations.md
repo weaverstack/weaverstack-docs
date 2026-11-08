@@ -46,7 +46,7 @@ weaver.check_mirror(plan: MirrorPlan, *, session=None) -> ResolvedMirror
 ### `weaver.deploy_catalogue_dashboard`
 
 ```python
-weaver.deploy_catalogue_dashboard(*, catalogue: str | Sequence[str] | None=None, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, session=None) -> CatalogueDashboardResult
+weaver.deploy_catalogue_dashboard(*, catalogue: str | Sequence[str] | None=None, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, import_mode: bool=False, dry_run: bool=False, session=None) -> CatalogueDashboardResult
 ```
 
 ### `weaver.execute`
@@ -55,10 +55,16 @@ weaver.deploy_catalogue_dashboard(*, catalogue: str | Sequence[str] | None=None,
 weaver.execute(engine: str, item: str, command: str | None=None, *, file: str | Path | None=None, workspace: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, limit: int=DEFAULT_LIMIT, session=None) -> ExecuteResult
 ```
 
+### `weaver.export_catalogue_dashboard`
+
+```python
+weaver.export_catalogue_dashboard(path: str | Path, *, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, session=None) -> CatalogueDashboardExport
+```
+
 ### `weaver.health`
 
 ```python
-weaver.health(items: str | Sequence[str] | None=None, *, as_of: str | datetime | None=None, workspace: str | None=None, catalogue: str | None=None, workspace_config: str | Path | None=None, inventories: bool=True, session=None) -> HealthReport
+weaver.health(items: str | Sequence[str] | None=None, *, as_of: str | datetime | None=None, workspace: str | None=None, catalogue: str | Sequence[str] | None=None, workspace_config: str | Path | None=None, inventories: bool=True, session=None) -> 'HealthReport | JoinedHealthReport'
 ```
 
 ### `weaver.initialise`
@@ -70,7 +76,7 @@ weaver.initialise(project_folder, *, workspace: str | None=None, catalogue: str 
 ### `weaver.load`
 
 ```python
-weaver.load(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, ancestors: bool=False, descendants: bool=False, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, fault_tolerant: bool=False, dry_run: bool=False, reload: bool=False, ignore_stability_threshold: bool=False, stale: bool=False, as_of: str | datetime | None=None, concurrency: int | None=None, session=None) -> LoadRunReport
+weaver.load(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, ancestors: bool=False, descendants: bool=False, source=None, workspace: str | None=None, catalogue: str | Sequence[str] | None=None, environment: str | None=None, workspace_config: str | Path | None=None, fault_tolerant: bool=False, dry_run: bool=False, reload: bool=False, ignore_stability_threshold: bool=False, stale: bool=False, as_of: str | datetime | None=None, concurrency: int | None=None, session=None) -> LoadRunReport
 ```
 
 ### `weaver.mirror`
@@ -100,7 +106,7 @@ weaver.plan_wipe(targets: str | Iterable[str]=(), *, workspace: str | None=None,
 ### `weaver.test`
 
 ```python
-weaver.test(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, stale: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport
+weaver.test(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | Sequence[str] | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, stale: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport
 ```
 
 ### `weaver.unbind`

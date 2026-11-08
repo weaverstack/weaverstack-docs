@@ -133,6 +133,7 @@ nav:
       - getting-started/index.md
       - Installation: getting-started/installation.md
       - Your first Fabric project: warehouse/first-project.md
+      - Using Weaver with AI agents: getting-started/ai-agents.md
   - Lakehouse:
       - lakehouse/index.md
       - A first Lakehouse pipeline (Python): lakehouse/python.md
@@ -166,6 +167,7 @@ nav:
       - Workspace and environment mappings: estate/environments.md
       - Catalogue and Health: estate/catalogue-and-health.md
       - Catalogue Dashboard: estate/catalogue-dashboard.md
+      - Work across teams' catalogues: estate/across-catalogues.md
       - The development cycle: estate/development-cycle.md
       - Run, test and inspect the estate: estate/operate.md
       - Recover failed work: estate/recovery.md

@@ -34,6 +34,9 @@ Successful command outcomes normally exit `0`. A report that does not satisfy th
 | `load` | `requested`, `status`, `dry_run`, `fault_tolerant`, `reload`, `ignore_stability_threshold`, `workspace`, `workflow_id`, `started_at`, `finished_at`, `order`, `edges`, `nodes`, `messages` | `0` for `succeeded` or `succeeded_with_rejects`; otherwise `1`. |
 | `test` | `status`, `nodes`, `totals`, `workflow_id`, `started_at`, `finished_at` | `0` for a completed passing or planned report; failed or invalid validation returns `1` while still emitting the report. |
 | `health` | `format_version`, `generated_at`, `as_of`, `status`, `targets`, `sections`, `current_load`, `load_activity` | `0` only for Green; Amber or Red returns `1`. |
+| `execute` | `status`, `engine`, `item`, `target`, `limit`, `seconds`, `result_sets`, and `output` where Python printed any | `0` after the request returns; a handled error returns `1` through the error envelope. |
+| `catalogue-dashboard` | `workspace`, `catalogue`, `catalogues`, `mode`, `name`, `items`, `sources`, `dry_run`, `status`, `errors`, `warnings` | `0` when `status` is `succeeded`; otherwise `1`. |
+| `catalogue-dashboard export` | `workspace`, `name`, `path`, `pages` | `0` after the pages are written; a handled error returns `1`. |
 | `wipe --dry-run` | `workspace`, `targets`, `catalogue`, `catalogue_action`, `unbound` | `0` after reporting the settled plan. |
 | `wipe` | `workspace`, `plan`, `items`, `unbound`, `dry_run` | `0` after the operation returns; refusal or a handled operation error returns `1`. |
 | `unbind --dry-run` | `workspace`, `catalogue`, `targets` | `0` for a settled plan, `1` for refusal/error. |
@@ -89,6 +92,8 @@ A Test result adds `missing_count`, `unexpected_count`, and nullable `error_mess
 `sections` is an object with `load`, `tests`, and `build`. Each section has `status`, `subjects`, `counts`, and `findings`. A finding has `area`, `code`, `severity`, nullable `status`, `message`, nullable `object_id`, nullable `target`, nullable `workflow_id`, nullable timestamps, and nullable `failure_count`.
 
 `current_load` is null or has `workflow_ids`, nullable timestamps, and `counts`. `load_activity[]` has object and target identity, workflow and timing fields, row counts, `is_reload`, and `is_static_skip`. Health timestamps are ISO 8601 strings. `format_version: 2` versions this report only; it says nothing about the other command documents.
+
+Given more than one `--catalogue`, Health writes a joined document instead: `format_version` `1`, `generated_at`, `as_of`, `status`, `complete`, `catalogues` and `cycles`. Each `catalogues[]` entry has `label`, `catalogue`, `status`, nullable `error`, and nullable `report`, which is that catalogue's ordinary Health document above. `complete` is false when a catalogue could not be read or assessed. `cycles[]` lists each dependency cycle once, as its member node IDs. The exit code follows the joined `status`.
 
 ### Wipe
 

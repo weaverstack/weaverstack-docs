@@ -43,7 +43,7 @@ The top-level keys listed below are accepted. Unknown keys are rejected at the t
 | `workspace` | non-empty string | yes | — | Fabric workspace in which the workload, catalogue and targets are resolved. Fabric-name validation applies. |
 | `catalogue` | `Warehouse/Name` | no | unset | Warehouse holding the Weaver catalogue. The kind must be the literal `Warehouse`; a workspace-qualified value is not accepted here. |
 | `environment` | `Environment` or `Workspace/Environment` | no | unset | Published Fabric Environment attached to Spark work. A qualified reference may select an Environment owned by another workspace. This key does not create or publish it. |
-| `mirror` | `Warehouse/Name` or `Workspace/Warehouse/Name` | no | unset | Source catalogue for Mirror and mirrored-state reads. Although the qualified form parses, Mirror and mirrored-state reads reject a source outside the resolved `workspace`. |
+| `mirror` | `Warehouse/Name` or `Workspace/Warehouse/Name` | no | unset | Source catalogue for Mirror and mirrored-state reads. The qualified form names a catalogue in another workspace. |
 | `execution` | mapping | no | build/run defaults below | Workspace-level resource limits. |
 | `data_sources` | mapping | no | `{}` | Shared M expression name to typed `Warehouse/Name` or `Lakehouse/Name`; explicit Build mappings override the same expression. |
 | `targets` | mapping from logical item to target declaration | no | `{}` | Build and Mirror destination bindings. An operation that needs an absent binding fails when resolving that item. |
@@ -189,9 +189,9 @@ Mirror resolves its two catalogue roles separately:
 
 A configuration containing only `catalogue` therefore describes a possible source estate, not an inferred destination. The destination must be supplied separately. A configuration containing both uses `mirror` as the source and `catalogue` as the destination.
 
-Both catalogues must resolve to distinct Warehouses in the selected `workspace`. A value such as `Production/Warehouse/ParcelCatalogue` is accepted by the configuration parser but rejected by Mirror when `workspace` is not `Production`; it does not enable cross-workspace mirroring. Destination targets also belong to the selected workspace because target declarations carry names, not workspace qualifiers.
+The destination catalogue is in the selected `workspace`. The source may be too, as a distinct Warehouse, or it may be in another workspace, such as `Production/Warehouse/ParcelCatalogue`; from there Mirror selects only Lakehouse items. Destination targets belong to the selected workspace because target declarations carry names, not workspace qualifiers. See [Mirror behaviour](../operation-behaviour/mirror.md#source-and-destination).
 
-The development example above is valid because its source catalogue, destination catalogue and destination targets all belong to `Parcel Operations`.
+In the development example above, the source catalogue, destination catalogue and destination targets all belong to `Parcel Operations`.
 
 ## Validation boundary
 

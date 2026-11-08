@@ -1,5 +1,5 @@
 {
-  "export_count": 61,
+  "export_count": 63,
   "exports": [
     {
       "kind": "class",
@@ -8,6 +8,10 @@
     {
       "kind": "class",
       "name": "BuildResult"
+    },
+    {
+      "kind": "class",
+      "name": "CatalogueDashboardExport"
     },
     {
       "kind": "class",
@@ -192,7 +196,7 @@
     {
       "kind": "function",
       "name": "deploy_catalogue_dashboard",
-      "signature": "(*, catalogue: str | Sequence[str] | None=None, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, session=None) -> CatalogueDashboardResult"
+      "signature": "(*, catalogue: str | Sequence[str] | None=None, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, import_mode: bool=False, dry_run: bool=False, session=None) -> CatalogueDashboardResult"
     },
     {
       "kind": "function",
@@ -201,8 +205,13 @@
     },
     {
       "kind": "function",
+      "name": "export_catalogue_dashboard",
+      "signature": "(path: str | Path, *, name: str | None=None, workspace: str | None=None, workspace_config: str | Path | None=None, session=None) -> CatalogueDashboardExport"
+    },
+    {
+      "kind": "function",
       "name": "health",
-      "signature": "(items: str | Sequence[str] | None=None, *, as_of: str | datetime | None=None, workspace: str | None=None, catalogue: str | None=None, workspace_config: str | Path | None=None, inventories: bool=True, session=None) -> HealthReport"
+      "signature": "(items: str | Sequence[str] | None=None, *, as_of: str | datetime | None=None, workspace: str | None=None, catalogue: str | Sequence[str] | None=None, workspace_config: str | Path | None=None, inventories: bool=True, session=None) -> 'HealthReport | JoinedHealthReport'"
     },
     {
       "kind": "function",
@@ -217,7 +226,7 @@
     {
       "kind": "function",
       "name": "load",
-      "signature": "(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, ancestors: bool=False, descendants: bool=False, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, fault_tolerant: bool=False, dry_run: bool=False, reload: bool=False, ignore_stability_threshold: bool=False, stale: bool=False, as_of: str | datetime | None=None, concurrency: int | None=None, session=None) -> LoadRunReport"
+      "signature": "(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, ancestors: bool=False, descendants: bool=False, source=None, workspace: str | None=None, catalogue: str | Sequence[str] | None=None, environment: str | None=None, workspace_config: str | Path | None=None, fault_tolerant: bool=False, dry_run: bool=False, reload: bool=False, ignore_stability_threshold: bool=False, stale: bool=False, as_of: str | datetime | None=None, concurrency: int | None=None, session=None) -> LoadRunReport"
     },
     {
       "kind": "function",
@@ -247,7 +256,7 @@
     {
       "kind": "function",
       "name": "test",
-      "signature": "(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, stale: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport"
+      "signature": "(items: str | Sequence[str] | None=None, *, names: str | Sequence[str] | None=None, files: str | Path | Sequence[str | Path] | None=None, source=None, workspace: str | None=None, catalogue: str | Sequence[str] | None=None, environment: str | None=None, workspace_config: str | Path | None=None, dry_run: bool=False, stale: bool=False, concurrency: int | None=None, session=None) -> ValidationRunReport"
     },
     {
       "kind": "function",
@@ -268,6 +277,7 @@
   "ownership": {
     "Assumption": "docs/reference/python/validation.md",
     "BuildResult": "docs/reference/python/results.md",
+    "CatalogueDashboardExport": "docs/reference/python/results.md",
     "CatalogueDashboardResult": "docs/reference/python/results.md",
     "CommandError": "docs/reference/python/errors.md",
     "ConfigError": "docs/reference/python/errors.md",
@@ -314,6 +324,7 @@
     "default_lakehouse": "docs/reference/python/session.md",
     "deploy_catalogue_dashboard": "docs/reference/python/operations.md",
     "execute": "docs/reference/python/operations.md",
+    "export_catalogue_dashboard": "docs/reference/python/operations.md",
     "health": "docs/reference/python/operations.md",
     "initialise": "docs/reference/python/operations.md",
     "lakehouse_for": "docs/reference/python/session.md",

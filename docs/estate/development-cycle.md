@@ -57,6 +57,6 @@ This iteration loop assumes the model and Report targets have already been deplo
 
 ## Optional: establish a mirrored development baseline
 
-Once the ordinary loop works, [develop using Mirror](mirror.md) if development should borrow existing source data rather than load every unchanged object locally. It requires existing source and destination items in the same workspace and empties the destination catalogue plus selected targets. Re-mirror only for a fresh baseline, not for each edit.
+Once the ordinary loop works, [develop using Mirror](mirror.md) if development should borrow existing source data rather than load every unchanged object locally. It requires existing destination items, reads a source in this workspace or another, and empties the destination catalogue plus selected targets. Re-mirror only for a fresh baseline, not for each edit.
 
 [Run, test and inspect the estate](operate.md) is the installed-state path when no source change needs Build. [Build, Load and Test](../core-concepts/build-load-and-test.md) explains the operation boundaries behind both paths.

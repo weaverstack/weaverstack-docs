@@ -57,7 +57,7 @@ weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] 
 : Fabric Environment name or Workspace/Environment reference.
 
 `--catalogue CATALOGUE`
-: Where the Weaver catalogue lives, for example Warehouse/Weaver.
+: Where the Weaver catalogue lives, for example Warehouse/Weaver. Repeat as Workspace/Warehouse/Name to test across several catalogues. Items still decide what runs, and --stale counts a load in any of them.
 
 <!-- END GENERATED CLI -->
 

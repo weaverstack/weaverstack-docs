@@ -21,6 +21,14 @@ Use your actual workspace and the bindings written by Initialise. `environment` 
 
 Local Check needs no Fabric runtime. Desktop Lakehouse Build, Load and Test use hosted Spark, including when their source is Spark SQL. Build checks the hosted runtime before mutation; not calling authored `read()` does not remove that prerequisite. Load imports your installed Table and Folder code; Test imports or executes installed validations.
 
+`environment` can also name an Environment in another workspace as `Workspace/Name`, for example one Weaver Environment a platform team publishes for several workspaces:
+
+```yaml title="workspace-config.yml"
+environment: Platform/Weaver
+```
+
+Spark work attaches that Environment. The project that defines it publishes it; a project that only references it does not.
+
 ## Publish the matching packages
 
 Use the same Weaver release locally and in Fabric. From the Landing project root:

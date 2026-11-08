@@ -67,6 +67,8 @@ Health separates three questions:
 
 Green means the assessed subjects have no current finding. Amber identifies work that needs attention without a current failure, such as an unrun Table, rejected input or stale Test. Red identifies a recorded failure or inconsistent installation. The overall colour is the worst section colour; act on its named findings, not on colour alone.
 
+Objects that read one another form a dependency cycle. Health names the members in a Green Build finding and does not compare their load times; see [Cycles](across-catalogues.md#cycles).
+
 For example, after loading the connected Parcel items but before rerunning Test, the report retained four successful historical validations and marked them stale:
 
 ```bash
@@ -195,6 +197,8 @@ Interpret current status separately from history. A blocked Load can have a curr
 To browse the same state in Power BI, deploy the [Catalogue Dashboard](catalogue-dashboard.md).
 
 The [catalogue tour](../core-concepts/catalogue.md) groups every table by the question it answers. The [Catalogue schema reference](../reference/catalogue-schema.md) owns exact columns, keys and stored values. The catalogue records resolved managed lineage, not every external connection.
+
+Health reads the configured catalogue. When another team's catalogue feeds yours, repeat `--catalogue` to read both together; see [Work across teams' catalogues](across-catalogues.md).
 
 Catalogue-free Power BI deployment/refresh and source/file-mode Test return reports without persisted Weaver status/history. They are separate supported modes, not another installed estate for this Health command. In an optional mixed mirrored estate, borrowed data’s current Load state comes from its source catalogue while local work uses the destination.
 

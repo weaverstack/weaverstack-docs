@@ -9,6 +9,7 @@ The constructors below describe the returned shape and are useful in tests. Norm
 ## Public exports
 
 - `weaver.BuildResult` — class
+- `weaver.CatalogueDashboardExport` — class
 - `weaver.CatalogueDashboardResult` — class
 - `weaver.ExampleOutcome` — class
 - `weaver.ExecuteResult` — class

@@ -6,7 +6,7 @@ Use Mirror only after the [ordinary development loop](development-cycle.md) is u
 
 ## Prepare existing destinations in the same workspace
 
-Mirror works between existing Fabric items in one workspace. Here the source is the estate you have been building: the `Catalogue` Warehouse and the `Operations` Warehouse it records. Mirror needs an empty destination for each, and it does not create Fabric items.
+This first baseline keeps source and destination in one workspace; [mirror from another workspace](#mirror-from-another-workspace) covers a separate development workspace. Here the source is the estate you have been building: the `Catalogue` Warehouse and the `Operations` Warehouse it records. Mirror needs an empty destination for each, and it does not create Fabric items.
 
 1. In the Fabric portal, create two Warehouses in `Parcel Development`: `CatalogueDev` and `OperationsDev`.
 2. Add a separate configuration beside the project. Keep `workspace-development.yml` as it is; this file describes the mirrored copy:
@@ -141,7 +141,7 @@ See [Mirrors](../core-concepts/mirrors.md) for borrowed and local data. Exact Mi
 
 After a successful Mirror, keep the same project source and pass `--workspace-config workspace-mirror.yml` to Build, Load, Test and Health. The [development cycle](development-cycle.md#edit-and-iterate) is unchanged.
 
-Build compares source with copied installed declarations. Unchanged borrowed objects stay borrowed. A changed selected object, or an affected selected descendant, becomes local after successful installation and loses its `_.Mirror` row. Items outside the Build selection do not materialise just because another item changed. Load operates local materialisations; borrowed data continues to be loaded and owned at its source.
+Build compares source with copied installed declarations. Unchanged borrowed objects stay borrowed. A changed selected object, or an affected selected descendant, becomes local after successful installation. Its `_.Mirror` row is marked deleted and stays as the record of the catalogue mirrored. Items outside the Build selection do not materialise just because another item changed. Load operates local materialisations; borrowed data continues to be loaded and owned at its source.
 
 For example, if you added the [selection example's](selective-runs.md#explore-a-larger-branching-selection) `Reference.Service`, change its `ServiceName` constant and run:
 
@@ -150,16 +150,59 @@ weaver build --item Warehouse/Operations --workspace-config workspace-mirror.yml
 weaver load Warehouse/Operations --stale --workspace-config workspace-mirror.yml
 ```
 
-Reference.Service becomes a local Table in OperationsDev and leaves `_.Mirror`. Reference.Depot stays borrowed, and the source Operations Warehouse keeps its original value.
+Reference.Service becomes a local Table in OperationsDev, and its `_.Mirror` row is marked deleted. Reference.Depot stays borrowed, and the source Operations Warehouse keeps its original value.
 
 Warehouse borrowed Tables/Views are presented through local Views. Lakehouse stored Tables/Folders use shortcuts, with local wrapper Views for source Views. Health reads borrowed current Load state from the source catalogue and local state from development. A mixed estate is an ordinary result, not evidence that every object has been copied.
 
 Selected changed or impacted protected Tables/Folders use preserving materialisation rather than empty reconstruction: Warehouse CTAS, Delta shallow clone or native recursive Folder copy. That path retains the established bookmark but is not an atomic estate snapshot; shallow clones require source file retention. Protection does not protect against Wipe or deliberate re-mirroring. Keep irreplaceable source data outside ordinary managed target ownership. See [Protecting data](../advanced/protecting-data.md).
 
+## Mirror from another workspace
+
+A development workspace of its own can borrow from production directly. Mirror reads a source catalogue in another workspace and borrows its Lakehouses across the boundary. A Warehouse borrows through Views, which read only their own workspace, so the Warehouse is built in development instead.
+
+Suppose `Parcel Production` holds the estate from [workspace mappings](environments.md#keep-development-and-production-bindings-separate): the `ParcelCatalogue` catalogue, the `ParcelLanding` Lakehouse and the `ParcelOperations` Warehouse. In a separate workspace, `Parcel Sandbox`, create three empty items with the same names: Warehouses `ParcelCatalogue` and `ParcelOperations`, and Lakehouse `ParcelLanding`. Then describe the sandbox beside the project:
+
+```yaml title="workspace-sandbox.yml"
+workspace: Parcel Sandbox
+catalogue: Warehouse/ParcelCatalogue
+environment: Parcel Development/Weaver
+mirror: Parcel Production/Warehouse/ParcelCatalogue
+
+targets:
+  Lakehouse/Landing: ParcelLanding
+  Warehouse/Operations: ParcelOperations
+```
+
+`mirror` names the source catalogue with its workspace. `catalogue` and `targets` are always in `workspace`. Mirror binds each source item by its Fabric IDs, so the sandbox can reuse production's names. Mirroring a Lakehouse runs Spark work, so `environment` names a published Weaver Environment; this one reuses the Environment in `Parcel Development`.
+
+Mirror, and later Load, Test and Health, read `Parcel Production`. The identity running them needs read access to the production catalogue and `ParcelLanding`; see [Permissions](../reference/permissions.md).
+
+Mirror only the Lakehouse:
+
+```bash
+weaver mirror --item Lakehouse/Landing --workspace-config workspace-sandbox.yml
+```
+
+Without `--item`, Mirror selects every configured target, and `Warehouse/Operations` is refused before anything is emptied. Mirror asks once before emptying the sandbox's `ParcelCatalogue` and `ParcelLanding`.
+
+The sandbox's `ParcelLanding` now presents production's Tables and Folders through shortcuts into `Parcel Production`, with local wrapper Views over its Views. Mirror read production's catalogue rows over T-SQL and wrote them into the sandbox's `ParcelCatalogue`. The sandbox catalogue claims only items in `Parcel Sandbox`: `Warehouse/Operations`, left in production, is not claimed.
+
+Build and load the Warehouse in the sandbox:
+
+```bash
+weaver build --item Warehouse/Operations --workspace-config workspace-sandbox.yml
+weaver load Warehouse/Operations --workspace-config workspace-sandbox.yml
+weaver health --workspace-config workspace-sandbox.yml
+```
+
+Build installs Operations into the sandbox's `ParcelOperations` as a new item. Its logical Shortcut to `Lakehouse/Landing` resolves to the sandbox's `ParcelLanding`, so Operations reads production's Landing data through the borrowed Tables. Load runs Operations' work in the sandbox; Landing stays borrowed and is loaded in production. Health reads the borrowed Landing objects' state from `ParcelCatalogue` in `Parcel Production`. Nothing in `Parcel Production` changes.
+
+From here the development cycle is the one above: a changed Landing object becomes local in the sandbox when Build selects it.
+
 ## Reset only when a new source baseline is intended
 
 Run Mirror again only when the displayed destination catalogue and selected targets should be replaced. Local work inside that boundary is not preserved as a fallback. Preflight failures leave destinations unchanged; a failure after mutation begins does not restore the old catalogue or targets and does not undo already completed destinations. Inspect remaining state before retrying.
 
-Selective mirroring still copies the destination catalogue, but only selected items are rebound to development targets; unselected copied installations remain source-bound. A catalogue-only Mirror copies installed/current state without emptying an item target, and destination Log/LoadStatistic history starts empty. It is not an isolated writable copy of every source binding. Rebinding from an already mirrored source is refused rather than chaining borrowing hops.
+Selective mirroring still copies the destination catalogue, but only selected items are rebound to development targets. Within one workspace, unselected copied installations remain source-bound; from another workspace, an unselected item there is left unclaimed for Build to install. A catalogue-only Mirror copies installed/current state without emptying an item target, and destination Log/LoadStatistic history starts empty. It is not an isolated writable copy of every source binding. Rebinding from an already mirrored source is refused rather than chaining borrowing hops.
 
 [Mirror and materialisation strategies](../advanced/mirror-and-materialisation-strategies.md) explains these narrower estate shapes. [Mirror behaviour](../reference/operation-behaviour/mirror.md) owns exact selection, binding and failure rules. Once the baseline is in place, return to [ordinary development](development-cycle.md), not another reset.

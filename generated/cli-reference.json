@@ -102,8 +102,13 @@
           "required": false
         },
         {
-          "help": "The catalogue Warehouse to read, as Workspace/Warehouse/Name or Warehouse/Name. Defaults to catalogue: in workspace configuration.",
+          "help": "A catalogue Warehouse to read, as Workspace/Warehouse/Name or Warehouse/Name. Repeat for each catalogue, in the order the Dashboard lists them. Defaults to catalogue: in workspace configuration.",
           "invocation": "--catalogue REFERENCE",
+          "required": false
+        },
+        {
+          "help": "Import the catalogues instead of reading them over Direct Lake. Required for more than ten. Each SQL endpoint needs a connection the model can refresh with.",
+          "invocation": "--ImportMode",
           "required": false
         },
         {
@@ -112,7 +117,7 @@
           "required": false
         },
         {
-          "help": "Resolve the source and the Dashboard's items without changing them.",
+          "help": "Resolve the catalogues and the Dashboard's items without changing them.",
           "invocation": "--dry-run",
           "required": false
         },
@@ -127,8 +132,59 @@
           "required": false
         }
       ],
+      "positionals": [
+        {
+          "choices": [
+            "export"
+          ],
+          "help": null,
+          "invocation": "{export}",
+          "required": false
+        }
+      ],
+      "synopsis": "weaver catalogue-dashboard [-h] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--catalogue REFERENCE] [--ImportMode] [--name NAME] [--dry-run] [--json] [--non-interactive] {export} ..."
+    },
+    {
+      "command": "catalogue-dashboard export",
+      "options": [
+        {
+          "help": "show this help message and exit",
+          "invocation": "-h, --help",
+          "required": false
+        },
+        {
+          "help": "Fabric Workspace name.",
+          "invocation": "--workspace WORKSPACE",
+          "required": false
+        },
+        {
+          "help": "Workspace configuration file.",
+          "invocation": "--workspace-config WORKSPACE_CONFIG",
+          "required": false
+        },
+        {
+          "help": "Folder to write, local or a OneLake abfss:// location.",
+          "invocation": "--path PATH",
+          "required": true
+        },
+        {
+          "help": "The Dashboard to export. Defaults to catalogue_dashboard: in workspace configuration.",
+          "invocation": "--name NAME",
+          "required": false
+        },
+        {
+          "help": "Emit the result as JSON.",
+          "invocation": "--json",
+          "required": false
+        },
+        {
+          "help": "Do not read stdin, wait for a keypress or open browser sign-in. Missing authorisation or required input is an error.",
+          "invocation": "--non-interactive",
+          "required": false
+        }
+      ],
       "positionals": [],
-      "synopsis": "weaver catalogue-dashboard [-h] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--catalogue REFERENCE] [--name NAME] [--dry-run] [--json] [--non-interactive]"
+      "synopsis": "weaver catalogue-dashboard export [-h] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] --path PATH [--name NAME] [--json] [--non-interactive]"
     },
     {
       "command": "check",
@@ -515,7 +571,7 @@
           "required": false
         },
         {
-          "help": "Where the Weaver catalogue lives, for example Warehouse/Weaver.",
+          "help": "Where the Weaver catalogue lives, for example Warehouse/Weaver. Repeat as Workspace/Warehouse/Name to report on several catalogues together, joined where one's shortcuts read another's objects.",
           "invocation": "--catalogue CATALOGUE",
           "required": false
         }
@@ -807,7 +863,7 @@
           "required": false
         },
         {
-          "help": "Where the Weaver catalogue lives, for example Warehouse/Weaver.",
+          "help": "Where the Weaver catalogue lives, for example Warehouse/Weaver. Repeat as Workspace/Warehouse/Name to plan one load across several catalogues. Items still decide what runs; Workspace/Kind/Name names an item in another catalogue, and a workspace name all of its items.",
           "invocation": "--catalogue CATALOGUE",
           "required": false
         }
@@ -989,7 +1045,7 @@
           "required": false
         },
         {
-          "help": "Where the Weaver catalogue lives, for example Warehouse/Weaver.",
+          "help": "Where the Weaver catalogue lives, for example Warehouse/Weaver. Repeat as Workspace/Warehouse/Name to test across several catalogues. Items still decide what runs, and --stale counts a load in any of them.",
           "invocation": "--catalogue CATALOGUE",
           "required": false
         }
@@ -1183,10 +1239,11 @@
       "synopsis": "weaver workflow [-h] [--file PATH] [--timings] [--yes] [--non-interactive] [--workspace WORKSPACE] [--workspace-config WORKSPACE_CONFIG] [--environment ENVIRONMENT] [--catalogue CATALOGUE] name"
     }
   ],
-  "leaf_count": 20,
+  "leaf_count": 21,
   "ownership": {
     "build": "docs/reference/cli/build.md",
     "catalogue-dashboard": "docs/reference/cli/catalogue-dashboard.md",
+    "catalogue-dashboard export": "docs/reference/cli/catalogue-dashboard.md",
     "check": "docs/reference/cli/check.md",
     "doctor": "docs/reference/cli/doctor.md",
     "execute": "docs/reference/cli/execute.md",

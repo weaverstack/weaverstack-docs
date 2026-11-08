@@ -1438,7 +1438,7 @@
           "vocabulary": null
         }
       ],
-      "description": "Source and local physical type for installed objects whose data comes from another target. Removed when the object is built locally.",
+      "description": "Source and local physical type for installed objects whose data comes from another target. When the object is built locally its row stays, marked deleted, as the record of the catalogue this one mirrors.",
       "key": [
         "Item type",
         "Item name",

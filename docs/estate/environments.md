@@ -105,6 +105,6 @@ A Lakehouse target uses the same logical-to-physical mapping. For the existing [
 
 An `environment` binding selects an existing published Fabric Environment for Spark work. It does not create or publish that Environment. Desktop Lakehouse Build/Load/Test, including generated Spark SQL work, needs the matching hosted Weaver runtime; a Spark-backed Build checks compatibility before mutation even though it does not call authored `read()` methods. Pure Warehouse T-SQL and standalone Power BI avoid that Spark prerequisite. [Running Python in Fabric](../lakehouse/runtime.md) owns publication and attached-notebook runtime setup.
 
-A `mirror` binding selects a source catalogue for deliberate same-workspace [Mirror](mirror.md). Loading the file does not run Mirror; ordinary development needs no mirrored baseline.
+A `mirror` binding selects a source catalogue, in this workspace or another, for deliberate [Mirror](mirror.md). Loading the file does not run Mirror; ordinary development needs no mirrored baseline.
 
 With one configuration selecting the intended estate, [read Catalogue and Health](catalogue-and-health.md) to see what was installed and what happened there. [Logical and physical items](../core-concepts/logical-and-physical-items.md) explains why the project keeps its identities while physical bindings change.

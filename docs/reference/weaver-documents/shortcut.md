@@ -85,7 +85,7 @@ A Table, Folder or View destination is `Schema.Object`; a schema destination is 
 - adds `source → destination` to the document graph and a cross-item edge to the item graph;
 - must preserve the Tables/Files namespace for a Lakehouse destination.
 
-Item graphs remain acyclic. Physical targets add no project dependency edge. Metadata references and foreign keys do not turn into Shortcut dependencies.
+Items that read one another through Shortcuts may form a cycle, which is ordered and reported as described in [Cycles](../../estate/across-catalogues.md#cycles). Physical targets add no project dependency edge. Metadata references and foreign keys do not turn into Shortcut dependencies.
 
 ## Operations and managed state
 
