@@ -14,6 +14,9 @@ Features merged to weaverstack after v0.10.0, against weaverstack `main` at `efc
 - The CLI and Python references are regenerated; the CLI generator now documents a command that runs alone and also has subcommands (`catalogue-dashboard` and `catalogue-dashboard export`). The machine-readable output page adds `execute`, `catalogue-dashboard`, `export` and joined Health.
 
 Not verified in Fabric: building and loading a Warehouse in a mirror workspace after a Lakehouse-only cross-workspace mirror has no automated test, though it was run by hand on a real project on 7 November 2026.
+## Permissions: 8 November 2026
+
+`docs/reference/permissions.md` owns the permissions each command needs: workspace roles, tenant settings and the Azure actions behind `weaver fabric capacity`. Command behaviour comes from the CLI's declared session requirements in weaverstack `efc046e7`. Role, setting and Azure action names were checked against Microsoft Learn on 8 November 2026. Whether the HTML Content visual is Power BI certified was not established, so the page gives the organisational-visuals route instead. Installation links to it.
 
 ## Catalogue Dashboard — 17 October 2026
 
