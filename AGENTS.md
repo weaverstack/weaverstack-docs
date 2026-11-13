@@ -33,6 +33,8 @@ Use Weaver's user model rather than deriving a taxonomy from internal nouns. A p
 
 Examples use a neutral parcel and logistics domain. Start the Parcel journey with one selected item through the installed `weaver initialise --example Parcel` generator, then extend that same project. Preserve existing item-owned sources and add distinctly named coordination objects. Sales remains a separate installed example. Direct entrants use Initialise, not a downloadable snapshot or repository checkout. Advanced source variations add complete declarations alongside the working pipeline; retained fixtures are verification inputs, not the reader’s next project.
 
+The repository is public. Committed files, acceptance evidence and pull-request text carry no private hostnames, preview addresses, home-directory or agent-profile paths, or runtime process IDs. Use repository-relative paths and placeholders. `tools/check_private_details.py` enforces the first two.
+
 ## Public site structure
 
 The reader-facing navigation is **Getting started → Lakehouse → Warehouse → Semantic models → Reports → Coordinate your estate → Reference**. Home exposes the four items, estate coordination and a quiet Start here link. Item groups teach first success, validation and later useful capabilities. Estate coordination owns shared dependencies, mappings, state, development, recovery and tuning. Reference owns exact interfaces. Concepts and deeper mechanisms remain available through contextual links at stable URLs; Core/Basics/Advanced are no longer reader-facing destinations.
