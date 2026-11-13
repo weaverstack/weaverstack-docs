@@ -39,4 +39,4 @@ Targets are frozen into mutation actions. Independent targets can execute under 
 
 Successful target outcomes are `emptied`; a retained catalogue in an unbind result is `preserved` with `unbound: true`. Lakehouse reports describe removed entries/shortcuts. A failure or uncertain action raises a command error rather than a completed successful Wipe result. Earlier/independent mutations remain, a failing target can be partially changed, and missing certification may already have been withdrawn. Inspect the remaining physical/catalogue state before retrying; do not automatically replay an uncertain destructive action. Wipe has no rollback.
 
-See [`weaver wipe`](../cli/wipe.md), [Unbind](unbind.md), [Python operations](../python/operations.md) and [machine output](../machine-readable-output.md).
+See [`weaver wipe`](../cli/wipe.md), [Unbind](unbind.md), [Python operations](../python/operations.md) and [JSON output](../ai-agents.md#json-output).

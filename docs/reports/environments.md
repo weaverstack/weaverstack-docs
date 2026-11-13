@@ -1,12 +1,14 @@
 # Development and production Reports
 
-Use the same native Report and model in both workspaces. The selected workspace configuration changes their physical names and the Report's deployed model binding; it does not change their logical names or authored files.
+Development and production copies of a Report need different service bindings, not different native definitions. The selected workspace configuration changes the model and Report's physical names and the Report's deployed model binding; their logical names and authored files stay the same.
 
-Continue from [Deploy a native Report](deploy.md) in the same `parcel` project. If you are starting here, that page generates and deploys the pair. Keep your model overlays and source bindings.
+This example starts with the linked pair from [Deploy a native Report](deploy.md) in the same `parcel` project, including any existing model overlays and source bindings. That page generates and deploys the pair for direct entrants. The two configurations below change destinations without changing the model's content.
 
 ## Select the two destinations
 
-Create `workspace-development.yml` and `workspace-production.yml` for two existing disposable workspaces. If you already have these files from the [estate pages](../estate/environments.md), add the two targets to each instead. These inline-model destinations need no source workload. For an estate with Lakehouse or Warehouse items, copy the working configuration instead, retain its catalogue, runtime and source bindings, and change only the intended destinations. A production-labelled example is not a reason to use a real production workspace.
+The two configurations below describe an inline-model project in two existing disposable workspaces; neither destination needs a source workload. An estate with Lakehouse or Warehouse items also needs its working catalogue, runtime and source bindings. In that case, a copy of the working configuration provides the starting point, with only the intended destinations changed.
+
+Create `workspace-development.yml` and `workspace-production.yml` as shown below for the inline project. If these files already exist from the [estate pages](../estate/environments.md), add the two targets to each instead of replacing the files. Use disposable workspaces: the production label here illustrates a destination mapping, not a live release.
 
 ```yaml title="workspace-development.yml"
 workspace: Parcel Development
@@ -138,7 +140,7 @@ Installation
 
 Each Build ran in its own workspace and selected the linked model with the Report, as a catalogue-free project requires. If the development pair is already deployed, only the production Build is new work.
 
-Check each Report's actual service binding, including the workspace, not just the displayed item names:
+The expected service bindings are below. Both the workspace and model name matter: a matching display name alone would not establish that a Report points to the intended destination.
 
 | Configuration | Workspace | Report | Linked semantic model |
 | --- | --- | --- | --- |
@@ -183,7 +185,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-Each model returns Delivery Count = 2, so open each Report and its card shows **2**. Model refresh and Report rendering are separate checks from Build and binding; there is no Report Load or Test.
+Each model returns Delivery Count = 2, and each Report's card shows **2**. Those observations establish that the refreshed data reaches the Report, separately from Build's definition and binding checks. There is no Report Load or Test.
 
 An unrelated authored `byConnection` with no local model association stays as authored. Weaver does not reverse-map that external connection to a development or production model. The linked-pair behaviour above applies to the local association; [Report binding rules](../reference/power-bi/requirements-and-compatibility.md#report-binding) also describe same-name model precedence and the catalogue-backed Report-only case.
 

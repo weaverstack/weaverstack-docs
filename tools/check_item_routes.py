@@ -163,7 +163,19 @@ def audit(root, records, developer_site=None, product_site=None):
             return None, fragment
         destination = urls.get(url)
         if destination is None:
-            # This gate covers pages, not CSS/images/downloads; the paired crawl owns assets.
+            # Static demo pages are real destinations too. Check their files and
+            # fragments instead of treating every .html link as a Markdown route.
+            if url.endswith(".html"):
+                if is_rendered and developer_site:
+                    asset = developer_site / url.lstrip("/")
+                else:
+                    relative = posixpath.normpath(posixpath.join(posixpath.dirname(source), urlsplit(href).path))
+                    asset = root / "docs" / relative
+                if asset.is_file():
+                    checked_links += 1
+                    if fragment and fragment not in Page(asset.read_text(), article_only=False).ids:
+                        errors.append(f"missing target fragment: {source} -> {href}")
+                    return None, fragment
             if url.endswith(("/", ".html", ".md")):
                 errors.append(f"unresolved documentation URL: {source} -> {href}")
             return None, fragment

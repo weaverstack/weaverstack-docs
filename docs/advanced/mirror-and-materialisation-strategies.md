@@ -26,15 +26,15 @@ A catalogue-only branch can carry existing `_.Mirror` state because it does not 
 
 ## Mirror only the items that need development targets
 
-Selective mirroring rebinds named logical items and leaves every unselected installation source-bound. It avoids creating development copies for items that will not change.
+Selective mirroring rebinds named logical items. Within one workspace, unselected installations retain source bindings; installations left in another workspace are unclaimed by the destination catalogue. It avoids creating development copies for items that will not change.
 
 All selected destination bindings are settled before Weaver changes anything. Logical Shortcuts are recreated against those final bindings, and selected producer items are processed before selected consumers where recorded Shortcuts require it. A selected destination cannot overlap a source read by the same run or another selected destination.
 
-Source and destination catalogues must be distinct Warehouses in the same resolved Fabric workspace. Mirror does not provide a cross-workspace catalogue copy mechanism. The [Mirror operation reference](../reference/operation-behaviour/mirror.md) defines item selection, binding checks and destructive scope.
+The destination catalogue and targets are in the resolved Fabric workspace. The source catalogue may be in another workspace; from there only Lakehouse items can be selected, and an unselected item installed there is left unclaimed for a later Build to install in the destination. The [Mirror operation reference](../reference/operation-behaviour/mirror.md) defines item selection, binding checks and destructive scope.
 
 ## Let Build create a mixed estate
 
-Build compares project source, copied certification and destination inventory. An unchanged borrowed object keeps its borrowed form and its `_.Mirror` row. When a selected borrowed object changed, or is an affected selected descendant, Build replaces the borrowed form with the authored local form and removes that object's mirror record after the physical work succeeds.
+Build compares project source, copied certification and destination inventory. An unchanged borrowed object keeps its borrowed form and its `_.Mirror` row. When a selected borrowed object changed, or is an affected selected descendant, Build replaces the borrowed form with the authored local form and, after the physical work succeeds, marks that object's mirror record deleted. The record stays as the history of the catalogue mirrored.
 
 Materialisation is therefore object-selective, not an automatic conversion of the whole mirrored estate:
 
@@ -42,7 +42,8 @@ Materialisation is therefore object-selective, not an automatic conversion of th
 unchanged object             → borrowed source data
 changed selected object      → local development data
 affected selected descendant → local development data
-unselected item              → copied source binding
+unselected same-workspace item → copied source binding
+unselected remote item         → unclaimed in destination
 ```
 
 The result is a mixed estate. Load can run local materialised objects; borrowed objects continue to take their Load state from the catalogue where their data is owned. Health uses the installation and mirror records to inspect the corresponding state.

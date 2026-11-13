@@ -1,6 +1,6 @@
 # A first Warehouse Table and View
 
-Keep the transformation as a T-SQL SELECT. A metadata comment tells Weaver which Table to maintain; Build generates its load work, and Load applies the rows and records the result. Here, three parcel events feed a View showing each parcel's latest status.
+A Warehouse transformation can stay a T-SQL SELECT rather than a hand-written loading procedure. A metadata comment tells Weaver which Table to maintain; Build generates its load work, and Load applies the rows and records the result. Here, three parcel events feed a View showing each parcel's latest status.
 
 You need [Weaver installed](../getting-started/installation.md) and a Fabric workspace on running capacity where you can create Warehouses. The example uses a workspace called `Parcel Development`; substitute your own. Use a disposable workspace for the tutorials: Build owns the Warehouses it manages and removes objects you did not declare there.
 
@@ -143,7 +143,7 @@ from (values
 ```
 <!-- /initialise -->
 
-The key identifies one event. Keep the SQL as a SELECT; the declaration describes the Table that should receive it.
+The key identifies one event. The SELECT supplies the rows, while the declaration describes the Table that receives them; the authored query needs no INSERT or MERGE statement.
 
 ## Read the latest event through a View
 
@@ -302,7 +302,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-Run the two generated validations, then read Health, Weaver's summary of what is installed and what ran:
+Check the data as well as the successful Load. `CurrentStatusMatches` compares the View with the two expected latest-status rows; `StatusIsKnown` looks for null or unrecognised event statuses. Together they check that the View chose the right events and the source stayed within the allowed status vocabulary. Run both, then read Health, Weaver's summary of what is installed and what ran:
 
 ```bash
 weaver test Warehouse/Operations

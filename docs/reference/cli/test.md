@@ -57,7 +57,7 @@ weaver test [-h] [--item ITEM] [--name PATTERN] [--file PATH] [--source SOURCE] 
 : Fabric Environment name or Workspace/Environment reference.
 
 `--catalogue CATALOGUE`
-: Where the Weaver catalogue lives, for example Warehouse/Weaver.
+: Where the Weaver catalogue lives, for example Warehouse/Weaver. Repeat as Workspace/Warehouse/Name to test across several catalogues. Items still decide what runs, and --stale counts a load in any of them.
 
 <!-- END GENERATED CLI -->
 
@@ -85,7 +85,7 @@ weaver test SemanticModel/Parcel --source . --workspace-config workspace-dev.yml
 
 The last command uses file mode only when that configuration has no catalogue; with a catalogue it selects installed validations. Add `--file PowerBI/Parcel/assumptions/Parcel` to explicitly choose source mode.
 
-See [Test behaviour](../operation-behaviour/test.md), [DAX validations](../power-bi/validations.md) and [machine output](../machine-readable-output.md).
+See [Test behaviour](../operation-behaviour/test.md), [DAX validations](../power-bi/validations.md) and [JSON output](../ai-agents.md#json-output).
 
 ## Validate source data and semantic models together
 

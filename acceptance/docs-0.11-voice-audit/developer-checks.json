@@ -1,0 +1,20 @@
+[
+  {
+    "command": "~/dev/weaverstack-editorial-runtime/.venv/bin/python acceptance/docs-0.11-voice-audit/check_developer_fixes.py ~/dev/weaverstack-editorial-runtime",
+    "output": "PARSE ONLY: weaver build --item Warehouse/Operations --dry-run --workspace-config workspace-mirror.yml\nPARSE ONLY: weaver check\nPARSE ONLY: weaver execute tsql Warehouse/Operations --command \"SELECT TOP 10 [Parcel ID], [Status], [Depot] FROM [Parcel].[CurrentStatus] ORDER BY [Parcel ID]\" --workspace-config workspace-config.dev.yml --json --non-interactive\nPARSE ONLY: weaver test Warehouse/Operations --workspace-config workspace-mirror.yml\nSOURCE signatures changed only: ['Lakehouse/Landing/Files/Parcel.Events', 'Warehouse/Operations/Parcel.StatusEvent']\nMIRROR branch proof: CurrentStatus is a descendant; LakehouseCurrentStatus is unchanged and independent\nPARSED changed connected project; dependency edges: [('Parcel.CurrentStatus', 'Parcel.Event'), ('Parcel.CurrentStatus', 'Parcel.StatusEvent'), ('Parcel.CurrentStatusMatches', 'Parcel.CurrentStatus'), ('Parcel.Event', 'Parcel.Events'), ('Parcel.EventStatusIsKnown', 'Parcel.Event'), ('Parcel.LakehouseCurrentStatus', 'Parcel.Event'), ('Parcel.StatusIsKnown', 'Parcel.StatusEvent')]\nLOCAL SQL oracle, not service execution: corrected first depot East; latest rows: [('P-1001', 'In transit', 'Central'), ('P-1002', 'Delivered', 'South')]\n{\"changed_pages\": 9, \"historical_captures\": \"unchanged\", \"local_links_checked\": 95, \"network\": \"blocked\", \"new_commands_parsed_only\": 4, \"runtime_dispatch\": \"none\"}",
+    "exit_code": 0,
+    "error": null
+  },
+  {
+    "command": ".venv/bin/python -m mkdocs build --strict",
+    "output": "\u2502  \u26a0  Warning from the Material for MkDocs team\n \u2502\n \u2502  MkDocs 2.0, the underlying framework of Material for MkDocs,\n \u2502  will introduce backward-incompatible changes, including:\n \u2502\n \u2502  \u00d7 All plugins will stop working \u2013 the plugin system has been removed\n \u2502  \u00d7 All theme overrides will break \u2013 the theming system has been rewritten\n \u2502  \u00d7 No migration path exists \u2013 existing projects cannot be upgraded\n \u2502  \u00d7 Closed contribution model \u2013 community members can't report bugs\n \u2502  \u00d7 Currently unlicensed \u2013 unsuitable for production use\n \u2502\n \u2502  Our full analysis:\n \u2502\n \u2502  https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/\n\nINFO    -  Cleaning site directory\nINFO    -  Building documentation to directory: ~/dev/weaverstack-docs-editorial17/site\nINFO    -  Documentation built in 2.22 seconds",
+    "exit_code": 0,
+    "error": null
+  },
+  {
+    "command": "git diff --check",
+    "output": "",
+    "exit_code": 0,
+    "error": null
+  }
+]

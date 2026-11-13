@@ -1,6 +1,6 @@
 # Installation
 
-Weaver needs Python 3.11 or later. Install it into the Python environment you use for the project, ideally a virtual environment:
+Weaver is a Python package that provides both a command-line tool and a Python library. It needs Python 3.11 or later. A project virtual environment keeps its installation separate from your other Python work.
 
 <span id="install-the-documented-snapshot"></span>
 
@@ -14,7 +14,7 @@ python -m pip install --upgrade weaverstack
 weaver --version
 ```
 
-The package provides the `weaver` command and the `weaver` Python library. `weaver --help` lists the commands.
+`weaver --help` lists the available commands.
 
 <span id="configure-fabric-access"></span>
 

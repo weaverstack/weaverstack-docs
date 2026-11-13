@@ -1,8 +1,8 @@
 # Testing Lakehouse data
 
-Check that CurrentStatus returns the expected parcels, and that every event uses a recognised status. These validations live beside the same Folder and Tables; Build installs them, and Test runs them separately from Load.
+A completed Load tells you the pipeline ran, but not whether it chose the right latest event or accepted an unknown status. The generated validations check both questions: a Test compares CurrentStatus with expected parcels, and an Assumption finds events with unrecognised statuses. Build installs these validations beside the same Folder and Tables; Test runs them separately from Load.
 
-Continue the same `parcel` project, with Event and CurrentStatus loaded. If you are starting here, run the [Python project](python.md) first.
+The example uses the same `parcel` project with Event and CurrentStatus loaded. The [Python project](python.md) provides these Tables and their generated validations.
 
 ## Compare CurrentStatus with an independent result
 
@@ -104,7 +104,7 @@ weaver test Lakehouse/Landing \
   --file Lakehouse/Landing/assumptions/Parcel.EventStatusIsKnown.sql
 ```
 
-File mode reads the deployed Tables but records no catalogue Test state. Use the installed-mode command above when you want Health to reflect the result.
+File mode reads the deployed Tables but records no catalogue Test state. The installed-mode command above records its result for Health; file mode returns the result separately while you work on the source.
 
 ## Optional: diagnose one mismatch
 

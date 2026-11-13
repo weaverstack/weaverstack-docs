@@ -2,6 +2,18 @@
 
 This maintainer-only ledger records the item-first revision and earlier delivery evidence. It is not rendered.
 
+## 0.11.0 release: 8 November 2026
+
+Features merged to weaverstack after v0.10.0, against weaverstack `main` at `efc046e7`:
+
+- `docs/estate/across-catalogues.md` owns working across teams' catalogues: Health, Load and Test with several `--catalogue`, and dependency cycles (#266, #267, #268). The Health, Load and Test behaviour pages carry the exact rules; Weaver document pages no longer say item cycles are refused.
+- `docs/estate/catalogue-dashboard.md` covers several catalogues, Direct Lake and Import, the Workspaces and Items pages, the item chooser, the Filters pane, the too-large page message, mirror marks and `catalogue-dashboard export` (#270, #271). The demo pages are regenerated with the current renderer; the demo's payload source has no Workspaces page yet, so the demo has none. Capture `152-catalogue-dashboard` predates the multi-catalogue output.
+- `docs/estate/mirror.md` and the Mirror behaviour page cover a source catalogue in another workspace, Lakehouse items only, same-name destinations, unselected items left unclaimed and the `_.Mirror` row kept when Build materialises (#270).
+- Initialise accepts a shared `Workspace/Name` Environment and gives a Report-only project a catalogue (#265).
+- `docs/reference/ai-agents.md` is new under Reference: the agent loop, boundaries and a project instruction file, with the former Machine-readable output page as its JSON output section. The old URL forwards there.
+- The CLI and Python references are regenerated; the CLI generator now documents a command that runs alone and also has subcommands (`catalogue-dashboard` and `catalogue-dashboard export`). The machine-readable output page adds `execute`, `catalogue-dashboard`, `export` and joined Health.
+
+Not verified in Fabric: building and loading a Warehouse in a mirror workspace after a Lakehouse-only cross-workspace mirror has no automated test, though it was run by hand on a real project on 7 November 2026.
 ## Permissions: 8 November 2026
 
 `docs/reference/permissions.md` owns the permissions each command needs: workspace roles, tenant settings and the Azure actions behind `weaver fabric capacity`. Command behaviour comes from the CLI's declared session requirements in weaverstack `efc046e7`. Role, setting and Azure action names were checked against Microsoft Learn on 8 November 2026. Whether the HTML Content visual is Power BI certified was not established, so the page gives the organisational-visuals route instead. Installation links to it.

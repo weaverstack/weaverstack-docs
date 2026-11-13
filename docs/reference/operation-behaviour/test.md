@@ -82,4 +82,10 @@ Source/file and dry-run invocations write no installed TestStatus or Log evidenc
 
 Test does not provide a transaction across validations or rollback authored side effects. If validation SQL or Python changes external state before failing, Test does not undo that work; it still records the installed validation outcome when recording succeeds. A catalogue flush failure is an operation failure and may follow completed validation execution.
 
+## Several catalogues
+
+Repeating `--catalogue` (Python `catalogue=[...]`) with more than one value makes one installed run across those catalogues. Catalogue forms, labels and the join are as for [Health](health.md#several-catalogues); item forms, the catalogue that runs when no items are named, and the refusal of a catalogue that cannot be read are as for [Load](load.md#several-catalogues).
+
+Each validation runs in its catalogue's workspace and is recorded in its own catalogue; every record in the run carries one workflow ID. Lakehouse validations use the working workspace's Environment. `--stale` judges each validation against what it reads in every catalogue given, so a load or Build in another catalogue makes a passed validation stale. `--file` is refused with several catalogues, before any work. Testing another team's validations writes to its catalogue; see [Permissions](../permissions.md).
+
 See [`weaver test`](../cli/test.md), [Test documents](../weaver-documents/test.md), [Assumption documents](../weaver-documents/assumption.md), [Health](health.md), and [Catalogue schema](../catalogue-schema.md).

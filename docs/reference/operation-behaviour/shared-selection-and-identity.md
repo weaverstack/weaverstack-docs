@@ -191,7 +191,7 @@ The logical item must have an installation in the source catalogue. Without `=TA
 
 `--no-item` selects no physical item and forks only the catalogue. It is mutually exclusive with `--item`.
 
-Mirror does not accept object names or Wipe-style positional targets. A logical item selected twice is rejected after binding resolution. Destination physical identity includes kind and name: a Lakehouse and Warehouse may share a display name, but two selected items of the same kind cannot share one destination. The source catalogue, destination catalogue, source item targets and destination item targets must all be usable within the one resolved workspace; workspace-qualified Mirror configuration does not widen this boundary.
+Mirror does not accept object names or Wipe-style positional targets. A logical item selected twice is rejected after binding resolution. Destination physical identity includes kind and name: a Lakehouse and Warehouse may share a display name, but two selected items of the same kind cannot share one destination. The destination catalogue and destination item targets are in the resolved workspace. The source catalogue may be in another workspace; each source item is read in the workspace its installation names, and only a Lakehouse can be selected from another workspace.
 
 ## Selection and dependency boundary
 

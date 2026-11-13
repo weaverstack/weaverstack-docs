@@ -1,6 +1,6 @@
 # `weaver execute`
 
-Execute runs T-SQL, Spark SQL, Python or DAX against one item and prints what it returns. Use it to inspect or repair an estate without writing a Weaver document.
+Execute runs T-SQL, Spark SQL, Python or DAX against one item and prints what it returns. Use it to inspect or repair an estate without writing a Weaver document. SQL and Python can modify data; the running identity's permissions determine what the engine allows.
 
 ```bash
 weaver execute tsql Warehouse/Curated --command "SELECT TOP 10 * FROM dbo.Example"
@@ -22,7 +22,7 @@ Python always runs in Fabric, never in the local process, as `__main__`, so an `
 
 Each result is read to `--limit` rows (default 100) where it runs, and the output says when a result had more. Python keeps only the first 100,000 characters it prints, however much it prints. Power BI returns a whole DAX result, subject to its own limits, and the limit applies to what is kept.
 
-Execute records nothing in the catalogue. It moves no bookmark and leaves Load and Test state as it was, whatever the source changes. A request whose response is lost may have run; Execute reports that and does not send it again.
+Execute does not automatically record a Weaver Load or Test or advance bookmarks. Submitted code can still modify data, including catalogue tables if its identity has permission; do not write Weaver-owned catalogue rows yourself. A request whose response is lost may have run; Execute reports that and does not send it again.
 
 `--json` prints the result, or the error, as one JSON document and nothing else. The command exits `0` when the source ran and `1` when it failed or its outcome is unknown.
 

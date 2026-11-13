@@ -17,11 +17,12 @@ from pathlib import Path
 
 OUTPUT = Path("docs/assets/catalogue-dashboard")
 OBJECTS = 120
-VERSION = "0.10.0"
+VERSION = "0.11.0"
 # 04:00 on 17 October in Canberra, so the nightly runs fall in the small hours there.
 AT = datetime(2026, 10, 16, 17, 0, tzinfo=timezone.utc)
 TITLES = {
-    "overview": "Overview",
+    "workspaces": "Workspaces",
+    "overview": "Items",
     "health": "Health",
     "orchestration": "Orchestration",
     "performance": "Performance",

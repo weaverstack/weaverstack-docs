@@ -99,4 +99,4 @@ Spark-backed execution admits a matching Weaver runtime before dispatch, includi
 
 The shared scheduler dispatches ready graph actions subject to success/settlement edges, resource limits and exclusions. Independent branches may continue after known failures; dependent publication/certification cannot succeed without its required work. Uncertain mutation results fail rather than authorize replay. Installation reports `succeeded`, `failed` and `skipped` actions and has no operation-wide rollback. Earlier effects remain.
 
-See [Build behaviour](operation-behaviour/build.md), [`weaver install`](cli/install.md) and [machine output](machine-readable-output.md).
+See [Build behaviour](operation-behaviour/build.md), [`weaver install`](cli/install.md) and [JSON output](ai-agents.md#json-output).

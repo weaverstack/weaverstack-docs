@@ -1,6 +1,6 @@
 # Testing Warehouse data
 
-The [first Table and View](first-project.md) ended with two passing validations. This page explains what they check and what a failure looks like. Use the same `parcel` project; if you are starting here, run the [Table and View task](first-project.md) first.
+The [first Table and View](first-project.md) ended with two passing validations. This page explains what they check and what a failure looks like, using that same `parcel` project. The Table and View task provides the loaded data and installed validations for this example.
 
 ## Check the result without repeating the ranking query
 

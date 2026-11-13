@@ -1,0 +1,82 @@
+{
+  "docs-mobile-results": [
+    {
+      "route": "reference/ai-agents/",
+      "layout": {
+        "width": 390,
+        "body": 390,
+        "title": "\ud83d\udc34 Using Weaver with AI agents - Weaver documentation"
+      }
+    },
+    {
+      "route": "reference/permissions/",
+      "layout": {
+        "width": 390,
+        "body": 390,
+        "title": "\ud83d\udc34 Permissions - Weaver documentation"
+      }
+    },
+    {
+      "route": "estate/across-catalogues/",
+      "layout": {
+        "width": 390,
+        "body": 390,
+        "title": "\ud83d\udc34 Work across teams' catalogues - Weaver documentation"
+      }
+    },
+    {
+      "route": "estate/mirror/",
+      "layout": {
+        "width": 390,
+        "body": 390,
+        "title": "\ud83d\udc34 Develop using Mirror - Weaver documentation"
+      }
+    },
+    {
+      "route": "estate/catalogue-dashboard/",
+      "layout": {
+        "width": 390,
+        "body": 390,
+        "title": "\ud83d\udc34 Catalogue Dashboard - Weaver documentation"
+      }
+    }
+  ],
+  "docs-desktop-results": [
+    {
+      "route": "reference/permissions/",
+      "layout": {
+        "width": 1280,
+        "body": 1265,
+        "title": "\ud83d\udc34 Permissions - Weaver documentation",
+        "codeBlocks": 0
+      }
+    },
+    {
+      "route": "estate/across-catalogues/",
+      "layout": {
+        "width": 1280,
+        "body": 1265,
+        "title": "\ud83d\udc34 Work across teams' catalogues - Weaver documentation",
+        "codeBlocks": 7
+      }
+    },
+    {
+      "route": "estate/mirror/",
+      "layout": {
+        "width": 1280,
+        "body": 1265,
+        "title": "\ud83d\udc34 Develop using Mirror - Weaver documentation",
+        "codeBlocks": 17
+      }
+    },
+    {
+      "route": "estate/catalogue-dashboard/",
+      "layout": {
+        "width": 1280,
+        "body": 1265,
+        "title": "\ud83d\udc34 Catalogue Dashboard - Weaver documentation",
+        "codeBlocks": 8
+      }
+    }
+  ]
+}

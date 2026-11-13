@@ -1,8 +1,8 @@
 # Running Python in Fabric
 
-Publish the Python packages once, then keep editing and building your project. The Fabric Environment supplies Weaver to hosted Spark work; it is separate from the Lakehouse and catalogue bindings in your workspace configuration.
+Python and Spark SQL work runs in Fabric Spark, so it needs Weaver's packages in a published Fabric Environment. That runtime changes less often than your project: editing a Table or validation normally needs Check and Build, not another Environment publication. The Environment binding is separate from the Lakehouse and catalogue bindings in your workspace configuration.
 
-The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. Use this page when setting up that runtime or changing its packages. The [incremental extension](incremental.md) uses this same published Environment and Landing binding.
+The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. This page explains that runtime setup and later package changes. The [incremental extension](incremental.md) uses the same published Environment and Landing binding.
 
 ## Bind the runtime you will use
 
@@ -17,9 +17,19 @@ targets:
   Lakehouse/Landing: Landing
 ```
 
-Use your actual workspace and the bindings written by Initialise. `environment` selects the Fabric Environment to attach; it does not create or publish it. For development/production mappings of the whole project, use [Workspace and environment mappings](../estate/environments.md).
+In your project, the workspace and target names are the bindings written by Initialise. `environment` selects the Fabric Environment to attach; it does not create or publish it. [Workspace and environment mappings](../estate/environments.md) explains development and production destinations for the whole project.
 
 Local Check needs no Fabric runtime. Desktop Lakehouse Build, Load and Test use hosted Spark, including when their source is Spark SQL. Build checks the hosted runtime before mutation; not calling authored `read()` does not remove that prerequisite. Load imports your installed Table and Folder code; Test imports or executes installed validations.
+
+## Use a shared Environment
+
+`environment` can also name an Environment in another workspace as `Workspace/Name`, for example one Weaver Environment a platform team publishes for several workspaces:
+
+```yaml title="workspace-config.yml"
+environment: Platform/Weaver
+```
+
+Spark work attaches that Environment. Give the running identity Read permission on it and use workspaces with the same capacity and network security settings; otherwise the session fails to start. The current workspace supplies pool and compute settings, not the shared Environment. The project that defines it publishes it; a project that only references it does not. See [Microsoft's attachment requirements](https://learn.microsoft.com/en-us/fabric/data-engineering/create-and-use-environment#attach-an-environment-to-a-notebook-or-a-spark-job-definition).
 
 ## Publish the matching packages
 
@@ -41,9 +51,9 @@ weaver fabric environment publish Weaver
 
 Run that command from the same project root so the workspace is discovered from its configuration. [Fabric Environment definition](../reference/configuration-files/fabric-environment.md) owns local-directory shape, libraries and existing-Environment authority. A Notebook already in Fabric needs the matching package in its attached runtime, not another remote Spark session.
 
-## Keep the runtime and project changes separate
+## Runtime updates and project updates {#keep-the-runtime-and-project-changes-separate}
 
-Republish after changing Environment libraries or the Weaver package mode/version. Editing a Python Table, Folder, Test or Assumption does not itself require republication: Check and Build install project changes. Adding a Spark SQL transformation follows the same project loop.
+Changes to Environment libraries or the Weaver package mode/version require republication. Editing a Python Table, Folder, Test or Assumption does not itself require republication: Check and Build install project changes. Adding a Spark SQL transformation follows the same project loop.
 
 Build checks matching Weaver version, supported plan format, writer version and required executor capabilities before mutation.
 

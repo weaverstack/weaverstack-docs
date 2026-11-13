@@ -1,6 +1,6 @@
 # Connect items and dependencies
 
-What should a Warehouse read when the data comes from a Lakehouse? Name the existing producer in a logical Shortcut. Weaver installs the connection in order and keeps its dependency with the project.
+A Warehouse query may need data that another part of the project already produces in a Lakehouse. A logical Shortcut gives that data a local name while retaining the producer's identity. Weaver uses the relationship to order installation and selected data work across the two items. This example connects the existing Landing pipeline to Operations without replacing either pipeline.
 
 You need both items in the same `parcel` project. If you followed the Warehouse and Lakehouse tasks in order, you already have them: [adding Landing](../lakehouse/python.md#create-the-project) also generated the Warehouse files below. Otherwise, add the item you are missing from inside `parcel`:
 
@@ -251,9 +251,9 @@ The source identity in `shortcuts.yml` stays unchanged when [workspace mappings]
 
 ## Order selected work, not every related item
 
-Python imports and supported Warehouse SQL references normally supply document dependencies without a second authored graph. An explicit `Dependencies` declaration replaces inference, including an empty list. Spark SQL data documents still require that field explicitly. The item graph must be acyclic.
+Python imports and supported Warehouse SQL references normally supply document dependencies without a second authored graph. An explicit `Dependencies` declaration replaces inference, including an empty list. Spark SQL data documents still require that field explicitly. Items can read one another; [data cycles](across-catalogues.md#cycles) are ordered deterministically, while physical mutation actions must remain free of circular waits.
 
-For a connection with loadable work on both sides, select both logical items in an item-wide Load. Weaver orders selected producers before consumers and inserts supported OneLake-publication and SQL-endpoint readiness barriers where the installed cross-engine path requires them. The Shortcut View has no separate Load, but its consuming LakehouseCurrentStatus Table does. Name both Landing and Operations when you want that selected cross-item work ordered together.
+For a connection with loadable work on both sides, an item-wide Load that selects both logical items can order their work together. Weaver places selected producers before consumers and inserts supported OneLake-publication and SQL-endpoint readiness barriers where the installed cross-engine path requires them. The Shortcut View has no separate Load, but its consuming LakehouseCurrentStatus Table does. Selecting both Landing and Operations includes that cross-item work in the same run.
 
 Dependencies never add an unnamed item. Build changes affected descendants only inside selected items; item-wide Load orders only its selected work. Plain `--name` Load is an operator override without inferred dependency ordering or readiness barriers. [Run part of an estate](selective-runs.md) shows how deliberate ancestor/descendant expansion restores ordering within the requested boundary.
 

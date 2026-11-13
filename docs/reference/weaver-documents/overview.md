@@ -48,7 +48,7 @@ When `Dependencies` is absent, Weaver infers document dependencies from authored
 
 Spark SQL **Tables and Views still require an explicit `Dependencies` key**, including `Dependencies: []`. Spark SQL Tests and Assumptions are validation documents and may omit it; Weaver then infers their SQL references.
 
-Logical Shortcuts add cross-item edges. Physical references and physical Shortcuts have no project producer to order. Descriptive `$...` metadata references and foreign-key metadata do not create execution dependencies. Document and item dependency graphs must be acyclic; explicit replacement does not permit an item cycle.
+Logical Shortcuts add cross-item edges. Physical references and physical Shortcuts have no project producer to order. Descriptive `$...` metadata references and foreign-key metadata do not create execution dependencies. Items may read one another and so form a cycle; each cycle is ordered deterministically and reported (see [Cycles](../../estate/across-catalogues.md#cycles)). The objects one Build changes must not form a cycle, because an action cannot wait on itself, and a cycle of `$...` metadata references is a declaration error.
 
 Native Power BI definitions use [their own discovery/layout](../power-bi/project-layout.md), not a Table metadata header. Model-owned [DAX validations](../power-bi/validations.md) use opening comment metadata; native TMDL policy and annotations have separate rules. A Report is a native definition, not a Python/SQL data document.
 

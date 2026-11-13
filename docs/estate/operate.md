@@ -1,8 +1,8 @@
 # Run and inspect an estate
 
-What needs to run again? Use Health to decide, then Load or Test the intended installed work. Health brings Lakehouse and Warehouse state together with registered model refreshes and validations; Load and Test operate that work without a second set of model-specific procedures.
+After a project change or a source repair, the next operation depends on the state that remains. Health brings installation, processing and validation findings together so you can distinguish an uninstalled edit from stale data or an out-of-date test result. This guide uses those findings to choose the work, then checks whether it resolved them.
 
-Keep the project from the [development loop](development-cycle.md). The Landing/Operations commands below use `workspace-development.yml`. If you added [source-backed models](../semantic-models/managed-sources.md), retain their targets in this same configuration. Run from the same project root throughout.
+The examples use the Landing/Operations project from the [development loop](development-cycle.md), with commands run from its root using `workspace-development.yml`. Any [source-backed models](../semantic-models/managed-sources.md) already added to that configuration remain part of the same estate.
 
 ## 1. Inspect the starting state
 
@@ -12,7 +12,14 @@ weaver health --workspace-config workspace-development.yml
 
 Without an item selector, Health covers the whole installed estate. It is read-only and reports Load, Tests and Build state as Green, Amber or Red, naming findings that need attention. By default it also compares installed claims with physical inventory.
 
-Use the findings to decide whether the estate needs data work, validation or Build recovery. Health does not read unbuilt source or run Load or Test for you.
+Read the named finding before choosing a command:
+
+- If a source has loaded since its validation last passed, rerun Test. The old pass has not checked the new data.
+- If Load work is pending or stale, use the catch-up Load below, then Test the result.
+- If you edited a project definition, Check and Build it first; Load and catalogue-mode Test still use the installed definition.
+- If a load failed or installed objects are missing or inconsistent, inspect the failed step or inventory finding and follow [Recovery](recovery.md). Repeating Test will not repair that state.
+
+For example, `Parcel.CurrentStatusMatches` becoming Amber after a successful StatusEvent Load calls for validation, not another source load.
 
 For changed definitions, [Check, preview and Build](development-cycle.md) before this installed-state sequence. Source-data and model/Report definitions require separate Build calls. Reports participate in Build only; they have no independent Load or Test.
 
@@ -24,7 +31,7 @@ For the normal item-wide run:
 weaver load --workspace-config workspace-development.yml
 ```
 
-Load selects the installed Table and Folder work and registered semantic-model refreshes. Managed dependencies order selected source work before model refreshes. Reports use the model’s data rather than having their own Load. Load reads installed definitions and bindings from the catalogue. It does not read edited project source; run Build first when source has changed.
+Load selects the installed Table and Folder work and registered semantic-model refreshes. Managed dependencies order selected source work before model refreshes. Reports use the model’s data rather than having their own Load. Load uses the definitions and destinations installed in the catalogue. After editing project files, run Build before loading them.
 
 For routine catch-up after Build or when Health reports pending or stale load work, narrow the run to non-Green loadable objects:
 
@@ -34,7 +41,7 @@ weaver load --stale --workspace-config workspace-development.yml
 
 `--stale` uses the same Load-health assessment as Health. It preserves dependency ordering among selected item-wide work but does not pull Green upstream work into the run. An empty stale selection succeeds without changing the estate.
 
-A Load can leave partial state when work fails. Completed work is not rolled back. Use its per-object outcomes and then follow [Recover failed work](recovery.md).
+Completed changes remain in place when a run fails. Inspect the failed steps for partial changes, correct the cause, then use [Recover failed work](recovery.md) to rerun the work that needs attention.
 
 ## 3. Run installed validations
 
@@ -42,7 +49,9 @@ A Load can leave partial state when work fails. Completed work is not rolled bac
 weaver test --workspace-config workspace-development.yml
 ```
 
-Test runs the installed Tests and Assumptions across Lakehouse Python/Spark SQL, Warehouse SQL and semantic-model DAX. A model-owned Test can compare its measure with SQL calculated independently from the source. A failed validation found data discrepancies or violations; a validation that could not run is an execution problem. In catalogue mode, edited validation source takes effect after Build installs it. Source/file mode reads authored validations and records no catalogue status/history.
+A successful Load tells you that processing completed, not that the data meets your rules. In Parcel, the installed Tests compare current statuses with independently expected rows; the Assumptions look for unrecognised event statuses. A failed validation found a discrepancy or violation. A validation that could not run is an execution problem: inspect its error before changing the rule.
+
+Health includes these recorded results alongside load and deployment findings. Author rules in the relevant [Lakehouse](../lakehouse/tests.md), [Warehouse](../warehouse/tests.md) or [model validation task](../semantic-models/validation.md). Test supports Python/Spark SQL, Warehouse SQL and semantic-model DAX; a model-owned Test can also compare a measure with an independent source SQL calculation. Build installs edited rules before catalogue-mode Test uses them. Source/file mode lets you check authored validations separately without recording catalogue status or history.
 
 ## 4. Inspect the resulting state
 

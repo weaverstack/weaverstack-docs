@@ -1,8 +1,8 @@
 # Loading changes and bookmarks
 
-Update one carrier file, remove another, and Load the installed pipeline again. The Folder records what changed; the incremental Table uses its own bookmark to read those changes and apply updates and explicit deletes.
+Once a carrier feed changes, reprocessing every file is not always necessary. A Folder records which files changed, and an incremental Table uses its own bookmark to read the changes since its last clean Load. This example follows an updated file and a removed file through to a Table update and an explicit deletion, without rebuilding the pipeline.
 
-Continue the [Landing project](tests.md) in the same folder. Keep Events, Event, CurrentStatus and their validations. Add a separate `Parcel.StatusFiles` Folder and incremental `Parcel.LiveStatus` Table for changing carrier snapshots. The original constant example stays available and unchanged.
+The starting point is the working [Landing project](tests.md), with Events, Event, CurrentStatus and their validations. The example adds a separate `Parcel.StatusFiles` Folder and incremental `Parcel.LiveStatus` Table in the same project folder. The original constant example stays available and unchanged.
 
 ## Let the consumer remember its progress
 
@@ -12,7 +12,7 @@ The bookmark belongs to the consumer, not the source. It is the UTC instant imme
 
 ## Provision the external Lakehouse
 
-Keep your working `workspace-config.yml`, catalogue, Landing target and published Environment. In the Fabric portal, create a Lakehouse called **ParcelSourceArchive** in the same workspace for the changing carrier data. Do not add it to `targets`: Build owns the managed target and may prune undeclared co-located content; the external archive must remain outside that scope.
+The existing `workspace-config.yml`, catalogue, Landing target and published Environment are sufficient for the managed pipeline. The changing carrier data needs a separate source. In the Fabric portal, create a Lakehouse called **ParcelSourceArchive** in the same workspace. Do not add it to `targets`: Build owns the managed target and may prune undeclared co-located content; the external archive must remain outside that scope.
 
 In the Fabric portal, open `ParcelSourceArchive`, create `Files/parcel-status`, and upload two CSV files with the contents below:
 
@@ -431,7 +431,7 @@ The Table read zero rows and made no changes. Its clean `return None` still adva
 
 ## Build only when the declaration changes
 
-The second Load changes source data only. Editing a Folder or Table instead changes the installed code only after Check and Build. For each rebuilt loadable object, Build resets current Load state and its bookmark to the initial boundary; the next Load must ask that new generation for all available history. Use `weaver load Lakehouse/Landing --stale` for post-Build catch-up, not as a substitute for the data-only sequence above.
+The second Load changes source data only. Editing a Folder or Table instead changes the installed code only after Check and Build. For each rebuilt loadable object, Build resets current Load state and its bookmark to the initial boundary; the next Load must ask that new generation for all available history. Post-Build catch-up with `weaver load Lakehouse/Landing --stale` is therefore a different case from the data-only sequence above.
 
 With a working mutable source, [Shortcuts and existing data](shortcuts.md) explains how to choose a managed logical source or an external physical boundary. For shared run state and recovery, continue to [Catalogue and Health](../estate/catalogue-and-health.md) and [Recover failed work](../estate/recovery.md).
 

@@ -76,6 +76,7 @@ extra_javascript:
   - assets/javascripts/dashboard-demo.js
 
 not_in_nav: |
+  /reference/machine-readable-output.md
   /getting-started/first-project.md
   /advanced/automation-and-execution-contexts.md
   /advanced/build-bundles-and-controlled-installation.md
@@ -166,6 +167,7 @@ nav:
       - Workspace and environment mappings: estate/environments.md
       - Catalogue and Health: estate/catalogue-and-health.md
       - Catalogue Dashboard: estate/catalogue-dashboard.md
+      - Work across teams' catalogues: estate/across-catalogues.md
       - The development cycle: estate/development-cycle.md
       - Run, test and inspect the estate: estate/operate.md
       - Recover failed work: estate/recovery.md
@@ -177,6 +179,7 @@ nav:
   - Reference:
       - reference/index.md
       - Permissions: reference/permissions.md
+      - Using Weaver with AI agents: reference/ai-agents.md
       - Weaver documents:
           - Overview: reference/weaver-documents/overview.md
           - Common metadata: reference/weaver-documents/common-metadata.md
@@ -244,4 +247,3 @@ nav:
           - Fault and outcome vocabulary: reference/operation-behaviour/fault-and-outcome-vocabulary.md
       - Catalogue schema: reference/catalogue-schema.md
       - Build bundle format: reference/build-bundle-format.md
-      - Machine-readable output: reference/machine-readable-output.md

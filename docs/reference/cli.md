@@ -4,7 +4,7 @@
 weaver [--version] command ...
 ```
 
-Run `weaver <command> --help` for the exact options in the installed version. This page records command responsibility, shared interaction and status semantics, and the selection grammar that differs between commands. [Machine-readable output](machine-readable-output.md) records the current JSON documents.
+Run `weaver <command> --help` for the exact options in the installed version. This page records command responsibility, shared interaction and status semantics, and the selection grammar that differs between commands. [JSON output](ai-agents.md#json-output) records the current JSON documents.
 
 ## Commands
 
@@ -143,7 +143,7 @@ Test accepts repeated regex `--name` and repeated `--file` paths/directories/glo
 
 ## Shared CLI behaviour
 
-The Weaver CLI parses one command, applies one interaction policy and reports one command outcome. Command-specific arguments are listed on the command pages, and current result fields are in [Machine-readable output](machine-readable-output.md).
+The Weaver CLI parses one command, applies one interaction policy and reports one command outcome. Command-specific arguments are listed on the command pages, and current result fields are in [JSON output](ai-agents.md#json-output).
 
 ## Parsing and help
 

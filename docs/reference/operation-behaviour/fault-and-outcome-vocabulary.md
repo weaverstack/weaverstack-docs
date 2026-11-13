@@ -90,4 +90,4 @@ Capitalisation above is the stored display value; Python constants and report ma
 
 Load message objects currently use `info`, `warning` and `error` severity. These describe messages, not node or report success.
 
-The terms on this page are the exact current surfaced vocabularies. Their containing fields and JSON documents are command-specific and mostly unversioned. Do not parse one operation's term set as another operation's schema or infer compatibility between them. See [Machine-readable interfaces](../machine-readable-output.md) for current field placement.
+The terms on this page are the exact current surfaced vocabularies. Their containing fields and JSON documents are command-specific and mostly unversioned. Do not parse one operation's term set as another operation's schema or infer compatibility between them. See [JSON output](../ai-agents.md#json-output) for current field placement.

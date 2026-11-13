@@ -47,9 +47,9 @@ weaver mirror [-h] [--item ITEM[=TARGET]] [--no-item] [--mirror CATALOGUE] [--wo
 
 ## Responsibility and selection
 
-`mirror` forks the catalogue selected by `--mirror` into the destination catalogue selected by `--catalogue`. Either value may instead come from workspace configuration.
+`mirror` forks the catalogue selected by `--mirror` into the destination catalogue selected by `--catalogue`. Either value may instead come from workspace configuration. The source may be in another workspace, written `Workspace/Warehouse/Name`; the destination is always in the command's workspace.
 
-`--item ITEM` selects a logical Weaver item and uses its configured destination target. `ITEM=TARGET` supplies or overrides that physical destination binding. Repeat the option to select several items. Omitting `--item` selects every configured target; use `--no-item` to fork only the catalogue. `--item` and `--no-item` cannot be combined.
+`--item ITEM` selects a logical Weaver item and uses its configured destination target. `ITEM=TARGET` supplies or overrides that physical destination binding. Repeat the option to select several items. Omitting `--item` selects every configured target; use `--no-item` to fork only the catalogue. `--item` and `--no-item` cannot be combined. From a source in another workspace, only Lakehouse items can be selected; a selected Warehouse installed there is refused before anything is emptied. See [Mirror behaviour](../operation-behaviour/mirror.md#item-selection).
 
 ## Execution
 
@@ -82,6 +82,19 @@ weaver mirror \
   --workspace-config workspace-development.yml \
   --item Warehouse/Operations=Warehouse/ParcelOperations_Dev
 ```
+
+Mirror one Lakehouse from a catalogue in another workspace:
+
+```bash
+weaver mirror \
+  --workspace "Parcel Sandbox" \
+  --environment "Parcel Development/Weaver" \
+  --mirror "Parcel Production/Warehouse/ParcelCatalogue" \
+  --catalogue Warehouse/ParcelCatalogue \
+  --item Lakehouse/Landing=Lakehouse/ParcelLanding
+```
+
+Mirroring a Lakehouse runs Spark work in Fabric, so name a published Weaver Environment. The identity running the command needs read access to the source catalogue and item; see [Permissions](../permissions.md).
 
 Fork only the catalogue in unattended execution:
 

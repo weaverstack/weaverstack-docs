@@ -1,0 +1,103 @@
+[
+  {
+    "id": "D01",
+    "disposition": "changed",
+    "detail": "Dashboard reads catalogues in place; manage model/Report separately. Lifecycle independence retained in CLI reference.",
+    "paths": [
+      "docs/estate/catalogue-dashboard.md",
+      "docs/reference/cli/catalogue-dashboard.md"
+    ]
+  },
+  {
+    "id": "D02",
+    "disposition": "moved",
+    "detail": "Removed speculative Fabric Apps sentence; researched introducing commit and both repository histories. No separate formal policy found. Conservatively retained best-effort status in named support/compatibility reference; backlog and research in implementation report.",
+    "paths": [
+      "docs/estate/catalogue-dashboard.md",
+      "docs/reference/cli/catalogue-dashboard.md",
+      "acceptance/docs-0.11-confidence/implementation-report.md"
+    ]
+  },
+  {
+    "id": "D03",
+    "disposition": "changed",
+    "detail": "Update source projects before Dashboard deployment; schema checks before changes, then Contributor/read/model-ownership/connection requirements. No exact-version runtime restriction added.",
+    "paths": [
+      "docs/estate/catalogue-dashboard.md"
+    ]
+  },
+  {
+    "id": "D04",
+    "disposition": "changed",
+    "detail": "Teach Build, Load, Test, Health sequence; installed definitions beside Load; authored business validations beside Test. Separate source/model Builds remain explicit.",
+    "paths": [
+      "docs/estate/operate.md"
+    ]
+  },
+  {
+    "id": "D05",
+    "disposition": "changed",
+    "detail": "Completed changes remain; inspect failed steps for partial changes, correct cause and use Recovery.",
+    "paths": [
+      "docs/estate/operate.md"
+    ]
+  },
+  {
+    "id": "D06",
+    "disposition": "changed",
+    "detail": "Explain supplied catalogue context versus selected execution once; preserve defaults, selector forms and unresolved-source rules. Adjacent caption also corrected.",
+    "paths": [
+      "docs/estate/across-catalogues.md",
+      "docs/estate/index.md"
+    ]
+  },
+  {
+    "id": "D07",
+    "disposition": "changed",
+    "detail": "AI opening now gives development task, preview and result; feature entries lead with useful actions.",
+    "paths": [
+      "docs/reference/ai-agents.md"
+    ]
+  },
+  {
+    "id": "D08",
+    "disposition": "changed",
+    "detail": "Health acceptance reports assessed scope/findings/completeness and runs authored rules. Exact development command retained; stale description now covers work needing attention.",
+    "paths": [
+      "docs/reference/ai-agents.md"
+    ]
+  },
+  {
+    "id": "D09",
+    "disposition": "changed",
+    "detail": "Consolidated least-privilege identity, explicit development configuration and review/approval setup. Desktop permissions, effective shortcut identity, mutation, production prohibition and Mirror reset preserved.",
+    "paths": [
+      "docs/reference/ai-agents.md"
+    ]
+  },
+  {
+    "id": "D10",
+    "disposition": "changed",
+    "detail": "Exact command block preserved. Explained supported flags/output once; JSON opening simplified while exact fields, versions, error/stream and compatibility contracts remain. Execute bookkeeping links existing CLI owner.",
+    "paths": [
+      "docs/reference/ai-agents.md"
+    ]
+  },
+  {
+    "id": "D11",
+    "disposition": "changed",
+    "detail": "Light usable-role introduction and duplicate ownership clause removal in #16 commit 7442917e4dc24f580364727b219a4c9de49064af, ordinary forward merge into #17. Matrix unchanged otherwise.",
+    "paths": [
+      "docs/reference/permissions.md"
+    ]
+  },
+  {
+    "id": "D12",
+    "disposition": "changed",
+    "detail": "Explicit limitation/workaround: own mirror configuration with mirror source; joined remote mirror remains unassessed even with production supplied and report is incomplete. T05 open; internal cause moved to acceptance report.",
+    "paths": [
+      "docs/reference/operation-behaviour/health.md",
+      "acceptance/docs-0.11-confidence/implementation-report.md"
+    ]
+  }
+]

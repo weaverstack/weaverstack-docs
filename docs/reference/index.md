@@ -2,6 +2,17 @@
 
 Use Reference to look up current public interfaces, exact representations and operation behaviour. For a worked task, start with [Lakehouse](../lakehouse/index.md), [Warehouse](../warehouse/index.md), [Semantic models](../semantic-models/index.md), [Reports](../reports/index.md) or [Coordinate your estate](../estate/index.md).
 
+## Changes for 0.11
+
+- Keep separate team projects and [assess, load or test across their catalogues](../estate/across-catalogues.md). Supply catalogue context and select the work independently.
+- Use [Python workflows](python/session.md#workflows) to share a Session and configuration and correlate recorded Load/Test work. [Test stale validations](operation-behaviour/test.md#stale-selection) to rerun failed, invalid, Pending or stale results.
+- [Execute](cli/execute.md) submits commands or files in T-SQL, Spark SQL, Python and DAX without authoring a Weaver document. SQL and Python can change data.
+- [Mirror Lakehouse items across workspaces](../estate/mirror.md#mirror-from-another-workspace), retain local materialisation records, and [use a shared Environment](../lakehouse/runtime.md#use-a-shared-environment). Report-only initialisation supplies a catalogue without an Environment.
+- Deploy the [multi-catalogue Dashboard](../estate/catalogue-dashboard.md), choose Direct Lake for up to ten catalogues or Import for more than ten, and export static HTML snapshots.
+- Python-style names split at the first `__`; later separators remain in the object name. [Naming rules](operation-behaviour/shared-selection-and-identity.md) retain the schema restriction.
+
+The release also corrects installation lookup for single-item work, publishes Folder files through the mount used by readers, excludes housekeeping columns from generated model source shapes, waits for shortcut columns to become available, and corrects Build/prune ordering. These are fixes to existing workflows, not new deployment modes. [Dependency cycles](../estate/across-catalogues.md#cycles) now use deterministic execution order without convergence iteration.
+
 ## Find the definition for your item
 
 | Item | Authored definitions and relevant interfaces |
@@ -31,7 +42,7 @@ For Lakehouse and Warehouse validation declarations, use [Test](weaver-documents
 | [Operation behaviour](operation-behaviour/index.md) | Selection, state changes, outcomes and failure boundaries. |
 | [Catalogue schema](catalogue-schema.md) | Public `_` tables, columns, types and keys. |
 | [Build bundle format](build-bundle-format.md) | Manifest, payload and destination-bound installation handoff. |
-| [Machine-readable output](machine-readable-output.md) | Command-specific CLI JSON documents and exit outcomes. |
+| [Using Weaver with AI agents](ai-agents.md) | Running Weaver from an agent, and the JSON each command writes with its exit codes. |
 | [Permissions](permissions.md) | Workspace roles, tenant settings and Azure permissions each command needs. |
 
 For options in an installed CLI version, run:

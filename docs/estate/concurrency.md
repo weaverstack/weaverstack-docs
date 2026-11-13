@@ -1,10 +1,10 @@
 # Control concurrency
 
-Can this run use less simultaneous work? Add `--concurrency 2` to limit it to two scheduled nodes. Leave the setting out when the normal configured limits are appropriate.
+Independent branches can run at the same time, but they also share service and compute resources. An invocation's concurrency cap limits how many nodes Weaver schedules simultaneously; it does not make dependent work parallel or provision more compute. The example below uses a cap of two, without changing the project's normal configured limits.
 
 ## Limit one run
 
-Continue the Landing/Operations project from [selective runs](selective-runs.md), keeping `workspace-development.yml`. Cap its Landing Load at two scheduled nodes:
+The example uses the Landing/Operations project from [selective runs](selective-runs.md) and its existing `workspace-development.yml`. This command caps the Landing Load at two scheduled nodes:
 
 ```bash
 weaver load Lakehouse/Landing --concurrency 2 --workspace-config workspace-development.yml
@@ -160,9 +160,9 @@ There is no `execution.test`, target-level `parallel_workers` setting or `--spar
 
 ## Measure before increasing a limit
 
-Use enough independent work for the cap to matter. A single dependency chain will not become parallel merely because the number increases.
+A cap affects elapsed time only when enough independent work is ready to use it. A single dependency chain will not become parallel merely because the number increases.
 
-Compare a fixed workload, record waits, outcomes and resource usage, and change one setting at a time. More concurrency can increase contention or throttling. The historical F64 benchmark used 24 Spark lanes and 12 per Warehouse; these are not defaults, small-capacity recommendations or hard maxima.
+For a fixed workload, waits, outcomes and resource usage show whether a higher limit helped or merely increased contention or throttling. Changing one setting at a time makes the comparison meaningful. The historical F64 benchmark used 24 Spark lanes and 12 per Warehouse; these are not defaults, small-capacity recommendations or hard maxima.
 
 ## Related tasks
 

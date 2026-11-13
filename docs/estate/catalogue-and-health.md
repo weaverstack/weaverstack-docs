@@ -1,14 +1,14 @@
 # Catalogue and Health
 
-What happened after the last run? Read Health to find the data work, validation or installation that needs attention. The catalogue keeps installed definitions and operation results together, so a source Table, its model refresh and a DAX validation can be judged against the same dependency history.
+The last command's result is only part of an estate's current state. A Table may have loaded successfully while its validations are now stale, or a model may still need a refresh after its source changed. The catalogue keeps installed definitions and operation results together. Health uses those records and dependencies to explain which work needs attention.
 
-Continue the [mapped Landing/Operations project](environments.md#bind-the-project-to-fabric), using the same `workspace-development.yml`. Keep its installed state; inspecting it does not require another Load or Test:
+The example uses the installed [mapped Landing/Operations project](environments.md#bind-the-project-to-fabric) and its `workspace-development.yml`. Health can inspect that state without another Load or Test:
 
 ```bash
 weaver health --workspace-config workspace-development.yml
 ```
 
-If you added models and Reports through [the estate mapping](environments.md#a-model-and-report-variation), keep the same `workspace-development.yml`; their installed refresh and validation results appear in this Health report. For a different working project, use its own configuration consistently. No return to the Warehouse starter is required.
+Models and Reports added through [the estate mapping](environments.md#a-model-and-report-variation) use that same configuration; their installed model-refresh and validation results appear in this Health report. Another working project can be inspected with its own configuration, without returning to the Warehouse starter.
 
 Without an item selector, Health covers the whole managed installed estate. It reads recorded state and, by default, compares installed claims with physical inventory. It does not read unbuilt source, load data or execute validations.
 
@@ -66,6 +66,8 @@ Health separates three questions:
 | Build | Installed claims that are inconsistent or absent in the inspected physical form | Inspect bindings and installation, then reconcile with Build |
 
 Green means the assessed subjects have no current finding. Amber identifies work that needs attention without a current failure, such as an unrun Table, rejected input or stale Test. Red identifies a recorded failure or inconsistent installation. The overall colour is the worst section colour; act on its named findings, not on colour alone.
+
+Objects that read one another form a dependency cycle. Health names the members in a Green Build finding and does not compare their load times; see [Cycles](across-catalogues.md#cycles).
 
 For example, after loading the connected Parcel items but before rerunning Test, the report retained four successful historical validations and marked them stale:
 
@@ -195,6 +197,8 @@ Interpret current status separately from history. A blocked Load can have a curr
 To browse the same state in Power BI, deploy the [Catalogue Dashboard](catalogue-dashboard.md).
 
 The [catalogue tour](../core-concepts/catalogue.md) groups every table by the question it answers. The [Catalogue schema reference](../reference/catalogue-schema.md) owns exact columns, keys and stored values. The catalogue records resolved managed lineage, not every external connection.
+
+Health reads the configured catalogue. When another team's catalogue feeds yours, repeat `--catalogue` to read both together; see [Work across teams' catalogues](across-catalogues.md).
 
 Catalogue-free Power BI deployment/refresh and source/file-mode Test return reports without persisted Weaver status/history. They are separate supported modes, not another installed estate for this Health command. In an optional mixed mirrored estate, borrowed data’s current Load state comes from its source catalogue while local work uses the destination.
 

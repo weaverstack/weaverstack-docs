@@ -1,8 +1,8 @@
 # Working with Spark SQL
 
-Keep the Python event pipeline and inspect its generated SQL transformation: the latest status for each parcel. Weaver installs it as another Delta Table and orders its Load after the event Table.
+The Python event pipeline holds every tracking event, but a consumer may need only each parcel's latest status. The generated Spark SQL transformation produces that result as another Delta Table. Weaver orders its Load after the event Table.
 
-Use the [Python project](python.md) in `parcel`. Initialise wrote this SQL file into the same Landing item, and the first Load already ran it.
+This page explains the SQL file Initialise wrote into the [Python project's](python.md) Landing item in `parcel`. The first Load already ran it; there is no new pipeline to set up.
 
 ## Inspect the current-status query {#add-the-current-status-query}
 

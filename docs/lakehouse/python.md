@@ -1,6 +1,6 @@
 # A first Lakehouse pipeline with Python
 
-Turn a carrier CSV export into a Delta Table using ordinary Python. Weaver manages the files and Table, discovers the dependency from your import and records each Load's result.
+A carrier export often needs a little Python before its rows are ready for a Delta Table. In this example, a Folder stages a small CSV export and a Python Table reads it. Weaver manages the files and Table, discovers the dependency from your import and records each Load's result.
 
 ## Create the project
 
@@ -319,7 +319,7 @@ Load summary
 
 The item-wide run loads the carrier Folder, Event and CurrentStatus in order. Its six inserted entries comprise one CSV file, three event rows and two current-status rows.
 
-Run the two generated validations, then read Health:
+Did the transformation keep the right latest event for each parcel, and does every event use a recognised status? The generated `CurrentStatusMatches` Test compares the two latest-status rows with expected values; the `EventStatusIsKnown` Assumption looks for null or unrecognised statuses. Run both, then read Health:
 
 ```bash
 weaver test Lakehouse/Landing
@@ -413,6 +413,6 @@ The result should contain the three rows in `EVENTS`. The managed file is `Files
 
 The Folder staged the file, and Weaver published it under `Files/Parcel/Events`. The Python import supplied the Folder → Table dependency, so Load ran the file work first. Build installed the Table and its code; Load applied the three rows and recorded the result. `Lineage` remains a description, not another dependency declaration.
 
-You now have the event history in a Table. [Inspect the Spark SQL CurrentStatus Table](spark-sql.md) to answer the next question: where is each parcel now? Keep the Python Event and its Folder; the next page explains the generated transformation in this same project.
+You now have the event history in a Table. The [Spark SQL CurrentStatus Table](spark-sql.md) answers the next question: where is each parcel now? The next page explains that generated transformation in the same project, alongside the Python Event and its Folder.
 
-For edits to either declaration, Check and Build again, then use `weaver load Lakehouse/Landing --stale` for post-Build catch-up. Changing the `EVENTS` constant is a code change, not an external data-only incremental run. [Loading changes](incremental.md) supplies that later variation. Exact authored forms are in [Folder](../reference/weaver-documents/folder.md) and [Table](../reference/weaver-documents/table.md).
+Edits to either declaration take effect after Check and Build; `weaver load Lakehouse/Landing --stale` then catches up the changed installed work. Changing the `EVENTS` constant is a code change, not an external data-only incremental run. [Loading changes](incremental.md) supplies that later variation. Exact authored forms are in [Folder](../reference/weaver-documents/folder.md) and [Table](../reference/weaver-documents/table.md).

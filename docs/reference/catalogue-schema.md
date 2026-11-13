@@ -41,7 +41,7 @@ Every table also has these required `datetime2(6)` audit columns:
 
 Semantic metadata is projected from deployed readback, not a claim to discover all unmanaged workspace models. Report registrations live in Installation/Registry; there is no separate Report dictionary table. A catalogue-free deployment/refresh or file-mode Test adds no rows here. Signatures are equality tokens for reconciliation, not a public cross-version hash algorithm.
 
-`_.Mirror` records local object identity and physical source/form. It is removed when an object becomes local. Protected mirror materialisation retains data/bookmarks under its specific Build rules; ordinary replacement and Wipe have different boundaries.
+`_.Mirror` records local object identity and physical source/form. When an object becomes local, Build sets its `Row delete datetime` and the row stays as the record of the catalogue mirrored; catalogue reads take only live rows. Protected mirror materialisation retains data/bookmarks under its specific Build rules; ordinary replacement and Wipe have different boundaries.
 
 The generated inventory includes every physical column, including audit columns. Keys are shown in stored order. Vocabulary spellings are recorded in the checked-in manifest; they do not imply relational constraints or a versioned migration policy.
 
@@ -565,7 +565,7 @@ Keys on this page are Weaver's row-identity rules, not declared Warehouse primar
 - `Workflow ID` associates status and statistic rows with operational evidence in `_.Log`; it is an operational join, not a declared key relationship; and
 - a matching `_.Mirror` row supplements a `_.Registry` certification with the borrowed source and local physical form.
 
-`_.Bookmark`, `_.LoadStatus`, and `_.TestStatus` are current state for the object as installed. Rebuilding the corresponding loadable object, data node, or validation invalidates that object's applicable rows. `_.Log` and `_.LoadStatistic` are append-only history and are not invalidated by Build. `_.Mirror` is borrowed state: it remains until the object is materialised locally or Mirror replaces the borrowed scope.
+`_.Bookmark`, `_.LoadStatus`, and `_.TestStatus` are current state for the object as installed. Rebuilding the corresponding loadable object, data node, or validation invalidates that object's applicable rows. `_.Log` and `_.LoadStatistic` are append-only history and are not invalidated by Build. `_.Mirror` is borrowed state: a row is live until the object is materialised locally or Mirror replaces the borrowed scope.
 
 A physical object is not installed state without its Registry certification and item binding. Build reconciles those claims against physical inventory. A selected item remains bound even when a successful Build certifies no objects.
 

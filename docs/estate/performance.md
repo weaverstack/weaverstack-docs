@@ -1,10 +1,10 @@
 # Investigate performance and scale
 
-First establish what the run is doing. Work that moves rows, waits for a service and repeats setup needs different remedies.
+A slow run can spend its time processing rows, waiting for a service or repeating setup. Those causes need different remedies: more concurrency may help independent work, but it will not shorten a serial dependency chain or fix a slow source query. The reports and timings below help distinguish these cases before a setting changes.
 
 ## 1. Keep the comparison fixed
 
-Record the Weaver revision/package, capacity, selected items, source and target state, run mode and resource limits. Compare the same workload before changing one setting. Separate a first Load, an unchanged Load and incremental change; they answer different questions.
+A useful comparison holds the workload and conditions fixed: Weaver revision/package, capacity, selected items, source and target state, run mode and resource limits. Changing one setting at a time makes its effect distinguishable. A first Load, an unchanged Load and an incremental change answer different questions, so their timings are not interchangeable.
 
 Use normal operation reports to identify attempted, succeeded, failed and blocked work. A short run that omitted necessary work is not a performance improvement.
 
@@ -44,7 +44,7 @@ Weaver shares repeated setup, batches supported access and coordinates endpoint 
 
 An observed synthetic workload of around 3,000 objects on F64, with one Lakehouse and two Warehouses, completed its first Load in about an hour. The later measured incremental Loads completed in under 15 minutes. The workload inserted about 4 billion rows across its layers; those are estate insertions, not distinct source records. These observations are not a service SLA or a duration promised for another workload.
 
-Use that as context, then measure your own project with its data shape, source access and capacity. Keep first-load and incremental timings separate when comparing changes.
+Those measurements describe that workload, not the duration of another project. Your project's data shape, source access and capacity determine its own timings; first-load and incremental results remain separate comparisons.
 
 ## Related tasks
 

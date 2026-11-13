@@ -1,8 +1,8 @@
 # Run part of an estate
 
-Can you rerun only this Table and the work it affects? Start with a named Load preview, then add upstream or downstream work when that is the intended scope.
+A correction to one Table may not need a full estate Load. Named selection narrows the work, while ancestor and descendant expansion can include its producers or consumers. The distinction matters: plain named Load does not automatically add dependencies or order multiple matches. This example shows the selection in a preview before running it.
 
-Keep the [Landing → Operations project](connected-items.md) and its `workspace-development.yml` from [workspace mappings](environments.md). Landing’s Folder supplies Event, which feeds CurrentStatus. Operations exposes Event through a Shortcut and loads the additional LakehouseCurrentStatus Table.
+The starting project is [Landing → Operations](connected-items.md), with `workspace-development.yml` from [workspace mappings](environments.md). Landing’s Folder supplies Event, which feeds CurrentStatus. Operations exposes Event through a Shortcut and loads the additional LakehouseCurrentStatus Table.
 
 ## Preview one Table
 
@@ -110,7 +110,7 @@ Plan
 | Ancestors | Folder `Parcel.Events`, then Table `Parcel.Event` |
 | Descendants | Table `Parcel.Event`, then Table `Parcel.CurrentStatus` |
 
-Expansion uses the **installed** dependencies, not edited source files. It restores dependency ordering within the selected graph. It never adds an unnamed item: Operations remains outside these requests, and the Shortcut itself has no Load; its consuming Table is selected only when Operations is named. A descendant run omits the Folder, so keep its staged CSV current.
+Expansion uses the **installed** dependencies, not edited source files. It restores dependency ordering within the selected graph. It never adds an unnamed item: Operations remains outside these requests, and the Shortcut itself has no Load; its consuming Table is selected only when Operations is named. A descendant run omits the Folder and therefore relies on its staged CSV already being current.
 
 ## Run the selection you inspected
 
@@ -160,7 +160,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-Event ran before CurrentStatus. Inspect each outcome; attempted is not the same as succeeded. With the original three-event feed, CurrentStatus should still show the two parcel statuses from the Lakehouse task. Operations is outside this invocation; its additional cross-item Table is not reloaded by this Landing-only selection. Next, [limit simultaneous work](concurrency.md) on this same estate.
+The report shows Event completing before CurrentStatus, with an outcome for each selected Table. With the original three-event feed, CurrentStatus should still show the two parcel statuses from the Lakehouse task. Operations is outside this invocation; its additional cross-item Table is not reloaded by this Landing-only selection. The next example explains [concurrency limits](concurrency.md) on this same estate.
 
 ## Diagnose an unmatched name
 

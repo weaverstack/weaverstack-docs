@@ -16,4 +16,4 @@ Use these pages to look up the current selection, ordering, state-change and fai
 | Where does work run and what does a Session reuse? | [Session and runtime](session-runtime.md) |
 | What do operation-specific status words mean? | [Fault and outcome vocabulary](fault-and-outcome-vocabulary.md) |
 
-Exact command syntax is in [CLI reference](../cli.md). Current JSON fields are in [Machine-readable interfaces](../machine-readable-output.md). These behaviour pages do not add compatibility guarantees to unversioned representations.
+Exact command syntax is in [CLI reference](../cli.md). Current JSON fields are in [JSON output](../ai-agents.md#json-output). These behaviour pages do not add compatibility guarantees to unversioned representations.

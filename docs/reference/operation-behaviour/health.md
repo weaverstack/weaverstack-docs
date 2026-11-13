@@ -19,13 +19,13 @@ Health reads:
 
 Older Log and LoadStatistic rows remain history but are not the current Health activity window. A partial run may leave current objects correlated with different workflows; blocked work can have current status without a LoadStatistic row.
 
-For borrowed objects, current Load state and matching statistics come from the configured source catalogue. The destination catalogue still supplies topology, validation and Build evidence. If borrowed objects exist but the source catalogue is absent or names another workspace, Health fails rather than using copied state as current.
+For borrowed objects, current Load state and matching statistics come from the configured source catalogue. The destination catalogue still supplies topology, validation and Build evidence. The configured source may be in another workspace. If borrowed objects exist but no source catalogue can be resolved, Health fails rather than using copied state as current.
 
 ## Inventory and host boundaries
 
 With inventory enabled, Warehouse objects are read over TDS and Lakehouse storage objects through OneLake. Health does not start Spark or Livy and accepts no Environment option. Lakehouse Views are not reported missing merely because storage inventory cannot enumerate them. SemanticModel/Report targets request no Warehouse/OneLake physical inventory; Health uses recorded catalogue evidence for them. It requires a catalogue and does not report a catalogue-free refresh as persisted health.
 
-`--no-inventory` skips physical reads. Build health can then report catalogue contradictions but cannot establish that certified objects are physically present. Authentication, catalogue, mirror-source and inventory-read failures are command errors; Health does not turn them into Red findings.
+`--no-inventory` skips physical reads. Build health can then report catalogue contradictions but cannot establish that certified objects are physically present. For one catalogue, authentication, catalogue, mirror-source and inventory-read failures are command errors; Health does not turn them into Red findings. With several catalogues, a catalogue's read failure is reported in its place; see [Several catalogues](#several-catalogues).
 
 ## Status aggregation
 
@@ -38,6 +38,8 @@ Installed Tables, Folders and registered semantic-model refresh roots are Load s
 - **Green:** the current installed generation was processed successfully, is not older than `as_of`, and is not behind a managed ancestor.
 - **Amber:** no load has processed the object since Build; the latest result contains tolerated rejects or another non-failure state; the last clean completion is older than `as_of`; or a managed ancestor has not been processed in its current generation or was established later.
 - **Red:** the current result is failed, errored or blocked.
+
+Load times are not compared between members of a dependency cycle, because each reads what another last loaded. A member's own failed, Pending or overdue state is still reported, and a member that has processed nothing makes the others Amber.
 
 After a static object has established its load-once state, its own age and ancestor-freshness checks are exempt. Its latest lifecycle touch can still affect descendant freshness. A static object that has never loaded is Amber.
 
@@ -61,7 +63,7 @@ Build health checks installed-state consistency, not unbuilt project source. Red
 - more than one logical installation claiming one physical address; and
 - when inventory is enabled, a certified object absent from its expected local or borrowed physical form.
 
-Build has no Amber classification in the current assessment: contradictions above are Red and no finding is Green.
+Objects that read one another form a dependency cycle. Each cycle with a selected member is a Green `dependency_cycle` finding naming its members; it does not change the section's colour. Build has no Amber classification: the contradictions above are Red.
 
 ## `as_of` and dependency freshness
 
@@ -71,12 +73,43 @@ The cutoff applies to Load age only. It does not replace dependency freshness: a
 
 ## Report and exit behaviour
 
-The report contains Load, Tests and Build sections, subject and outcome counts, non-Green findings, selected targets, `generated_at`, `as_of`, current Load workflow/timing summary and matching Load activity where available. A finding includes a condition code and may include logical identity, physical target, runtime outcome, workflow, times and failure count.
+The report contains Load, Tests and Build sections, subject and outcome counts, non-Green findings and any `dependency_cycle` finding, selected targets, `generated_at`, `as_of`, current Load workflow/timing summary and matching Load activity where available. A finding includes a condition code and may include logical identity, physical target, runtime outcome, workflow, times and failure count.
 
 The Python operation returns `HealthReport`; `is_healthy` is true only for Green. The CLI exits `0` only for Green. Amber, Red and command errors exit `1`. Human output conveys status without requiring terminal colour.
 
 `--json` emits the current report mapping with an explicit `format_version`. The source does not promise that field set, ordering or format-version compatibility remains unchanged; consumers must not infer a broader stability guarantee from the current representation.
 
 Health never writes current state or history. It reports partial state left by other operations; rerunning Health only rereads that state and does not repair, retry or roll it back.
+
+## Remote mirrored catalogues
+
+### Limitation and workaround
+
+To assess borrowed objects, run Health using the mirror's own workspace configuration with its `mirror:` source set. Joined Health currently leaves a remote mirrored catalogue unassessed, even when its production catalogue is also supplied. Use the mirror's own configuration for that assessment; the joined report identifies the incomplete scope.
+
+## Several catalogues
+
+Repeating `--catalogue` (Python `catalogue=[...]`) with more than one value reads those catalogues together. Each value is `Workspace/Warehouse/Name`; `Warehouse/Name` is in the working workspace. The working workspace resolves by the ordinary precedence and, when nothing names one, is the first catalogue's workspace. Giving one catalogue twice is a command error. Health needs read access to every catalogue given; see [Permissions](../permissions.md).
+
+**Join.** Each physical Shortcut a catalogue records is matched to the given catalogue whose installation binds the Fabric item it names, by workspace, kind and item name; the Shortcut's path gives the producer object, which becomes an ancestor of the Shortcut's readers. A Shortcut whose target no given catalogue installs, or more than one installs, joins nothing. Nothing else is declared. A cycle is between objects: two catalogues that read different objects of each other's form none.
+
+**Labels.** Each catalogue is labelled by its workspace name, or `Workspace/Name` when two catalogues given share a workspace. A finding names an object in another catalogue as `Label: identity`.
+
+**Selection.** Repeatable `--item` accepts:
+
+| Form | Selects |
+| --- | --- |
+| `Kind/Name` | an item of the working workspace's catalogue |
+| `Workspace/Kind/Name` | an item of that workspace's catalogue |
+| `Workspace` | every item of that workspace's catalogue |
+| `Workspace/Warehouse/Catalogue/Kind/Name` | an item, where one workspace holds two catalogues given |
+
+Without `--item`, every catalogue is reported with its whole installed estate. With `--item`, only catalogues with a named item, and any catalogue that could not be read, are reported; the others are read for their graph and load state and are not inventoried.
+
+**Assessment.** Each reported catalogue is assessed as one catalogue is, with managed ancestry through the others: a foreign ancestor that failed, has not processed, or was established after the reader makes the reader Amber. Load times are not compared between members of a cycle, whichever catalogues hold them. A mirrored catalogue's load state comes from its configured source. See [remote mirrored catalogues](#remote-mirrored-catalogues) for the working-configuration requirement.
+
+**Failures.** A catalogue that cannot be read, interpreted or assessed, or whose selected targets cannot be inventoried, keeps its place with the error and no report. It counts as Amber. An object that reads into a catalogue that could not be read, or whose load state could not be interpreted, has an Amber `load_ancestor_unobserved` finding: whether it is current is unverified. These are not command errors.
+
+**Report.** The Python operation returns `JoinedHealthReport`. Its status is the worst catalogue's status; `is_healthy` and CLI exit `0` require Green. Human output gives each catalogue's report under its label and reference, in the order given, then **Cycles across catalogues**. `--json` emits `format_version` `1`, `generated_at`, `as_of`, `status`, `complete` (every catalogue was assessed), `catalogues` (each with `label`, `catalogue`, `status`, `report` and `error`) and `cycles`. A cycle within one catalogue is that catalogue's `dependency_cycle` finding; `cycles` lists each cycle whose members span catalogues, once, by qualified node.
 
 See [`weaver health`](../cli/health.md), [Load](load.md), [Test](test.md), [State and health](../../core-concepts/state-and-health.md), and [Catalogue schema](../catalogue-schema.md).

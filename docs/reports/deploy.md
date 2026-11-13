@@ -1,10 +1,10 @@
 # Deploy a native Report
 
-Keep your native `.Report` beside its semantic model. Build deploys the model first, then binds the Report to that deployed model without rewriting the local `definition.pbir`.
+A native Report's local association identifies the model it belongs to, not the service IDs it will have in a workspace. Build deploys the linked model first, then binds the Report to that deployed model without rewriting the local `definition.pbir`.
 
 ## Start with the linked pair
 
-Continue the [native Parcel model](../semantic-models/native-tmdl.md) in the same project, keeping its overlays. Initialise has already written its linked Report. If you are starting here, [install Weaver](../getting-started/installation.md) and generate the pair:
+The [native Parcel model task](../semantic-models/native-tmdl.md) provides the working model and overlays for this example; Initialise has already written its linked Report. If you are starting here, [install Weaver](../getting-started/installation.md) and generate the pair:
 
 ```bash
 weaver initialise \
@@ -31,13 +31,13 @@ Open `PowerBI/Parcel/Parcel.pbip` in Desktop to inspect the Report. Its associat
 ```
 <!-- /initialise -->
 
-The path is relative to the `.Report` directory. Keep the complete native Report payload as well as this file; the example includes its page and card definitions. [Native project layout](../reference/power-bi/project-layout.md#report-discovery-and-association) describes discovery for your own project.
+The path is relative to the `.Report` directory. This file supplies the model association, while the rest of the native Report payload supplies the pages and visuals. The example includes both its page and card definitions; `definition.pbir` alone is not a complete Report. [Native project layout](../reference/power-bi/project-layout.md#report-discovery-and-association) describes discovery for your own project.
 
-This starts in [Power BI-only mode, without a Catalogue](../semantic-models/index.md#power-bi-only-without-a-catalogue). Native-only Initialise writes the linked pair, workspace configuration and supporting local project files; it creates no Catalogue Warehouse or Fabric Environment by default. This inline model and Report need no Lakehouse, Warehouse workload or Spark runtime. Use an existing, suitably licensed Power BI service workspace with the permissions described below.
+This starts in [Power BI-only mode, without a Catalogue](../semantic-models/index.md#power-bi-only-without-a-catalogue), in an existing Power BI service workspace with suitable licensing and the permissions described below. Native-only Initialise writes the linked pair, workspace configuration and supporting local project files; it creates no Catalogue Warehouse or Fabric Environment by default. This inline model and Report need no Lakehouse, Warehouse workload or Spark runtime.
 
 ## Choose the destination and Build
 
-Use the generated `workspace-config.yml`. It already binds `SemanticModel/Parcel` and `Report/Parcel` to their physical items in Parcel Development. Keep any Lakehouse or Warehouse bindings in that file.
+The generated `workspace-config.yml` already binds `SemanticModel/Parcel` and `Report/Parcel` to their physical items in Parcel Development. Any Lakehouse or Warehouse bindings in that file remain unchanged; this Build selects only the linked pair.
 
 Build can create missing selected models and Reports or update existing ones. Choose item names you own. Sign in with an identity allowed to create/update and read back both items; the service licence and capacity must support the model mode. [Service requirements](../reference/power-bi/requirements-and-compatibility.md#runtime-and-service-access) give the platform boundaries.
 

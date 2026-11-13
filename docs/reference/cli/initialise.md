@@ -61,6 +61,21 @@ Create or extend a project folder for selected Lakehouse, Warehouse and native P
 
 Without explicit values, terminal use starts a wizard. Unattended use requires `--workspace` and `--project-folder`. Data projects default catalogue and Environment names to `Catalogue` and `Weaver`. A native-only `--semantic-model` selection needs neither supporting item; explicit catalogue or Environment requests remain available. Adding a Lakehouse or Warehouse later supplies missing supporting configuration without changing existing bindings.
 
+A project that holds only Reports, with no data items and no semantic model, gets the default catalogue and no Environment, because Build records each Report in a catalogue.
+
+### A shared Environment
+
+`--environment Workspace/Name` names an Environment in another workspace, such as one Weaver Environment several teams share. It must already exist there, be shared with Read permission for the running identity, and use the same capacity and network security settings as the consuming workspace. The consuming workspace supplies pool and compute settings; see [shared runtime setup](../../lakehouse/runtime.md#use-a-shared-environment). Initialise writes the reference to the workspace configuration as given and does not create, copy, define or publish it; `--publish-environment` with a shared Environment is refused, because the project that defines it publishes it.
+
+```bash
+weaver initialise \
+  --workspace "Parcel Development" \
+  --project-folder ./parcel \
+  --environment "Platform/Weaver" \
+  --lakehouse Landing \
+  --non-interactive
+```
+
 ## Execution
 
 Initialisation creates missing Fabric items and writes the project files. Existing items, edited source files and physical bindings are preserved. Rerunning with another item extends the configuration; omitting an existing item does not remove it. New file or identity collisions are refused before project writes or item creation. An unchanged selection is idempotent. `--example Parcel` or `--example Sales` adds the named example for the selected items; omitting the option adds no example content. `--publish-environment` publishes the Environment after setup.

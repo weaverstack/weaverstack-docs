@@ -77,4 +77,4 @@ For a command that advertises machine-readable output, use that output and the p
 
 There is no single JSON schema shared by every Weaver command, and not every command exposes JSON output. A workflow provides ordered command execution and a process status, not a universal structured envelope for all nested results. When automation needs one operation's structured report, invoke that operation through its advertised machine interface.
 
-Do not infer long-term compatibility from an unversioned result document. The [Machine-readable interfaces](../reference/machine-readable-output.md) page records the exact command fields, stream behaviour and current exit conditions.
+Do not infer long-term compatibility from an unversioned result document. [JSON output](../reference/ai-agents.md#json-output) records the exact command fields, stream behaviour and current exit conditions.

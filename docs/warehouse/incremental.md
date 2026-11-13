@@ -2,7 +2,7 @@
 
 A keyed incremental Table can apply new rows, changed values and cancellations while its definition stays installed. Your SQL returns the candidate rows and delete keys; Weaver generates the target merge and records the consumer's progress.
 
-Continue the [first Warehouse project](first-project.md) and [its validations](tests.md). Keep StatusEvent and the CurrentStatus View unchanged. Add a new `Parcel.LiveStatus` Table over changing external records, using the same Operations item, configuration and catalogue.
+The example extends the [first Warehouse project](first-project.md) and [its validations](tests.md) with a new `Parcel.LiveStatus` Table over changing external records. It uses the same Operations item, configuration and catalogue; StatusEvent and the CurrentStatus View remain unchanged.
 
 ## Keep the changing source separate
 

@@ -24,7 +24,7 @@ For the Lakehouse/Warehouse forms above, the file must sit directly under `assum
 
 Only these keys are accepted. `Primary key` is incompatible because an Assumption has no expected/actual pair to correlate. `Lineage`, `Schema`, `Column notes`, `Unique keys`, `Foreign keys`, `Not null`, `Identity`, `Comparison columns`, `Incremental`, `Static`, `Prohibit rebuild`, `File key`, `Has load procedure`, `Delete percentage threshold`, `Update percentage threshold` and `Stability row threshold` are also incompatible.
 
-Dependencies are inferred from Python object imports or SQL relation references when `Dependencies` is absent. Spark SQL Assumptions may use inference; the explicit-dependency requirement for Spark SQL Tables and Views does not apply to validations. A declaration replaces inferred references and cannot name the Assumption itself or any Test or Assumption. Item graphs remain acyclic.
+Dependencies are inferred from Python object imports or SQL relation references when `Dependencies` is absent. Spark SQL Assumptions may use inference; the explicit-dependency requirement for Spark SQL Tables and Views does not apply to validations. A declaration replaces inferred references and cannot name the Assumption itself or any Test or Assumption. Data dependency cycles use [deterministic ordering](../../estate/across-catalogues.md#cycles); physical mutation actions must not contain circular waits.
 
 ## Python body
 

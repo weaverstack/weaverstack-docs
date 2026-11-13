@@ -5,9 +5,9 @@ search:
 
 # Your first Fabric project
 
-Write a small Warehouse Table and View, then Build and Load them. The example starts with ordinary T-SQL and shows the load work Weaver handles around it.
+A small Warehouse Table and View provide a first example of how Weaver works with ordinary T-SQL. The [complete Warehouse task](../warehouse/first-project.md) explains the declarations, loads the sample data and checks the result.
 
-[Follow the complete Warehouse first task](../warehouse/first-project.md). Keep that project to add its Tests and Assumptions next.
+The same project supplies the data for [Tests and Assumptions](../warehouse/tests.md), so validation follows from the working example rather than another setup.
 
 This starter is optional. If you already have a Lakehouse, native model or Report, choose its [item route](index.md) instead.
 

@@ -1,6 +1,6 @@
 # Deploy a native semantic model
 
-Deploy native PBIP/TMDL, query a measure, then hide relationship foreign keys with one modelling rule. Weaver applies the rule to the deployed definition without editing the native files.
+A native PBIP/TMDL model can carry its own tables, relationships and measures while Weaver adds modelling conventions at deployment. Parcel demonstrates the distinction with a rule that hides relationship foreign keys: the deployed field list changes, but the native files and measure result do not.
 
 ## Native files first
 
@@ -8,7 +8,7 @@ A PBIP project contains the model’s native TMDL and its Report definitions. Yo
 
 ## Before you start
 
-[Install Weaver](../getting-started/installation.md). This exercise begins in [Power BI-only mode, without a Catalogue](index.md#power-bi-only-without-a-catalogue). Use an existing disposable Power BI service workspace with licensing and permissions to deploy, read and refresh Import Semantic Models, and to edit the linked Report for the field-list check. Use existing permissions; this exercise does not require changing tenant settings. [Service requirements](../reference/power-bi/requirements-and-compatibility.md#runtime-and-service-access) cover the licensing and API boundaries.
+This exercise starts with [Weaver installed](../getting-started/installation.md) and an existing disposable Power BI service workspace, in [Power BI-only mode, without a Catalogue](index.md#power-bi-only-without-a-catalogue). The workspace's licence and your permissions need to support deploying, reading and refreshing Import Semantic Models, plus editing the linked Report for the field-list check. No tenant-setting changes are part of the exercise. [Service requirements](../reference/power-bi/requirements-and-compatibility.md#runtime-and-service-access) cover the licensing and API boundaries.
 
 Parcel includes Delivery and Depot tables, a relationship and a Delivery Count measure. Its ParcelStatus table has the same `Parcel ID`, `Status` and `Depot` columns as the Warehouse data, with two sample rows to start. The model needs no Lakehouse or source Warehouse workload. If you already have a `parcel` project from the Fabric tasks, run the command from inside it with `--project-folder .` instead; Initialise keeps your data items and adds the models.
 
@@ -57,9 +57,9 @@ table Delivery
 ```
 <!-- /initialise -->
 
-`ParcelStatus.tmdl`, in the same native tables folder, carries the Warehouse-shaped sample. Later, [add `Weaver.Source`](managed-sources.md#connect-the-existing-native-model) to connect that table to the Warehouse without changing its columns or the linked Report.
+`ParcelStatus.tmdl`, in the same native tables folder, carries the Warehouse-shaped sample. Later, [`Weaver.Source`](managed-sources.md#connect-the-existing-native-model) can connect that table to the Warehouse without changing its columns or the linked Report.
 
-`workspace-config.yml` already binds `SemanticModel/Parcel` and `Report/Parcel` to their physical names. Keep any existing source bindings. [Environment mappings](../estate/environments.md) covers choosing other physical destinations without changing the source.
+`workspace-config.yml` already binds `SemanticModel/Parcel` and `Report/Parcel` to their physical names, alongside any existing source bindings. [Environment mappings](../estate/environments.md) covers choosing other physical destinations without changing the source.
 
 ## 2. Check the project
 
@@ -116,7 +116,7 @@ Installation
 </figure>
 <!-- /cli-capture -->
 
-This selects **only the inline semantic model**, even if your project also has source-backed models. Find `Parcel` in your workspace. The Report stays local until you [deploy it](../reports/deploy.md).
+The successful Build creates or updates `Parcel` in the workspace. This selection covers **only the inline semantic model**, even if your project also has source-backed models. The Report stays local until you [deploy it](../reports/deploy.md).
 
 ## 4. Refresh and inspect the model
 
@@ -153,7 +153,7 @@ Load summary
 </figure>
 <!-- /cli-capture -->
 
-In the workspace, open the deployed **Parcel** semantic model and choose **Write DAX queries**. Run:
+Delivery Count should count the two delivered parcels, not all three events. That result provides a comparison for the hiding rule: changing the field list should not change the measure. In the workspace, open the deployed **Parcel** semantic model and choose **Write DAX queries**. Run:
 
 ```dax
 EVALUATE
@@ -162,11 +162,13 @@ ROW("DeliveryCount", [Delivery Count])
 
 The live query returned **DeliveryCount = 2**. [DAX query view](https://learn.microsoft.com/en-us/power-bi/transform-model/dax-query-view) needs model write permission and the workspace’s existing web modelling setting. If it is unavailable, connect Power BI Desktop to the published Parcel semantic model using a live connection and run the query in Desktop’s DAX query view with Read and Build permission. Do not query the local PBIP instead: you are checking the deployed model.
 
-Use the linked Report already generated by Initialise for the field-list check below; there is no need to create another Report.
+The linked Report that Initialise generated provides the field list for the check below; no additional Report is needed.
 
 <span id="hide-relationship-foreign-keys"></span>
 
 ## AutoHideForeignKeys: hide relationship foreign keys
+
+A Report author can choose a depot from the Depot table; the relationship key in Delivery need not clutter their field list. The rule hides the many-side key in the deployed model while keeping the one-side field available and the native files unchanged.
 
 ### Add the same-name overlay
 
@@ -279,7 +281,7 @@ In the Power BI service, open the generated **Parcel** Report in **Edit** mode a
 | `Depot[DepotId]` | Visible | Visible |
 | Delivery Count | 2 | 2 |
 
-The native files and inline data remain in place. Desktop does not execute Weaver annotations when opening the local PBIP; inspect the service-connected model for the change. Hidden fields are not a security policy or RLS/OLS.
+The native files and inline data remain in place. Desktop does not execute Weaver annotations when opening the local PBIP, so the changed field list belongs to the service-connected model, not the local project. Hidden fields are not a security policy or RLS/OLS.
 
 To stop requesting the transformation, remove the annotation and rebuild. Setting it to `false` is a no-op, not an instruction to undo an independently authored native hide.
 
@@ -309,4 +311,4 @@ The rule hides the many-side key from the field list, not the one-side key.
 
 When this convention belongs on several models, [share it in `PowerBI/policy.tmdl`](shared-policy.md). The next task keeps Parcel and its local overlay, adding common formatting and a calculation group.
 
-[Validate the model](validation.md) to check its number, or [connect a managed Fabric source](managed-sources.md) by adding a source-backed model alongside this inline model. [Weaver documents](../core-concepts/weaver-documents.md#native-models-overlays-and-annotations) explains how overlays fit beside native definitions.
+[Validate the model](validation.md) to add a repeatable DAX Assumption that the delivery count stays positive, or [connect a managed Fabric source](managed-sources.md) by adding a source-backed model alongside this inline model. [Weaver documents](../core-concepts/weaver-documents.md#native-models-overlays-and-annotations) explains how overlays fit beside native definitions.

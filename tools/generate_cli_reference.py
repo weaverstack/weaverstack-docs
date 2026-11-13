@@ -31,6 +31,7 @@ OWNERSHIP: tuple[tuple[str, str], ...] = (
     ("test", "docs/reference/cli/test.md"),
     ("health", "docs/reference/cli/health.md"),
     ("catalogue-dashboard", "docs/reference/cli/catalogue-dashboard.md"),
+    ("catalogue-dashboard export", "docs/reference/cli/catalogue-dashboard.md"),
     ("execute", "docs/reference/cli/execute.md"),
     ("wipe", "docs/reference/cli/wipe.md"),
     ("unbind", "docs/reference/cli/unbind.md"),
@@ -110,6 +111,17 @@ def _leaves(
             raise ValueError("the root parser has no commands")
         return [_command_fact(path, parser)]
     facts: list[dict[str, Any]] = []
+    # A command that runs on its own and also has optional subcommands, such as
+    # catalogue-dashboard and catalogue-dashboard export, is documented as both.
+    # A group such as fabric only shows its help, and has no options of its own.
+    options = [
+        action
+        for action in parser._actions
+        if not isinstance(action, (argparse._SubParsersAction, argparse._HelpAction))
+    ]
+    runs_alone = bool(options) and not any(action.required for action in subparsers)
+    if path and runs_alone:
+        facts.append(_command_fact(path, parser))
     for name in sorted(choices):
         facts.extend(_leaves(choices[name], (*path, name)))
     return facts

@@ -1,0 +1,164 @@
+[
+  {
+    "url": "http://127.0.0.1:8891/estate/catalogue-dashboard/?confidence=3",
+    "title": "\ud83d\udc34 Catalogue Dashboard - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "opening": "Catalogue Dashboard\u00b6\n\nAfter you build and load a project, use the Catalogue Dashboard to see what is installed, what has run and what needs attention. Run weaver catalogue-dashboard to deploy its Power BI semantic model and Report over one catalogue or several teams' catalogues.\n\nStart with Workspaces or Items to see how the work connects. Use Health and Orchestration to investigate a failure or dependency. Performance, Gantt, Entity dictionary and Semantic model show timings, workflow timelines, table relationships and semantic models. The Dashboard reads the catalogue records Weaver already maintains; it needs no separate monitoring databas",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/operate/?confidence=3",
+    "title": "\ud83d\udc34 Run, test and inspect the estate - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "opening": "Run and inspect an estate\u00b6\n\nAfter changing a project or repairing a source problem, use Health to see which work needs attention. Build installs your source changes; Load processes data and refreshes models; Test runs the installed validations. Check Health again after the work completes.\n\nKeep the project from the development loop. The Landing/Operations commands below use workspace-development.yml. If you added source-backed models, retain their targets in this same configuration. Run from the same project root throughout.\n\n1. Inspect the starting state\u00b6\nweaver health --workspace-config workspace-development.yml\n\n\nWithout an item selector, ",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/across-catalogues/?confidence=3",
+    "title": "\ud83d\udc34 Work across teams' catalogues - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "opening": "Work across teams' catalogues\u00b6\n\nWhen your tables depend on another team's data, give Health both teams' catalogues to assess the connected work. For Load or Test, also choose the items or workspaces to run. Each team keeps its own project and catalogue, while Weaver coordinates the selected work in dependency order.\n\nBuild stays within one catalogue. Each team builds its own items as usual; joining happens only when an operation reads several catalogues together.\n\nBefore you start\u00b6\n\nYou need two teams' projects, each built into its own workspace and catalogue. In this page the Operations team works in Parcel Operations and the Planning team i",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/reference/ai-agents/?confidence=3",
+    "title": "\ud83d\udc34 Using Weaver with AI agents - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "opening": "Using Weaver with AI agents\u00b6\n\nAn AI coding agent can edit your Weaver project and run the same commands you use. Give it a development workspace, have it preview changes before applying them, and use the returned results to decide what to do next. This guide shows the commands and permissions for that workflow.\n\nIt applies to any agent that can run shell commands, such as Claude Code, GitHub Copilot or Codex.\n\nWhat an agent works with\u00b6\nEdit plain files. A project is Python, SQL, TMDL and YAML in a folder. An agent reads and edits them with its ordinary tools; there is no generated code to keep in step.\nCheck source locally. weaver check valid",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/reference/permissions/?confidence=3",
+    "title": "\ud83d\udc34 Permissions - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "opening": "Permissions\u00b6\n\nRun Weaver with your Fabric sign-in or a service principal. For most Build and Load work, the identity needs Contributor access to the destination workspace and read access to its sources. The table below lists the additional requirements for individual operations.\n\nOrdinary Weaver development does not require Fabric tenant administration. Tenant settings and Azure capacity permissions are separate from workspace access.\n\nWorkspace roles\u00b6\n\nFabric workspace roles are Admin, Member, Contributor and Viewer.\n\nCommand\tWhat it does in Fabric\tRole in the workspace it changes\tElsewhere\nweaver check\tNothing. It reads the project folder o",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/reference/operation-behaviour/health/?confidence=3",
+    "title": "\ud83d\udc34 Health - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1425,
+    "clientWidth": 1425,
+    "opening": "Health behaviour\u00b6\n\nHealth reads installed operational state. It does not read project source, execute authored Build, Load or Test work, publish certification, or change the estate.\n\nA Health invocation reads catalogue tables, matching current Load statistics, optional mirrored Load state and optional physical inventories at several points during the invocation. The report is not an atomic snapshot across those sources. generated_at is when the operation began; rerunning performs new reads and may produce a different result.\n\nSelection and evidence\u00b6\n\nRepeatable --item ITEM selects installed logical items. Naming none selects every physical ta",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/core-concepts/dependencies/?confidence=3",
+    "title": "\ud83d\udc34 Dependencies - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1425,
+    "clientWidth": 1425,
+    "opening": "Dependencies\u00b6\n\nWeaver normally discovers dependencies from authored imports and relation references. These relationships connect the documents that produce data to the documents that read it, without requiring a separate graph to be maintained by hand.\n\nA document can declare Dependencies when deliberate control is needed. An explicit declaration replaces inference; it does not add to the relationships Weaver discovered. An explicit empty list therefore means that the document has no managed dependencies.\n\nSpark SQL data documents are the exception to inference-first authoring: they still require an explicit Dependencies declaration, includin",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/environments/?confidence=3",
+    "title": "\ud83d\udc34 Workspace and environment mappings - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1425,
+    "clientWidth": 1425,
+    "opening": "Workspace and environment mappings\u00b6\n\nWhere should the same project deploy? Keep its documents and logical item names unchanged. A workspace configuration selects the physical workspace, catalogue and targets; selecting another file changes where the same source is installed.\n\nChoose the configuration for the deployment destination and a published Fabric Environment for the Python packages Spark work uses. Configure a model\u2019s native data connections separately from its target name.\n\nBind the project to Fabric\u00b6\n\nContinue the Landing \u2192 Operations connection. Copy its workspace-config.yml to workspace-development.yml; it should look like this:\n\nw",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/development-cycle/?confidence=3",
+    "title": "\ud83d\udc34 The development cycle - Weaver documentation",
+    "width": 1440,
+    "scrollWidth": 1425,
+    "clientWidth": 1425,
+    "opening": "The development cycle\u00b6\n\nEdit a working definition, check it, inspect the Build preview, install the change, catch up data and validate the result. Use the same configuration throughout so each report describes the estate you changed.\n\nedit \u2192 check \u2192 Build preview \u2192 Build \u2192 Load \u2192 Test \u2192 Health \u2192 repeat\n\n\nKeep the project and configuration you just inspected. The leading commands continue Landing \u2192 Operations with workspace-development.yml, as selected on the mapping and Health pages. Edit a Landing declaration while leaving its logical names and Operations connection intact. Use the connection task if those items are not yet installed.\n\nFor a",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/catalogue-dashboard/?confidence=3",
+    "title": "\ud83d\udc34 Catalogue Dashboard - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Catalogue Dashboard\u00b6\n\nAfter you build and load a project, use the Catalogue Dashboard to see what is installed, what has run and what needs attention. Run weaver catalogue-dashboard to deploy its Power BI semantic model and Report over one catalogue or several teams' catalogues.\n\nStart with Workspaces or Items to see how the work connects. Use Health and Orchestration to investigate a failure or dependency. Performance, Gantt, Entity dictionary and Semantic model show timings, workflow timelines, table relationships and semantic models. The Dashboard reads the catalogue records Weaver already maintains; it needs no separate monitoring databas",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/operate/?confidence=3",
+    "title": "\ud83d\udc34 Run, test and inspect the estate - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Run and inspect an estate\u00b6\n\nAfter changing a project or repairing a source problem, use Health to see which work needs attention. Build installs your source changes; Load processes data and refreshes models; Test runs the installed validations. Check Health again after the work completes.\n\nKeep the project from the development loop. The Landing/Operations commands below use workspace-development.yml. If you added source-backed models, retain their targets in this same configuration. Run from the same project root throughout.\n\n1. Inspect the starting state\u00b6\nweaver health --workspace-config workspace-development.yml\n\n\nWithout an item selector, ",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/across-catalogues/?confidence=3",
+    "title": "\ud83d\udc34 Work across teams' catalogues - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Work across teams' catalogues\u00b6\n\nWhen your tables depend on another team's data, give Health both teams' catalogues to assess the connected work. For Load or Test, also choose the items or workspaces to run. Each team keeps its own project and catalogue, while Weaver coordinates the selected work in dependency order.\n\nBuild stays within one catalogue. Each team builds its own items as usual; joining happens only when an operation reads several catalogues together.\n\nBefore you start\u00b6\n\nYou need two teams' projects, each built into its own workspace and catalogue. In this page the Operations team works in Parcel Operations and the Planning team i",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/reference/ai-agents/?confidence=3",
+    "title": "\ud83d\udc34 Using Weaver with AI agents - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Using Weaver with AI agents\u00b6\n\nAn AI coding agent can edit your Weaver project and run the same commands you use. Give it a development workspace, have it preview changes before applying them, and use the returned results to decide what to do next. This guide shows the commands and permissions for that workflow.\n\nIt applies to any agent that can run shell commands, such as Claude Code, GitHub Copilot or Codex.\n\nWhat an agent works with\u00b6\nEdit plain files. A project is Python, SQL, TMDL and YAML in a folder. An agent reads and edits them with its ordinary tools; there is no generated code to keep in step.\nCheck source locally. weaver check valid",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/reference/permissions/?confidence=3",
+    "title": "\ud83d\udc34 Permissions - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Permissions\u00b6\n\nRun Weaver with your Fabric sign-in or a service principal. For most Build and Load work, the identity needs Contributor access to the destination workspace and read access to its sources. The table below lists the additional requirements for individual operations.\n\nOrdinary Weaver development does not require Fabric tenant administration. Tenant settings and Azure capacity permissions are separate from workspace access.\n\nWorkspace roles\u00b6\n\nFabric workspace roles are Admin, Member, Contributor and Viewer.\n\nCommand\tWhat it does in Fabric\tRole in the workspace it changes\tElsewhere\nweaver check\tNothing. It reads the project folder o",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/reference/operation-behaviour/health/?confidence=3",
+    "title": "\ud83d\udc34 Health - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Health behaviour\u00b6\n\nHealth reads installed operational state. It does not read project source, execute authored Build, Load or Test work, publish certification, or change the estate.\n\nA Health invocation reads catalogue tables, matching current Load statistics, optional mirrored Load state and optional physical inventories at several points during the invocation. The report is not an atomic snapshot across those sources. generated_at is when the operation began; rerunning performs new reads and may produce a different result.\n\nSelection and evidence\u00b6\n\nRepeatable --item ITEM selects installed logical items. Naming none selects every physical ta",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/core-concepts/dependencies/?confidence=3",
+    "title": "\ud83d\udc34 Dependencies - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Dependencies\u00b6\n\nWeaver normally discovers dependencies from authored imports and relation references. These relationships connect the documents that produce data to the documents that read it, without requiring a separate graph to be maintained by hand.\n\nA document can declare Dependencies when deliberate control is needed. An explicit declaration replaces inference; it does not add to the relationships Weaver discovered. An explicit empty list therefore means that the document has no managed dependencies.\n\nSpark SQL data documents are the exception to inference-first authoring: they still require an explicit Dependencies declaration, includin",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/environments/?confidence=3",
+    "title": "\ud83d\udc34 Workspace and environment mappings - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "Workspace and environment mappings\u00b6\n\nWhere should the same project deploy? Keep its documents and logical item names unchanged. A workspace configuration selects the physical workspace, catalogue and targets; selecting another file changes where the same source is installed.\n\nChoose the configuration for the deployment destination and a published Fabric Environment for the Python packages Spark work uses. Configure a model\u2019s native data connections separately from its target name.\n\nBind the project to Fabric\u00b6\n\nContinue the Landing \u2192 Operations connection. Copy its workspace-config.yml to workspace-development.yml; it should look like this:\n\nw",
+    "brokenImages": []
+  },
+  {
+    "url": "http://127.0.0.1:8891/estate/development-cycle/?confidence=3",
+    "title": "\ud83d\udc34 The development cycle - Weaver documentation",
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "opening": "The development cycle\u00b6\n\nEdit a working definition, check it, inspect the Build preview, install the change, catch up data and validate the result. Use the same configuration throughout so each report describes the estate you changed.\n\nedit \u2192 check \u2192 Build preview \u2192 Build \u2192 Load \u2192 Test \u2192 Health \u2192 repeat\n\n\nKeep the project and configuration you just inspected. The leading commands continue Landing \u2192 Operations with workspace-development.yml, as selected on the mapping and Health pages. Edit a Landing declaration while leaving its logical names and Operations connection intact. Use the connection task if those items are not yet installed.\n\nFor a",
+    "brokenImages": []
+  }
+]

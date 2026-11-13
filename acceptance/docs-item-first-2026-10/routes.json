@@ -30,7 +30,8 @@
     "basics/tests-and-assumptions.md": "warehouse/tests.md",
     "basics/workspace-and-python-runtime.md": "estate/environments.md",
     "basics/sessions-and-workflows.md": "estate/automation-and-deployment.md",
-    "getting-started/first-project.md": "warehouse/first-project.md"
+    "getting-started/first-project.md": "warehouse/first-project.md",
+    "reference/machine-readable-output.md": "reference/ai-agents.md"
   },
   "splits": {
     "basics/tests-and-assumptions.md": [
@@ -107,6 +108,26 @@
       "5-load-the-producer": "estate/connected-items.md",
       "6-query-through-the-shortcut": "estate/connected-items.md",
       "connect-external-data-with-a-physical-shortcut": "lakehouse/shortcuts.md#expose-an-external-carrier-archive"
+    },
+    "reference/machine-readable-output.md": {
+      "machine-readable-output": "reference/ai-agents.md#json-output",
+      "stream-and-process-behaviour": "reference/ai-agents.md#stream-and-process-behaviour",
+      "commands-with-json": "reference/ai-agents.md#commands-with-json",
+      "commands-without-json-result-mode": "reference/ai-agents.md#commands-without-json-result-mode",
+      "nested-field-shapes": "reference/ai-agents.md#nested-field-shapes",
+      "initialise": "reference/ai-agents.md#initialise",
+      "doctor": "reference/ai-agents.md#doctor",
+      "build": "reference/ai-agents.md#build",
+      "install": "reference/ai-agents.md#install",
+      "load": "reference/ai-agents.md#load",
+      "test": "reference/ai-agents.md#test",
+      "health": "reference/ai-agents.md#health",
+      "wipe": "reference/ai-agents.md#wipe",
+      "unbind": "reference/ai-agents.md#unbind",
+      "mirror": "reference/ai-agents.md#mirror",
+      "fabric-notebooks": "reference/ai-agents.md#fabric-notebooks",
+      "environment-publication-json": "reference/ai-agents.md#environment-publication-json",
+      "compatibility-boundary": "reference/ai-agents.md#compatibility-boundary"
     }
   },
   "canonical_pages": [

@@ -21,7 +21,9 @@ Item-wide and stale runs use the installed dependency graph. Selected upstream w
 
 Where an installed cross-engine path requires it, planning inserts SQL-endpoint refresh or OneLake-publication readiness barriers between selected work. Unexpanded named selection deliberately omits those inferred edges and barriers; expanded named selection restores them within the requested scope.
 
-A cycle, unresolved installed dependency, ambiguous physical address, unknown name or unsupported reload selection is rejected during planning. `--reload` accepts Tables only; selecting a Folder rejects the whole request before execution, including in a dry run.
+An unresolved installed dependency, ambiguous physical address, unknown name or unsupported reload selection is rejected during planning. `--reload` accepts Tables only; selecting a Folder rejects the whole request before execution, including in a dry run.
+
+A dependency cycle is not rejected. Load places the members of each cycle in a fixed order, by target kind, target name and logical identity, and breaks cyclic ordering constraints for execution. Each selected member runs once per invocation, without convergence iteration; dependencies closing a cycle can read earlier-run results. The report carries an info message with code `dag_cycle` naming the members. Health does not compare load times between members of a cycle.
 
 ## Dry run
 
@@ -75,5 +77,23 @@ Load has no operation-wide transaction or rollback. Earlier successful nodes, to
 ## Host qualification
 
 Warehouse loads execute over TDS. Lakehouse Spark SQL uses Spark. Python-authored Lakehouse loads executed from a desktop require a configured Fabric Environment in which Weaver can be imported; execution inside an existing Fabric session uses that session. Capability, authentication and transport failures are operation or node failures according to whether a report has been opened.
+
+## Several catalogues
+
+Repeating `--catalogue` (Python `catalogue=[...]`) with more than one value makes one run over the catalogues' joined graph. Catalogue forms, the working workspace, labels and the join are as for [Health](health.md#several-catalogues).
+
+**Selection.** Positional items take the forms Health's `--item` accepts: `Kind/Name` for the working workspace's catalogue, `Workspace/Kind/Name` for another's, a bare `Workspace` for every item of its catalogue, and `Workspace/Warehouse/Catalogue/Kind/Name` where one workspace holds two catalogues given. `PowerBI` and `PowerBI/<project>` select the working workspace's project models. A named item its catalogue does not install is a command error. A catalogue with no named item runs nothing.
+
+With no items, the run covers the working workspace's configured catalogue if it is given, otherwise the one catalogue given in the working workspace. Several catalogues there, none configured, or none in the working workspace, is a command error.
+
+`--name`, `--ancestors`, `--descendants`, `--reload`, `--fault-tolerant`, `--concurrency` and `--dry-run` apply to the joined graph as to one catalogue. Items bound what runs; ordering passes through unrequested items, so two selected objects keep their order through a View or Shortcut another catalogue owns. `--stale` assesses each requested object with ancestry through every catalogue given.
+
+**Reading.** Each catalogue is read once before planning. A catalogue that cannot be read refuses the run before any work; there is no run report.
+
+**Barriers.** A physical Shortcut onto another catalogue's Warehouse Table adds that Table's OneLake publication before the reader's SQL endpoint refresh. When the run does not load that Table, the publication waits for the commits of the Table's last successful load, read from its catalogue; with no such load that wrote rows, it does not wait. A requested Lakehouse read through its SQL endpoint is refreshed before its readers even when nothing that fills it runs. A failed refresh or publication blocks its readers, including with `--fault-tolerant`.
+
+**Execution and records.** Each node runs in its catalogue's workspace with the working workspace's Environment, and is recorded in its own catalogue. Every record in the run carries one workflow ID. Warehouse lanes are per workspace and Warehouse; `--concurrency` caps the whole invocation. A run with Spark work is sent to Fabric once, to the workspace of the first catalogue, in the order given, with a requested Lakehouse. Each report node carries its catalogue's label as `catalogue`, and the report lists `catalogues` in the order given.
+
+Loading another team's objects writes to its catalogue and runs in its workspace; see [Permissions](../permissions.md).
 
 See [`weaver load`](../cli/load.md), [Health](health.md), [Catalogue schema](../catalogue-schema.md), and [Shared selection and identity](shared-selection-and-identity.md).

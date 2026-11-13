@@ -1,8 +1,8 @@
 # Workflows and controlled deployment
 
-Reuse one Session while you develop a command sequence, then record the accepted sequence as a workflow. When installation needs a reviewed handoff, plan a destination-specific bundle instead of asking the installer to reopen and reinterpret source.
+A development sequence often becomes the sequence a scheduled job needs to run. A workflow records those Weaver commands and runs them through one Session, reusing connections and other capabilities as needed. A reviewed installation handoff has a different requirement: a destination-specific bundle freezes the planned work so the installer does not reopen and reinterpret source. This guide works through both cases.
 
-Continue the working Landing/Operations project and `workspace-development.yml`. If you added the native model, Report and source-backed models, retain those bindings too; the Power BI Build below operates those local definitions. Omit that Build when your project has no Power BI items.
+The examples use the working Landing/Operations project and `workspace-development.yml`. The Power BI Build below is for projects that also include the native model, Report or source-backed models, with their existing bindings; it is unnecessary when the project has no Power BI items.
 
 ## Open one Session
 
@@ -79,4 +79,4 @@ Generate a separate bundle for each destination. Changing a configuration does n
 
 A failed installation stops later sequences but does not undo completed physical changes. After installation, operate the destination’s installed definitions with Load, Test and Health. [Build bundles and controlled installation](../advanced/build-bundles-and-controlled-installation.md) explains the handoff; [`build`](../reference/cli/build.md), [`install`](../reference/cli/install.md) and the [bundle format](../reference/build-bundle-format.md) own exact syntax and representation.
 
-For machine consumers, use each command’s advertised structured output and process status together, retaining diagnostics separately. There is no universal JSON envelope or promised long-term compatibility for unversioned output. [Machine-readable output](../reference/machine-readable-output.md) records the command-specific boundary.
+For machine consumers, use each command’s advertised structured output and process status together, retaining diagnostics separately. There is no universal JSON envelope or promised long-term compatibility for unversioned output. [JSON output](../reference/ai-agents.md#json-output) records the command-specific boundary.
