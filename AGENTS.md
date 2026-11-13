@@ -33,7 +33,7 @@ Use Weaver's user model rather than deriving a taxonomy from internal nouns. A p
 
 Examples use a neutral parcel and logistics domain. Start the Parcel journey with one selected item through the installed `weaver initialise --example Parcel` generator, then extend that same project. Preserve existing item-owned sources and add distinctly named coordination objects. Sales remains a separate installed example. Direct entrants use Initialise, not a downloadable snapshot or repository checkout. Advanced source variations add complete declarations alongside the working pipeline; retained fixtures are verification inputs, not the reader’s next project.
 
-The repository is public. Committed files, acceptance evidence and pull-request text carry no private hostnames, preview addresses, home-directory or agent-profile paths, or runtime process IDs. Use repository-relative paths and placeholders. `tools/check_private_details.py` enforces the first two.
+The repository is public. Committed files, acceptance evidence and pull-request text carry no private hostnames, preview addresses, home-directory or agent-profile paths, or runtime process IDs. Use repository-relative paths and placeholders. `tools/check_private_details.py` refuses Tailscale hostnames and home-directory and agent-profile paths.
 
 ## Public site structure
 
