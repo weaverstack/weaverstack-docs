@@ -13,9 +13,9 @@ Status: confirmed at runtime `efc046e7cf066daefd27f9268413ae05c3ed64e4`. Not fix
 ## Local reproduction
 
 ```bash
-/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python \
+~/dev/weaverstack-editorial-runtime/.venv/bin/python \
   acceptance/docs-0.11-editorial/reproduce_remote_mirror.py \
-  /Users/matthiaswong/dev/weaverstack-editorial-runtime
+  ~/dev/weaverstack-editorial-runtime
 ```
 
 Actual result:

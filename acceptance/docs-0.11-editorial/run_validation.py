@@ -10,7 +10,6 @@ runtime, product = (Path(p).resolve() for p in sys.argv[1:3])
 docs_python = root / '.venv/bin/python'
 product_python = runtime / '.venv/bin/python'
 env = dict(os.environ, WEAVER_CHECKOUT=str(runtime), PYTHONPATH=str(runtime / 'src'))
-env['TMPDIR'] = '/Users/matthiaswong/.hermes/profiles/fors/cache/scratch'
 commands = [[str(docs_python), '-m', 'mkdocs', 'build', '--strict']]
 for name in ['cli', 'python', 'catalogue', 'semantic']:
     commands.append([str(product_python), f'tools/generate_{name}_reference.py', '--check', '--weaver-checkout', str(runtime)])

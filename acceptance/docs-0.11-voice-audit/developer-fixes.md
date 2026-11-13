@@ -1,6 +1,6 @@
 # Developer journey fixes: D1–D7
 
-Baseline: docs `36ad90f4dcb677d8c04285916af3ab86268b9cdf` on the current owning branch. Runtime evidence is the unchanged checkout `/Users/matthiaswong/dev/weaverstack-editorial-runtime` at `efc046e7cf066daefd27f9268413ae05c3ed64e4`.
+Baseline: docs `36ad90f4dcb677d8c04285916af3ab86268b9cdf` on the current owning branch. Runtime evidence is the unchanged checkout `~/dev/weaverstack-editorial-runtime` at `efc046e7cf066daefd27f9268413ae05c3ed64e4`.
 
 ## Delivered
 

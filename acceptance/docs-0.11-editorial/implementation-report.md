@@ -10,13 +10,13 @@ Starting heads, freshly fetched and confirmed as open drafts:
 - Draft #16, `docs/permissions`, base main: `ee4a8f9f7ae4f5d8cb555a7a0bf6067eb0bae4aa`.
 - Draft #17, `docs/release-0.11`, base docs/permissions: `3239dd004c52327c1319a0275c49ae6bacc9336c`.
 - Runtime source baseline v0.10.0: `13a6fb359164d64b18da87f14c213c7064261a40`; reviewed snapshot and refreshed origin/main: `efc046e7cf066daefd27f9268413ae05c3ed64e4`.
-- Demo helper source: parent product worktree `/Users/matthiaswong/dev/.worktrees/weaverstack-011-editorial-site`, starting #275 head `13da9c688446c262ad38a381aefba56caf5c22d0`, with the parent's in-progress product prose. Its runtime/helper files were read, never edited here.
+- Demo helper source: parent product worktree `~/dev/.worktrees/weaverstack-011-editorial-site`, starting #275 head `13da9c688446c262ad38a381aefba56caf5c22d0`, with the parent's in-progress product prose. Its runtime/helper files were read, never edited here.
 
 Isolated owning worktrees:
 
-- `/Users/matthiaswong/dev/weaverstack-docs-editorial16`, local branch `docs/editorial-permissions`.
-- `/Users/matthiaswong/dev/weaverstack-docs-editorial17`, local branch `docs/editorial-release`.
-- `/Users/matthiaswong/dev/weaverstack-editorial-runtime`, detached frozen source, locally installed dependencies only.
+- `~/dev/weaverstack-docs-editorial16`, local branch `docs/editorial-permissions`.
+- `~/dev/weaverstack-docs-editorial17`, local branch `docs/editorial-release`.
+- `~/dev/weaverstack-editorial-runtime`, detached frozen source, locally installed dependencies only.
 
 Existing user/agent checkouts were left untouched, including the runtime root's unrelated `.claude/launch.json` modification.
 
@@ -64,10 +64,10 @@ The three supplied dbt editorial examples were consulted for task/reason/example
 Reproducible command bundle and complete command/stdout/return-code evidence: `run_validation.py`, `validation.json` in this directory.
 
 ```bash
-cd /Users/matthiaswong/dev/weaverstack-docs-editorial17
+cd ~/dev/weaverstack-docs-editorial17
 .venv/bin/python acceptance/docs-0.11-editorial/run_validation.py \
-  /Users/matthiaswong/dev/weaverstack-editorial-runtime \
-  /Users/matthiaswong/dev/.worktrees/weaverstack-011-editorial-site
+  ~/dev/weaverstack-editorial-runtime \
+  ~/dev/.worktrees/weaverstack-011-editorial-site
 ```
 
 Final parent rerun: **20 of 20 checks pass**. The initial 19/20 result exposed a stale format assertion; the correction and boundary are detailed below. Passing checks include:
@@ -100,7 +100,7 @@ Actual result: **296 passed in 13.67s**, core tests, no declared Fabric resource
 
 ## Rendered review and paths
 
-Final docs build path: `/Users/matthiaswong/dev/weaverstack-docs-editorial17/site/`.
+Final docs build path: `~/dev/weaverstack-docs-editorial17/site/`.
 
 Browser checked actual loopback-served HTML at 1280px desktop and 390px mobile for agents, permissions, across-catalogues, Mirror and Dashboard. Body widths did not exceed viewport widths. Dark desktop/mobile and light mobile screenshots were inspected; the long copyable instructions scroll within their code block. Canonical JSON and legacy Health fragment elements were verified. This is targeted layout/editorial review, not a claim of exhaustive keyboard/no-JavaScript/clipboard/console testing or a deployed-site check.
 

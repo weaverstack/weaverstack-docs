@@ -1,96 +1,96 @@
 [
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "-m",
       "mkdocs",
       "build",
       "--strict"
     ],
     "returncode": 1,
-    "output": "\n\u001b[31m \u2502  \u26a0  Warning from the Material for MkDocs team\u001b[0m\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  MkDocs 2.0, the underlying framework of Material for MkDocs,\n\u001b[31m \u2502\u001b[0m  will introduce backward-incompatible changes, including:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502  \u00d7 \u001b[0mAll plugins will stop working \u2013 the plugin system has been removed\n\u001b[31m \u2502  \u00d7 \u001b[0mAll theme overrides will break \u2013 the theming system has been rewritten\n\u001b[31m \u2502  \u00d7 \u001b[0mNo migration path exists \u2013 existing projects cannot be upgraded\n\u001b[31m \u2502  \u00d7 \u001b[0mClosed contribution model \u2013 community members can't report bugs\n\u001b[31m \u2502  \u00d7 \u001b[0mCurrently unlicensed \u2013 unsuitable for production use\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  Our full analysis:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  \u001b[4mhttps://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/\u001b[0m\n\u001b[0m\nINFO    -  Cleaning site directory\nINFO    -  Building documentation to directory: /Users/matthiaswong/dev/weaverstack-docs-editorial17/site\nWARNING -  Doc file 'reference/ai-agents.md' contains a link 'operation-behaviour/execute.md', but the target 'reference/operation-behaviour/execute.md' is not found among documentation files.\n\nAborted with 1 warnings in strict mode!\n"
+    "output": "\n\u001b[31m \u2502  \u26a0  Warning from the Material for MkDocs team\u001b[0m\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  MkDocs 2.0, the underlying framework of Material for MkDocs,\n\u001b[31m \u2502\u001b[0m  will introduce backward-incompatible changes, including:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502  \u00d7 \u001b[0mAll plugins will stop working \u2013 the plugin system has been removed\n\u001b[31m \u2502  \u00d7 \u001b[0mAll theme overrides will break \u2013 the theming system has been rewritten\n\u001b[31m \u2502  \u00d7 \u001b[0mNo migration path exists \u2013 existing projects cannot be upgraded\n\u001b[31m \u2502  \u00d7 \u001b[0mClosed contribution model \u2013 community members can't report bugs\n\u001b[31m \u2502  \u00d7 \u001b[0mCurrently unlicensed \u2013 unsuitable for production use\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  Our full analysis:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  \u001b[4mhttps://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/\u001b[0m\n\u001b[0m\nINFO    -  Cleaning site directory\nINFO    -  Building documentation to directory: ~/dev/weaverstack-docs-editorial17/site\nWARNING -  Doc file 'reference/ai-agents.md' contains a link 'operation-behaviour/execute.md', but the target 'reference/operation-behaviour/execute.md' is not found among documentation files.\n\nAborted with 1 warnings in strict mode!\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/generate_cli_reference.py",
       "--check",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
     "output": "validated 21 leaf commands across 18 page(s)\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/generate_python_reference.py",
       "--check",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
     "output": "validated 63 public exports across 7 page(s)\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/generate_catalogue_reference.py",
       "--check",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
     "output": "validated 25 catalogue table declarations\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/generate_semantic_reference.py",
       "--check",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
     "output": "validated 4 supported extension classes\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/generate_dashboard_demo.py",
       "--check",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/.worktrees/weaverstack-011-editorial-site"
+      "~/dev/.worktrees/weaverstack-011-editorial-site"
     ],
     "returncode": 0,
     "output": "10 Catalogue Dashboard demo files are current\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/check_estate_examples.py",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
-    "output": "{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"/Users/matthiaswong/.hermes/profiles/fors/cache/scratch/estate-continuation-ocb7ybku\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"/Users/matthiaswong/.hermes/profiles/fors/cache/scratch/estate-continuation-ocb7ybku\"\n}\n{\"continuous_project_checks\": 2, \"estate_commands\": 108, \"selection_plans\": 3, \"workspace_configs\": 5}\nPASS: Landing/Operations continuation, exact real LoadDag selections and active configuration; no service calls\n"
+    "output": "{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"$TMPDIR/estate-continuation-ocb7ybku\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"$TMPDIR/estate-continuation-ocb7ybku\"\n}\n{\"continuous_project_checks\": 2, \"estate_commands\": 108, \"selection_plans\": 3, \"workspace_configs\": 5}\nPASS: Landing/Operations continuation, exact real LoadDag selections and active configuration; no service calls\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/check_reference_examples.py",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
-    "output": "Validated against /Users/matthiaswong/dev/weaverstack-editorial-runtime/src/weaver/__init__.py\n{'commands': 117, 'configurations': 6, 'operation_calls': 15, 'dax_files': 2, 'native_edits': 1}\n"
+    "output": "Validated against ~/dev/weaverstack-editorial-runtime/src/weaver/__init__.py\n{'commands': 117, 'configurations': 6, 'operation_calls': 15, 'dax_files': 2, 'native_edits': 1}\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/check_docs_refresh_examples.py",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime",
+      "~/dev/weaverstack-editorial-runtime",
       "--runtime-revision",
       "efc046e7cf066daefd27f9268413ae05c3ed64e4"
     ],
@@ -99,29 +99,29 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "tools/check_journey_examples.py",
       "--weaver-checkout",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
-    "output": "{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"/Users/matthiaswong/.hermes/profiles/fors/cache/scratch/report-journey-nb2jm1gf\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"/Users/matthiaswong/.hermes/profiles/fors/cache/scratch/report-journey-nb2jm1gf\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"/Users/matthiaswong/.hermes/profiles/fors/cache/scratch/warehouse-journey-lrkvvxcf\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"/Users/matthiaswong/.hermes/profiles/fors/cache/scratch/warehouse-journey-lrkvvxcf\"\n}\nPASS: {'pages': 20, 'commands': 120, 'configs': 5, 'python_calls': 3}; generated native Report link and both environment mappings; Warehouse incremental addition and native extension preserve working sources; no service execution\n"
+    "output": "{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"$TMPDIR/report-journey-nb2jm1gf\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"$TMPDIR/report-journey-nb2jm1gf\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"$TMPDIR/warehouse-journey-lrkvvxcf\"\n}\n{\n  \"status\": \"succeeded\",\n  \"project_folder\": \"$TMPDIR/warehouse-journey-lrkvvxcf\"\n}\nPASS: {'pages': 20, 'commands': 120, 'configs': 5, 'python_calls': 3}; generated native Report link and both environment mappings; Warehouse incremental addition and native extension preserve working sources; no service execution\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/check_item_routes.py",
       "--developer-site",
       "site",
       "--product-site",
-      "/Users/matthiaswong/dev/.worktrees/weaverstack-011-editorial-site/docs"
+      "~/dev/.worktrees/weaverstack-011-editorial-site/docs"
     ],
     "returncode": 1,
     "output": "{\n  \"original_pages\": 114,\n  \"original_fragments\": 872,\n  \"canonical_pages\": 35,\n  \"canonical_present\": 35,\n  \"compatibility_routes\": 28,\n  \"documentation_links_checked\": 5183,\n  \"rendered\": true,\n  \"editorial_acceptance\": \"not assessed by this gate\",\n  \"errors\": [\n    \"unresolved documentation URL: /reference/ai-agents/ -> operation-behaviour/execute.md\"\n  ]\n}\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/check_item_routes.py",
       "--self-test"
     ],
@@ -130,7 +130,7 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/test_item_route_assets.py"
     ],
     "returncode": 0,
@@ -138,7 +138,7 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/test_generate_cli_reference.py"
     ],
     "returncode": 0,
@@ -146,7 +146,7 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/test_generate_python_reference.py"
     ],
     "returncode": 0,
@@ -154,7 +154,7 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/test_generate_catalogue_reference.py"
     ],
     "returncode": 0,
@@ -162,7 +162,7 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-docs-editorial17/.venv/bin/python",
+      "~/dev/weaverstack-docs-editorial17/.venv/bin/python",
       "tools/test_generate_semantic_reference.py"
     ],
     "returncode": 0,
@@ -170,18 +170,18 @@
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "acceptance/docs-0.11-editorial/check_commands.py",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
     "output": "usage: weaver [-h] [--version] command ...\nweaver: error: unrecognized arguments: --workspace-config\nusage: weaver [-h] [--version] command ...\nweaver: error: unrecognized arguments: --json\nweaverstack 0.10.0.dev4207855354841842658\nPASS: 81 complete CLI examples parsed from 14 pages; no handlers executed.\nPASS: check rejects workspace-config and workflow rejects json.\n"
   },
   {
     "command": [
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime/.venv/bin/python",
+      "~/dev/weaverstack-editorial-runtime/.venv/bin/python",
       "acceptance/docs-0.11-editorial/reproduce_remote_mirror.py",
-      "/Users/matthiaswong/dev/weaverstack-editorial-runtime"
+      "~/dev/weaverstack-editorial-runtime"
     ],
     "returncode": 0,
     "output": "CONFIRMED: remote place clears mirror; Health._read refuses: health needs the source catalogue for mirrored objects. Set mirror: Warehouse/<name> in workspace configuration.\nPASS: working mirror configuration resolves source; remote configuration does not. Offline read boundaries only.\n"
