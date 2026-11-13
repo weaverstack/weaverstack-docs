@@ -32,6 +32,7 @@ For Lakehouse and Warehouse validation declarations, use [Test](weaver-documents
 | [Catalogue schema](catalogue-schema.md) | Public `_` tables, columns, types and keys. |
 | [Build bundle format](build-bundle-format.md) | Manifest, payload and destination-bound installation handoff. |
 | [Machine-readable output](machine-readable-output.md) | Command-specific CLI JSON documents and exit outcomes. |
+| [Permissions](permissions.md) | Workspace roles, tenant settings and Azure permissions each command needs. |
 
 For options in an installed CLI version, run:
 

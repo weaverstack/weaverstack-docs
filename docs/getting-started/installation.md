@@ -26,7 +26,7 @@ The `weaver` command signs in with the first credential that works: a configured
 az login
 ```
 
-The identity needs the workspace rights each task lists. Tasks state their own requirements, such as creating Warehouses, publishing an Environment or refreshing a semantic model, where you need them. [Unattended execution](../estate/automation-and-deployment.md) covers service principals and `--non-interactive` for jobs.
+The identity needs a role in the workspace. Contributor is the ordinary starting role for Build and Load; model ownership, default-Environment updates and source access have additional requirements. Ordinary development needs no tenant administrator role. [Permissions](../reference/permissions.md) lists what each command needs, including the tenant settings an administrator may need to turn on. [Unattended execution](../estate/automation-and-deployment.md) covers service principals and `--non-interactive` for jobs.
 
 ## Model and Report access
 
