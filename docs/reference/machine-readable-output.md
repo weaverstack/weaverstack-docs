@@ -22,6 +22,49 @@ A handled Weaver error under `--json` has this current shape:
 
 Successful command outcomes normally exit `0`. A report that does not satisfy the command's success condition, a handled Weaver error, a refused confirmation, or a failed waited-for notebook run exits `1`. `argparse` usage errors write diagnostics to stderr and exit `2`. Do not treat this as a universal exit-code protocol for unhandled Python or host failures.
 
+A command that exits `1` has still written its document. Capture the status instead of letting the shell stop on it, read the document, then return the status:
+
+```bash
+set -euo pipefail
+
+status=0
+weaver test --json > test.json || status=$?
+jq '.error // {status, totals, failing: [.nodes[] | select(.status == "failed" or .status == "invalid")]}' test.json
+exit "$status"
+```
+
+## Reading Build, Load and Test results
+
+Each of the three reports its overall result in `status` and its size in a count mapping:
+
+| Command | Overall result | Count | Work items |
+| --- | --- | --- | --- |
+| `build` | `status` | `actions.total` | `preview.actions[]` in a dry run; the installation report at `report_path` otherwise |
+| `load` | `status` | `totals.planned` | `nodes[]` |
+| `test` | `status` | `totals.planned` | `nodes[]` |
+
+A Build has actions, not nodes. `actions.total` is `0` for an empty plan, in a dry run and in an installation alike:
+
+```bash
+weaver build --dry-run --json > plan.json
+jq '{status, actions: .actions.total, destructive: .preview.destructive}' plan.json
+jq -r '.preview.actions[] | [.classification, .resource_node_id, .description] | @tsv' plan.json
+```
+
+A Load stopped by a failure, without `--fault-tolerant`, emits the error envelope with its partial report under `report`. Read the run from either shape:
+
+```bash
+status=0
+weaver load --json > load.json || status=$?
+jq '(.report // .) as $run
+    | {error: .error.message, status: $run.status, totals: $run.totals,
+       failing: [$run.nodes[]? | select(.status == "failed" or .status == "blocked")
+                 | {node_id, status, messages}]}' load.json
+exit "$status"
+```
+
+A failed Test reports its `missing_count` and `unexpected_count`, and an Assumption its `violation_count`. A validation that could not run is `invalid` and carries `error_message`. The rows behind a finding are included only when the run names the validation, as in `weaver test --name Sales.OrdersReconcile --json`.
+
 ## Commands with `--json`
 
 | Command | Current top-level fields | Current exit condition |
@@ -29,9 +72,9 @@ Successful command outcomes normally exit `0`. A report that does not satisfy th
 | `initialise` / `initialize` | `project_folder`, `workspace`, `resources`, `files`, `example`, `example_added`, `environment_publication`, `environment_definition`, `dry_run`, `next_commands` | `0` for a produced report; handled setup errors return `1` through the error envelope. |
 | `doctor` | `workspace`, `authentication`, `workspaces`, `succeeded`, `checks` | `0` only when the report succeeds; otherwise `1`. |
 | `check` | `status`, `project_folder` | `0` for valid source; `1` with the error envelope for a Weaver error. |
-| `build` | `source`, `items`, `bundle_id`, `installation`, `bundle_path`, `status`, `errors` | `0` when `status` is `succeeded`; otherwise `1`. |
+| `build` | `source`, `items`, `bundle_id`, `installation`, `bundle_path`, `status`, `errors`; `actions` after an installation or a dry run | `0` when `status` is `succeeded`; otherwise `1`. |
 | `install` | `bundle_id`, `status`, `started_at`, `finished_at`, `sequences` | `0` when the installation report succeeds; otherwise `1`. |
-| `load` | `requested`, `status`, `dry_run`, `fault_tolerant`, `reload`, `ignore_stability_threshold`, `workspace`, `workflow_id`, `started_at`, `finished_at`, `order`, `edges`, `nodes`, `messages` | `0` for `succeeded` or `succeeded_with_rejects`; otherwise `1`. |
+| `load` | `requested`, `status`, `dry_run`, `fault_tolerant`, `reload`, `ignore_stability_threshold`, `workspace`, `workflow_id`, `started_at`, `finished_at`, `order`, `edges`, `nodes`, `totals`, `messages` | `0` for `succeeded` or `succeeded_with_rejects`; otherwise `1`. |
 | `test` | `status`, `nodes`, `totals`, `workflow_id`, `started_at`, `finished_at` | `0` for a completed passing or planned report; failed or invalid validation returns `1` while still emitting the report. |
 | `health` | `format_version`, `generated_at`, `as_of`, `status`, `targets`, `sections`, `current_load`, `load_activity` | `0` only for Green; Amber or Red returns `1`. |
 | `wipe --dry-run` | `workspace`, `targets`, `catalogue`, `catalogue_action`, `unbound` | `0` after reporting the settled plan. |
@@ -61,7 +104,7 @@ Only Health currently includes a top-level JSON `format_version`; its current va
 
 ### Build
 
-`items[]` contains logical item references. `installation` is Boolean and `bundle_path` is a string or null. `errors[]` has `id`, nullable `type`, nullable `message`, nullable `artefact`, and nullable `source`. An installation result additionally has `actions` (total/succeeded/skipped/failed counts) and `report_path`. A dry-run result adds `dry_run: true` and `preview`, containing `plan`, `objects`, `actions`, `no_op`, `destructive`, `uncertain`, certification/validation/runtime-state decisions, omissions and `execution_runtime_checked: false`. Preview is not a retained bundle or proof that the runtime can execute it.
+`items[]` contains logical item references. `installation` is Boolean and `bundle_path` is a string or null. `errors[]` has `id`, nullable `type`, nullable `message`, nullable `artefact`, and nullable `source`. An installation result additionally has `actions` (total/succeeded/skipped/failed counts) and `report_path`. A dry-run result adds `actions` with only `total`, `dry_run: true` and `preview`, containing `plan`, `objects`, `actions`, `no_op`, `destructive`, `uncertain`, certification/validation/runtime-state decisions, omissions and `execution_runtime_checked: false`. `actions.total` counts the entries of `preview.actions`. Preview is not a retained bundle or proof that the runtime can execute it.
 
 ### Install
 
@@ -75,6 +118,8 @@ Only Health currently includes a top-level JSON `format_version`; its current va
 - `status`, `executed`, nullable `started_at`, and nullable `finished_at`;
 - nullable `rows`; and
 - `messages[]`.
+
+`totals` has `planned` (every node), `executed`, and a count for each status of the run's vocabulary: `pending`, `running`, `succeeded`, `succeeded_with_rejects`, `failed`, `blocked` and `skipped`, or in a dry run `validated`, `invalid` and `blocked`.
 
 When present, `rows` is primitive result evidence. Data loads carry row counts; semantic refresh carries refresh evidence without invented row counts. Message objects currently carry `code`, `severity`, and `message`, with optional context fields supplied by the run representation. Status vocabulary differs between execution and dry run; do not infer another command's status set from it.
 

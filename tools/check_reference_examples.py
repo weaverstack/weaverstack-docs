@@ -12,6 +12,9 @@ import sys
 from pathlib import Path
 
 
+SHELL_OPERATORS = {">", ">>", "|", "||", "&&", ";"}
+
+
 def blocks(path, language):
     # Parser-owned pseudo-signatures are not executable code samples.
     text = re.sub(
@@ -53,7 +56,13 @@ def main():
             for line in block.replace("\\\n", " ").splitlines():
                 if not line.startswith("weaver ") or "<command>" in line:
                     continue
-                cli.parse_args(shlex.split(line)[1:])
+                words = shlex.split(line)[1:]
+                # The command ends where a redirection or another command begins.
+                shell = next(
+                    (i for i, word in enumerate(words) if word in SHELL_OPERATORS),
+                    len(words),
+                )
+                cli.parse_args(words[:shell])
                 counts["commands"] += 1
         for block in blocks(page, "yaml"):
             raw = yaml.safe_load(block)
