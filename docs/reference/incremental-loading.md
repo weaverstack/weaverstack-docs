@@ -65,7 +65,59 @@ Weaver keeps the two in step through three properties:
 - **Producers load before consumers.** In a run that selects both, dependency order finishes the upstream Table or Folder before your consumer starts, so everything the upstream wrote has an audit datetime earlier than the consumer's new bookmark.
 - **The bookmark leads, and only a clean Load moves it.** Weaver sets it to the instant before the Load began, so a change that lands during the Load is later than the bookmark and the next Load reads it. A failed, rejected or blocked Load leaves the bookmark where it was, so your consumer asks again for the same window.
 
-When the source is not a Weaver-managed Table or Folder, such as an external database, a CDC feed or an API, you or the source's owner have to supply the audit datetime, under the conditions in [source change evidence](#source-change-evidence). Weaver still supplies the bookmark.
+When the source is not a Weaver-managed Table or Folder, such as an external database, a CDC feed or an API, you or the source's owner have to supply the audit datetime, under the conditions in [tracking the incoming data](#tracking-the-incoming-data). Weaver still supplies the bookmark.
+
+## Return contract
+
+Your incremental Table returns candidate rows to insert or update and, when needed, the keys of rows to delete. A row that is absent from the candidates stays in the target: absence is not a delete. A Python Table declared with `Incremental: true` returns one of four forms from `read()`:
+
+| Return value | Meaning |
+| --- | --- |
+| `staging` | Insert or update candidates, with no delete claim. |
+| `(staging, deletes)` | Insert or update candidates and explicit delete keys. |
+| `None` | No candidates and no deletes. The load succeeds as a no-op. |
+| `(None, deletes)` | Deletion-only work. Weaver supplies an empty staging frame with the target shape. |
+
+`staging` holds every declared business column and `deletes` holds the declared primary-key columns, so an incremental Table requires a primary key. In SQL you express the same contract as result sets: the first supplies the candidates and an optional second supplies delete keys. An incremental Folder may return `(staging_folder, files_to_delete)`. [Table](weaver-documents/table.md#body-and-return-contract), [Folder](weaver-documents/folder.md) and [Python authored objects](python/objects.md) own the accepted forms.
+
+A source operation does not have to become the same target operation. After filters, joins or aggregation, a source update can produce a target delete, for example when a parcel's `Status` changes to `Cancelled` and your query returns its key as a delete claim. Your target query decides which target keys to delete, whether the evidence is a CDC tombstone, a cancellation, a deleted file, an API status or any other source it can read.
+
+
+## Bookmark
+
+A consumer's bookmark is the UTC instant immediately before its latest clean Load began. Weaver stores it in `_.Bookmark`, keyed by item type, item name, schema name and object name, and it holds `1900-01-01` until the object has had a clean Load.
+
+- **One per consumer.** The Table or Folder owns it, not the source. If two of your Tables read the same Folder, each keeps its own boundary, and loading one does not move the other's.
+- **Advances only on a clean Load.** A clean no-op counts. Failed, rejected, blocked, pending and static-skip outcomes leave it where it was, and a dry run writes nothing. A fault-tolerant Load that publishes accepted rows alongside rejects does not advance it either, so the next Load starts from the last clean boundary.
+- **Resets on rebuild.** When Build rebuilds a loadable object, Weaver resets its bookmark, because the new generation has not processed any history. `--reload` resets it for each reached Table. Your next Load therefore asks the source for all available history. After a Build, `weaver load --stale` runs the objects whose state is no longer Green.
+
+[Catalogue schema](catalogue-schema.md#_bookmark) lists the columns.
+
+## Tracking the target table via bookmark
+
+Your consumer tracks its own progress through its bookmark, and you read it in whichever language the consumer is authored in:
+
+| Authored in | Read it with |
+| --- | --- |
+| Python Table or Folder | `self.bookmark()`, a timezone-aware UTC `datetime`. It requires a catalogue. |
+| Python Folder source | `files_since(bookmark)` and `deleted_since(bookmark)` on the source Folder |
+| T-SQL Table | A `select` from `[_].[Bookmark]` on the four-part key. Each installed Warehouse sees `_.Bookmark` as a view. |
+
+`files_since()` returns the Folder's current managed files whose latest event is strictly after the bookmark. `deleted_since()` returns paths whose latest event is a deletion after it; those paths normally no longer exist, so your Table maps them to its own keys. `latest_files()` returns the current files from the newest change that left files in place.
+
+## Tracking the incoming data
+
+Your bookmark says where your consumer stopped. Which incoming data changed after that point depends on where the data comes from:
+
+| Source | Managed | Identifying changed data |
+| --- | --- | --- |
+| Weaver Folder | Weaver managed | `files_since()` and `deleted_since()`, compared with your bookmark. |
+| Weaver Table | Weaver managed | The audit datetime Weaver sets on each row, `[Row update datetime]` in a Warehouse and `row_update_datetime` in a Lakehouse, compared with your bookmark. |
+| Incoming source | Unmanaged | Depends on the source. The most sophisticated set-up uses polling tables. |
+
+If the data already loads through a Weaver pipeline, Weaver knows exactly what changed in every Folder and Table it manages, so you can load incrementally at every stage of the pipeline, as the worked example below does.
+
+Data that comes in from outside Weaver first has to be mapped to an extract datetime, so that you can extract it incrementally. A polling table is a good way to do that, though there are other techniques. [Acquiring information](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/acquiring-information/) in Principles of Data Engineering covers them. Whatever you use has to keep evidence of every change until your consumer has read it, and its datetimes have to share the bookmark's UTC time basis.
 
 ## Worked example: files, a Delta Table and a Warehouse Table
 
@@ -344,64 +396,5 @@ Run the same Load again without changing the source. The Folder reports no chang
 | Empty window | `read()` returns `None` | The query returns no rows |
 
 In both stages you left the declarations as they were, each Load saw only the window since the previous Load's boundary, and each consumer's bookmark moved independently of the others'.
-
-
-## Return contract
-
-Your incremental Table returns candidate rows to insert or update and, when needed, the keys of rows to delete. A row that is absent from the candidates stays in the target: absence is not a delete. A Python Table declared with `Incremental: true` returns one of four forms from `read()`:
-
-| Return value | Meaning |
-| --- | --- |
-| `staging` | Insert or update candidates, with no delete claim. |
-| `(staging, deletes)` | Insert or update candidates and explicit delete keys. |
-| `None` | No candidates and no deletes. The load succeeds as a no-op. |
-| `(None, deletes)` | Deletion-only work. Weaver supplies an empty staging frame with the target shape. |
-
-`staging` holds every declared business column and `deletes` holds the declared primary-key columns, so an incremental Table requires a primary key. In SQL you express the same contract as result sets: the first supplies the candidates and an optional second supplies delete keys. An incremental Folder may return `(staging_folder, files_to_delete)`. [Table](weaver-documents/table.md#body-and-return-contract), [Folder](weaver-documents/folder.md) and [Python authored objects](python/objects.md) own the accepted forms.
-
-A source operation does not have to become the same target operation. After filters, joins or aggregation, a source update can produce a target delete, for example when a parcel's `Status` changes to `Cancelled` and your query returns its key as a delete claim. Your target query decides which target keys to delete, whether the evidence is a CDC tombstone, a cancellation, a deleted file, an API status or any other source it can read.
-
-> **Design background:** [Responding to change](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/responding-to-change/) covers translating source changes into target actions.
-
-## Bookmark
-
-A consumer's bookmark is the UTC instant immediately before its latest clean Load began. Weaver stores it in `_.Bookmark`, keyed by item type, item name, schema name and object name, and it holds `1900-01-01` until the object has had a clean Load.
-
-- **One per consumer.** The Table or Folder owns it, not the source. If two of your Tables read the same Folder, each keeps its own boundary, and loading one does not move the other's.
-- **Advances only on a clean Load.** A clean no-op counts. Failed, rejected, blocked, pending and static-skip outcomes leave it where it was, and a dry run writes nothing. A fault-tolerant Load that publishes accepted rows alongside rejects does not advance it either, so the next Load starts from the last clean boundary.
-- **Resets on rebuild.** When Build rebuilds a loadable object, Weaver resets its bookmark, because the new generation has not processed any history. `--reload` resets it for each reached Table. Your next Load therefore asks the source for all available history. After a Build, `weaver load --stale` runs the objects whose state is no longer Green.
-
-[Catalogue schema](catalogue-schema.md#_bookmark) lists the columns.
-
-## Reading the bookmark
-
-| Authored in | Read it with |
-| --- | --- |
-| Python Table or Folder | `self.bookmark()`, a timezone-aware UTC `datetime`. It requires a catalogue. |
-| Python Folder source | `files_since(bookmark)` and `deleted_since(bookmark)` on the source Folder |
-| T-SQL Table | A `select` from `[_].[Bookmark]` on the four-part key. Each installed Warehouse sees `_.Bookmark` as a view. |
-
-`files_since()` returns the Folder's current managed files whose latest event is strictly after the bookmark. `deleted_since()` returns paths whose latest event is a deletion after it; those paths normally no longer exist, so your Table maps them to its own keys. `latest_files()` returns the current files from the newest change that left files in place.
-
-## Source change evidence
-
-The bookmark says where your consumer stopped. What counts as a change after that point depends on the source, so each source needs its own evidence:
-
-| Source | Change evidence |
-| --- | --- |
-| Table with audit datetimes | A predicate such as `where [Row update datetime] > @bookmark_datetime`. |
-| Database with CDC or a change table | The change rows after the boundary. |
-| Weaver-managed Folder | `files_since()` and `deleted_since()`. |
-| API | A cursor, usually with an overlap or polling window. |
-
-One consumer owns one bookmark, but a query over several sources interprets that boundary once per source, and you combine the source-specific readings into candidates and delete keys.
-
-Each approach has a condition. The source has to keep a row or other evidence of every change until your consumer has read it, and its audit datetimes have to share the bookmark's UTC time basis. A hard deletion in the source leaves no row for either result set, so propagating it needs evidence you keep, such as a tombstone, an audit table or CDC.
-
-> **Design background:** [Tracking changes](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/tracking-changes/) covers how a source can record what changed. The contract on this page is self-contained.
-
-## Declaration changes
-
-When you edit a Table or Folder, the change takes effect only after Check and Build. The rebuild resets that object's bookmark, so your next Load reads all available history rather than the changes since the old boundary. That mixes a declaration change, Build impact and a bookmark reset into the data change you wanted to measure, which is why editing a constant in a Weaver document and rebuilding it does not demonstrate an incremental load. Keep to the data-only sequence for that.
 
 [Load behaviour](operation-behaviour/load.md) owns exact bookmark, reload and selection rules. [Row auditing and operational history](../estate/catalogue-and-health/row-auditing.md) explains where current state and Load activity are recorded.
