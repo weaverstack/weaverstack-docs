@@ -1,4 +1,4 @@
-# Loading changes
+# Incremental load via bookmarks
 
 A keyed incremental Table can apply new rows, changed values and cancellations while its definition stays installed. Your SQL returns the candidate rows and delete keys; Weaver generates the target merge and records the consumer's progress.
 
@@ -363,4 +363,4 @@ A hard source deletion leaves no row for either SELECT. To propagate it, retain 
 
 Editing a Weaver document changes the source definition, not the installed one. Check and Build install that change; for each rebuilt loadable object, Build resets its bookmark to the initial boundary. The next Load must ask for all available history. That is why changing a VALUES constant and rebuilding it would not demonstrate this data-only loop.
 
-[Incremental loading](../reference/incremental-loading.md#return-contract) covers result forms and change-source design; [Load behaviour](../reference/operation-behaviour/load.md) owns exact bookmark, reload and failure rules. [Schemas, keys and protected data](schema-and-protection/index.md) follows from the next question: which data can you reconstruct, and which must stay outside a managed target?
+[Incremental loading](../reference/incremental-loading.md#return-contract) covers result forms and change-source design; [Load behaviour](../reference/operation-behaviour/load.md) owns exact bookmark, reload and failure rules. [Protecting data](../lakehouse/protecting-data.md) follows from the next question: which data can you reconstruct, and which must stay outside a managed target?

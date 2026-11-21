@@ -22,7 +22,7 @@ current = Parcel__CurrentStatus(self).dataframe(row_audit_columns=True)
 
 The result still describes rows currently held by the Table. It is not an append-only record of every prior value or of rows that have already been physically removed. Use upstream history, a deliberately modelled history Table or Change Data Feed when the application needs business-row version history.
 
-The row signature used for keyed comparisons is also managed, but it is never returned by `dataframe()`. [Schemas, keys and managed columns](../../warehouse/schema-and-protection/schemas-keys-and-columns.md) explains that boundary.
+The row signature used for keyed comparisons is also managed, but it is never returned by `dataframe()`. [Schemas, keys and managed columns](../../reference/weaver-documents/schemas-keys-and-columns.md) explains that boundary.
 
 ## Bookmarks are current cursor state
 

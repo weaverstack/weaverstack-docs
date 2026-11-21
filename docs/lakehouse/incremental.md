@@ -1,4 +1,4 @@
-# Loading changes and bookmarks
+# Incremental load via bookmarks
 
 Once a carrier feed changes, reprocessing every file is not always necessary. A Folder records which files changed, and an incremental Table uses its own bookmark to read the changes since its last clean Load. This example follows an updated file and a removed file through to a Table update and an explicit deletion, without rebuilding the pipeline.
 

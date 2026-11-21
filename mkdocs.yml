@@ -89,18 +89,15 @@ nav:
       - A first Lakehouse pipeline (Python): lakehouse/python.md
       - Working with Spark SQL: lakehouse/spark-sql.md
       - Testing Lakehouse data: lakehouse/tests.md
-      - Loading changes and bookmarks: lakehouse/incremental.md
+      - Incremental load via bookmarks: lakehouse/incremental.md
       - Shortcuts and existing data: lakehouse/shortcuts.md
+      - Protecting data: lakehouse/protecting-data.md
       - Running Python in Fabric: lakehouse/runtime.md
   - Warehouse:
       - warehouse/index.md
       - A first Warehouse Table and View: warehouse/first-project.md
       - Testing Warehouse data: warehouse/tests.md
-      - Loading changes: warehouse/incremental.md
-      - Schemas, keys and protected data:
-          - warehouse/schema-and-protection/index.md
-          - Schemas, keys and managed columns: warehouse/schema-and-protection/schemas-keys-and-columns.md
-          - Protecting data: warehouse/schema-and-protection/protecting-data.md
+      - Incremental load via bookmarks: warehouse/incremental.md
   - Semantic models:
       - semantic-models/index.md
       - Deploy a native model: semantic-models/native-tmdl.md
@@ -158,6 +155,7 @@ nav:
       - Weaver documents:
           - Overview: reference/weaver-documents/overview.md
           - Common metadata: reference/weaver-documents/common-metadata.md
+          - Schemas, keys and managed columns: reference/weaver-documents/schemas-keys-and-columns.md
           - Table: reference/weaver-documents/table.md
           - Folder: reference/weaver-documents/folder.md
           - View: reference/weaver-documents/view.md

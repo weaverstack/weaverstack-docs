@@ -22,7 +22,7 @@ Item kinds remain aligned: a logical Lakehouse binds to a physical Lakehouse, an
 | Protected managed object | In a managed target, with `Prohibit rebuild: true` on the Table, Folder, or View | Weaver still owns the object; the flag only guards replacement during Build. |
 | External physical source | In a physical item that is not a managed target, reached through a physical Shortcut | Weaver owns the local Shortcut, not the source item or its contents. |
 
-Do not bind or select an external source item as a managed target merely to make it readable. Keep it outside the Build boundary and expose only the required Table, Folder, or schema through a physical Shortcut. See [Protecting data](../../warehouse/schema-and-protection/protecting-data.md) for the recoverability decision.
+Do not bind or select an external source item as a managed target merely to make it readable. Keep it outside the Build boundary and expose only the required Table, Folder, or schema through a physical Shortcut. See [Protecting data](../../lakehouse/protecting-data.md) for the recoverability decision.
 
 ## Logical identity stays with the source
 

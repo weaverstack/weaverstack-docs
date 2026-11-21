@@ -119,6 +119,6 @@ weaver health --item Lakehouse/Landing
 
 The selected Test should fail and return diagnostic rows showing the expected `Delivered` and actual `In transit`. Health should show the failed validation. There is no Load here because the data declarations and their intended data have not changed. Restore the expected value, Check and Build again, then rerun the selected Test; it should succeed.
 
-The small fixed export made the expected rows explicit. A changing carrier feed needs processing state as well as tests: [Loading changes and bookmarks](incremental.md) shows a changing carrier-feed example, where updating or removing a file changes an additional LiveStatus Table without rebuilding its code or replacing this fixed example.
+The small fixed export made the expected rows explicit. A changing carrier feed needs processing state as well as tests: [Incremental load via bookmarks](incremental.md) shows a changing carrier-feed example, where updating or removing a file changes an additional LiveStatus Table without rebuilding its code or replacing this fixed example.
 
 [Tests](../reference/weaver-documents/test.md), [Assumptions](../reference/weaver-documents/assumption.md) and [Test behaviour](../reference/operation-behaviour/test.md) own the exact comparison, diagnostic and recording rules. Python validations use the same data: a `Test` implements `expected()` and `actual()` returning Spark DataFrames, while an `Assumption` implements `read()` returning violations; their complete forms are in those references.

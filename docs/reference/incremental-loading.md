@@ -7,7 +7,7 @@ schema_type: TechArticle
 
 # Incremental loading
 
-An incremental Table applies only the changes since its own last clean Load. Three things make that work: what the load returns, what the consumer's bookmark records and what evidence the source keeps of its changes. This page specifies each. The tasks build the same pipeline step by step: [Loading changes and bookmarks](../lakehouse/incremental.md) with Lakehouse Folders and [Loading changes](../warehouse/incremental.md) with a Warehouse source. [Load behaviour](operation-behaviour/load.md) owns selection, reload and failure outcomes.
+An incremental Table applies only the changes since its own last clean Load. Three things make that work: what the load returns, what the consumer's bookmark records and what evidence the source keeps of its changes. This page specifies each. The tasks build the same pipeline step by step: [Incremental load via bookmarks](../lakehouse/incremental.md) with Lakehouse Folders and [Incremental load via bookmarks](../warehouse/incremental.md) with a Warehouse source. [Load behaviour](operation-behaviour/load.md) owns selection, reload and failure outcomes.
 
 Incremental processing and [incremental Build selection](../estate/selective-runs/build-selection.md) answer different questions. Build selection decides which definitions to install. Incremental processing decides which source changes an installed Table or Folder applies, and an ordinary data change needs no Build:
 

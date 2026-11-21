@@ -283,4 +283,4 @@ A row only in expected is missing; a row only in actual is unexpected. A changed
 
 </details>
 
-These checks now describe the result you expect, but the event feed is still a constant in a SQL file. [Loading changes](incremental.md) uses a changing-source example: the same parcels arrive through an external Warehouse, and a keyed Table consumes updates and cancellations without rebuilding its definition.
+These checks now describe the result you expect, but the event feed is still a constant in a SQL file. [Incremental load via bookmarks](incremental.md) uses a changing-source example: the same parcels arrive through an external Warehouse, and a keyed Table consumes updates and cancellations without rebuilding its definition.

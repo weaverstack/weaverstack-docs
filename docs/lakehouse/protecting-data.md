@@ -1,5 +1,7 @@
 # Protecting data
 
+Weaver treats the Tables and Folders it manages as reproducible. When a declaration changes, Build normally drops and recreates the affected object, and a later Load rebuilds its contents from source. That is the right behaviour for a derived Table. It is the wrong one for data that was costly to acquire and cannot be fetched again: an API history the provider no longer serves, a manually supplied workbook, an archive another team owns. Acquired source files usually land in a Lakehouse, but the choices below are the same for Warehouse Tables.
+
 **Ownership should match recoverability.** Before bringing data under Weaver management, ask whether the physical contents can be reconstructed. For truly irreplaceable data, keep the contents in an external physical item and expose them through a physical Shortcut. If Weaver should own the object but Build must preserve its existing contents, declare `Prohibit rebuild: true`.
 
 ## Choose the ownership boundary
@@ -30,7 +32,7 @@ Use a physical Shortcut when no repeatable process can reconstruct the source. T
 
 Weaver manages the Shortcut destination in the local item: it may create, replace or remove that pointer as its declaration changes. Weaver does **not** manage the underlying physical source named by the Shortcut. This is the strongest ownership boundary because Build and Load do not treat the source contents as a Weaver-owned Table or Folder.
 
-For example, a Lakehouse physical Folder Shortcut can expose an archive held in another workspace without making that archive part of the local estate's managed data. Follow [Connect data with Shortcuts](../../lakehouse/shortcuts.md) for the authoring workflow, and use the [Shortcut reference](../../reference/weaver-documents/shortcut.md) for exact physical target forms and workspace rules.
+For example, a Lakehouse physical Folder Shortcut can expose an archive held in another workspace without making that archive part of the local estate's managed data. Follow [Connect data with Shortcuts](shortcuts.md) for the authoring workflow, and use the [Shortcut reference](../reference/weaver-documents/shortcut.md) for exact physical target forms and workspace rules.
 
 ## Retain an existing Weaver-owned object
 
@@ -51,7 +53,7 @@ This is appropriate for Weaver-owned data such as:
 
 When planning finds an existing protected object that would otherwise be rebuilt, it records that object as prohibited and omits its physical drop and build actions. The existing object is retained; Build does not fail merely because the changed object is protected. Other work in the plan can continue, including installation of new objects. Catalogue metadata, certification and separately generated load work can still reconcile when the change does not require replacing the protected physical object.
 
-A source change that requires a different physical shape does not update that shape in place. The old object remains. Review the plan and resulting physical shape rather than assuming the edited declaration has been materialised. [Build behaviour](../../reference/operation-behaviour/build.md) owns the exact planning, certification and installation semantics; [Common metadata](../../reference/weaver-documents/common-metadata.md) owns the accepted field and default.
+A source change that requires a different physical shape does not update that shape in place. The old object remains. Review the plan and resulting physical shape rather than assuming the edited declaration has been materialised. [Build behaviour](../reference/operation-behaviour/build.md) owns the exact planning, certification and installation semantics; [Common metadata](../reference/weaver-documents/common-metadata.md) owns the accepted field and default.
 
 ## A protected borrowed object can become local without resetting its contents
 

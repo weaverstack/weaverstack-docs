@@ -52,7 +52,7 @@ The result is a mixed estate. Load can run local materialised objects; borrowed 
 
 A selected changed/impacted protected Table or Folder uses preserving materialisation rather than empty reconstruction: Warehouse CTAS, Lakehouse Delta shallow clone, or native recursive Folder copy. Its retained bookmark remains established. Protection does not make every physical shape change an in-place migration.
 
-Review the Build preview before this transition. The destination wrapper/shortcut is removed, and failed materialisation can leave partial local state without rollback. Delta shallow clones require source file retention; Folder copying does not promise an atomic point-in-time estate snapshot. Source content is not emptied by this path. [Protecting data](../../warehouse/schema-and-protection/protecting-data.md) explains when the stronger external-ownership boundary is appropriate.
+Review the Build preview before this transition. The destination wrapper/shortcut is removed, and failed materialisation can leave partial local state without rollback. Delta shallow clones require source file retention; Folder copying does not promise an atomic point-in-time estate snapshot. Source content is not emptied by this path. [Protecting data](../../lakehouse/protecting-data.md) explains when the stronger external-ownership boundary is appropriate.
 
 ## Treat re-mirroring as a reset
 
