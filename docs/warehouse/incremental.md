@@ -65,6 +65,7 @@ It should return `P-1001` as `In transit` at `Central` and `P-1002` as `Delivere
 Weaver keeps each consumer's bookmark in the catalogue's `_.Bookmark` table, and every installed Warehouse sees it as a view. The Table therefore reads its own boundary with an ordinary query:
 
 ```sql
+-- This Table's bookmark: when its last clean Load began.
 select [Bookmark datetime]
 from [_].[Bookmark]
 where [Item type] = N'Warehouse'
@@ -94,6 +95,7 @@ Schema:
   Status: varchar(30)
   Depot: varchar(30)
 */
+-- Bookmark: when this Table's last clean Load began, read from the catalogue.
 declare @bookmark_datetime datetime2(6);
 set @bookmark_datetime = coalesce(
     (
@@ -104,7 +106,7 @@ set @bookmark_datetime = coalesce(
           and [Schema name] = N'Parcel'
           and [Object name] = N'LiveStatus'
     ),
-    cast('1900-01-01' as datetime2(6))
+    cast('1900-01-01' as datetime2(6))  -- initial boundary: no clean Load yet
 );
 
 -- Rows to insert or update
@@ -112,13 +114,13 @@ select [Parcel ID]
      , [Status]
      , [Depot]
 from [Source].[Parcel]
-where [Row update datetime] > @bookmark_datetime
+where [Row update datetime] > @bookmark_datetime  -- audit datetime after the bookmark
   and [Status] <> 'Cancelled';
 
 -- Keys to delete
 select [Parcel ID]
 from [Source].[Parcel]
-where [Row update datetime] > @bookmark_datetime
+where [Row update datetime] > @bookmark_datetime  -- audit datetime after the bookmark
   and [Status] = 'Cancelled';
 ```
 
@@ -234,6 +236,7 @@ order by [Parcel ID];
 It should contain the two seeded parcels. A clean Load sets the bookmark to the UTC instant immediately before that Load began. In a **SQL query connected to Catalogue**, record that boundary:
 
 ```sql
+-- This Table's bookmark: when its last clean Load began.
 select [Bookmark datetime]
 from [_].[Bookmark]
 where [Item type] = N'Warehouse'

@@ -8,6 +8,8 @@ schema_type: TechArticle
 
 # Incremental loading
 
+Incremental processing is foundational, and it is easy to get wrong. [Principles of Data Engineering](https://principlesofdataengineering.org/) explains the correct way to handle incremental loads, in [Tracking changes](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/tracking-changes/) and [Responding to change](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/responding-to-change/). What follows is an extract of that approach, applied to Fabric.
+
 An incremental Table or Folder applies only the changes since its own last clean Load. Three things make that work, and this page takes you through each: a bookmark that records how far your consumer has processed, an audit datetime on every source row or file that records when it changed, and a return contract that turns those changes into target actions. [Incremental load via bookmarks](../lakehouse/incremental.md) builds the pipeline step by step over a Lakehouse Folder source, and [the Warehouse task](../warehouse/incremental.md) does the same over a Warehouse source. [Load behaviour](operation-behaviour/load.md) owns selection, reload and failure outcomes.
 
 Incremental loading and [incremental Build selection](../estate/selective-runs/build-selection.md) answer different questions. Build selection decides which definitions Weaver installs, while incremental loading decides which source changes an installed Table or Folder applies. When only the source data changes, you load again without building:
@@ -118,6 +120,8 @@ class Parcel__StatusFiles(Folder):
         staging = self.staging_folder()
         for source in sorted(source_root.glob("*.csv")):
             shutil.copy2(source, staging.path / source.name)
+        # Weaver compares this snapshot with the managed Folder and records each
+        # path's insert, update or delete time: the Folder's audit datetimes.
         return staging
 ```
 
@@ -158,7 +162,9 @@ from weaver import Table
 class Parcel__LiveStatus(Table):
     def read(self):
         source = Parcel__StatusFiles(self)
+        # Bookmark: when this Table's last clean Load began (1900-01-01 before the first).
         bookmark = self.bookmark()
+        # Audit datetimes: the Folder's insert/update and delete events after the bookmark.
         changed = source.files_since(bookmark)
         deleted = source.deleted_since(bookmark)
 
@@ -173,10 +179,12 @@ class Parcel__LiveStatus(Table):
 
         deletes = None
         if deleted:
+            # A deleted file leaves no row, so its filename becomes the delete key.
             parcel_ids = [(path.stem,) for path in sorted(deleted)]
             deletes = self.spark.createDataFrame(parcel_ids, ["Parcel ID"])
 
         if staged is None and deletes is None:
+            # Nothing after the bookmark: a no-op. The bookmark still advances.
             return None
         return staged, deletes
 ```
@@ -192,6 +200,7 @@ Because the Table imports the Folder, Weaver treats the Folder as a managed depe
 After the first Load the Table holds both parcels. To see its bookmark, run this in a **SQL query connected to the catalogue Warehouse**. The value is the instant just before that read began, and the catalogue addresses a Lakehouse Table by schema name `Tables/Parcel`:
 
 ```sql
+-- This Table's bookmark: when its last clean Load began.
 select [Bookmark datetime]
 from [_].[Bookmark]
 where [Item type] = N'Lakehouse'
@@ -253,6 +262,7 @@ Schema:
   Status: varchar(30)
   Depot: varchar(30)
 */
+-- Bookmark: when this Table's last clean Load began, read from the catalogue.
 declare @bookmark_datetime datetime2(6);
 set @bookmark_datetime = coalesce(
     (
@@ -263,7 +273,7 @@ set @bookmark_datetime = coalesce(
           and [Schema name] = N'Parcel'
           and [Object name] = N'LiveStatus'
     ),
-    cast('1900-01-01' as datetime2(6))
+    cast('1900-01-01' as datetime2(6))  -- initial boundary: no clean Load yet
 );
 
 -- Rows to insert or update
@@ -271,13 +281,13 @@ select [Parcel ID]
      , [Status]
      , [Depot]
 from [Source].[Parcel]
-where [Row update datetime] > @bookmark_datetime
+where [Row update datetime] > @bookmark_datetime  -- audit datetime after the bookmark
   and [Status] <> 'Cancelled';
 
 -- Keys to delete
 select [Parcel ID]
 from [Source].[Parcel]
-where [Row update datetime] > @bookmark_datetime
+where [Row update datetime] > @bookmark_datetime  -- audit datetime after the bookmark
   and [Status] = 'Cancelled';
 ```
 

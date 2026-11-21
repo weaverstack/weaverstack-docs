@@ -11,8 +11,8 @@ The bookmark belongs to the consumer, not the source. It is the UTC instant imme
 A Table that consumes a Folder reads its own boundary and asks the Folder for what changed after it:
 
 ```python
-changed = source.files_since(self.bookmark())
-deleted = source.deleted_since(self.bookmark())
+changed = source.files_since(self.bookmark())  # files inserted or updated after the bookmark
+deleted = source.deleted_since(self.bookmark())  # paths deleted after the bookmark
 ```
 
 `files_since()` returns the managed files whose latest event is after the bookmark, and `deleted_since()` returns the paths deleted after it. Those two calls are the incremental read. The full Table below calls `self.bookmark()` once and passes the result to both.
@@ -106,6 +106,8 @@ class Parcel__StatusFiles(Folder):
         staging = self.staging_folder()
         for source in sorted(source_root.glob("*.csv")):
             shutil.copy2(source, staging.path / source.name)
+        # Weaver compares this snapshot with the managed Folder and records each
+        # path's insert, update or delete time: the Folder's audit datetimes.
         return staging
 ```
 
@@ -142,7 +144,9 @@ from weaver import Table
 class Parcel__LiveStatus(Table):
     def read(self):
         source = Parcel__StatusFiles(self)
+        # Bookmark: when this Table's last clean Load began (1900-01-01 before the first).
         bookmark = self.bookmark()
+        # Audit datetimes: the Folder's insert/update and delete events after the bookmark.
         changed = source.files_since(bookmark)
         deleted = source.deleted_since(bookmark)
 
@@ -157,10 +161,12 @@ class Parcel__LiveStatus(Table):
 
         deletes = None
         if deleted:
+            # A deleted file leaves no row, so its filename becomes the delete key.
             parcel_ids = [(path.stem,) for path in sorted(deleted)]
             deletes = self.spark.createDataFrame(parcel_ids, ["Parcel ID"])
 
         if staged is None and deletes is None:
+            # Nothing after the bookmark: a no-op. The bookmark still advances.
             return None
         return staged, deletes
 ```
@@ -295,6 +301,7 @@ It should contain `P-1001` as `In transit` at `Central` and `P-1002` as `Deliver
 In a **SQL query connected to Catalogue**, record the Table's first successful boundary:
 
 ```sql
+-- This Table's bookmark: when its last clean Load began.
 select [Bookmark datetime]
 from [_].[Bookmark]
 where [Item type] = N'Lakehouse'
