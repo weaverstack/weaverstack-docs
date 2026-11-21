@@ -20,13 +20,13 @@ The operations are separate because the things they act on are separate. Source 
 
 Python and SQL define data work under `Lakehouse/` and `Warehouse/`. Native model and Report definitions live under `PowerBI/`. Models use standard TMDL; optional overlays and Weaver annotations add refinements and modelling rules, and play the same authoring role as the engineering declarations around SQL and Python. Tests and Assumptions live beside the items they check.
 
-The project declares logical identities, not development or production item names. Workspace configuration selects the destination, so one copy of the source serves every environment.
+Your project declares logical identities, not development or production item names. Workspace configuration selects the destination, so you keep one copy of the source for every environment.
 
 [Projects and estates](../../estate/projects-and-estates.md) describes how a project is organised. [Logical and physical items](../../estate/environments/logical-and-physical-items.md) describes the binding to Fabric. [Weaver documents](../../reference/weaver-documents/overview.md) specifies what each file declares.
 
 ## Build installs definitions
 
-Build is the operation that reads Weaver documents. It combines the selected source with workspace configuration, works out what has to change in the bound Fabric items, applies it and records the resulting installed generation in the catalogue. It also deploys native semantic models and their linked Reports. Build does not run the authored data loads or refresh models.
+Build reads your Weaver documents. It combines the selected source with workspace configuration, works out what has to change in the bound Fabric items, applies it and records the resulting installed generation in the catalogue. It also deploys native semantic models and their linked Reports. Build does not run the authored data loads or refresh models.
 
 Each kind of document contributes something different:
 
@@ -36,15 +36,15 @@ Each kind of document contributes something different:
 - Shortcuts contribute installed connections.
 - Warehouse programmables and schema metadata contribute definitions with no separate Load step.
 
-Editing a document changes the project, not the installed estate. The edit becomes part of the operating estate when Build installs it, and not before.
+When you edit a document, you change the project, not the installed estate. The edit joins the operating estate when Build installs it, and not before.
 
-Build Lakehouse and Warehouse work first, then models and Reports in a separate call against the same project. The second call can read the metadata the first one installed. A workflow can sequence both.
+You build Lakehouse and Warehouse work first, then models and Reports in a separate call against the same project. The second call can read the metadata the first one installed. A workflow can sequence both.
 
 ## Load runs installed work
 
 Load reads installed items and their recorded bindings. It runs Table and Folder work and refreshes registered semantic models through one dependency graph. With no item selection it covers the installed estate, and selected source work runs before the consumers and model refreshes that depend on it.
 
-Because Load does not reopen project source, a Table edited after the last Build keeps running its previously installed work until another Build succeeds.
+Because Load does not reopen project source, a Table you edited after the last Build keeps running its previously installed work until another Build succeeds.
 
 Each consumer keeps its own bookmark of successful processing, so a failed node does not discard the progress of independent work that finished. Views, Tests, Assumptions, Shortcuts, Warehouse programmables and schema metadata have no Load step of their own, though loadable work can read from them. A Report has no Load or Test either; it uses its model's data.
 
@@ -52,7 +52,7 @@ Each consumer keeps its own bookmark of successful processing, so a failed node 
 
 ## Test checks the data
 
-Test reads the catalogue and runs the installed validations in its selection. A Test compares expected and actual rows. An Assumption returns the rows that contradict a condition and passes when there are none. Both can be authored for Lakehouse and Warehouse data, or as DAX against a semantic model. A model's DAX result can be compared with SQL calculated independently from its managed source.
+Test reads the catalogue and runs the installed validations in its selection. A Test compares expected and actual rows. An Assumption returns the rows that contradict a condition and passes when there are none. You can author both for Lakehouse and Warehouse data, or as DAX against a semantic model. A model's DAX result can be compared with SQL calculated independently from its managed source.
 
 Each validation's current outcome is recorded in the catalogue alongside its history. In catalogue mode an edited validation takes effect after Build installs it. File mode, selected with `--file` or by running without a catalogue, reads authored validations directly and records nothing. `--source` chooses the project folder; it does not by itself select file mode when a catalogue is configured.
 

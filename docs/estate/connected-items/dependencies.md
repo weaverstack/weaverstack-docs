@@ -1,10 +1,10 @@
 # Dependencies
 
-Weaver normally discovers dependencies from authored imports and relation references. These relationships connect the documents that produce data to the documents that read it, without requiring a separate graph to be maintained by hand.
+Weaver normally discovers dependencies from authored imports and relation references. These relationships connect the documents that produce data to the documents that read it, so you do not maintain a separate graph by hand.
 
-A document can declare `Dependencies` when deliberate control is needed. An explicit declaration **replaces** inference; it does not add to the relationships Weaver discovered. An explicit empty list therefore means that the document has no managed dependencies.
+You can declare `Dependencies` on a document when you need deliberate control. Your declaration **replaces** inference; it does not add to the relationships Weaver discovered. An explicit empty list therefore means that the document has no managed dependencies.
 
-Spark SQL data documents are the exception to inference-first authoring: they still require an explicit `Dependencies` declaration, including an empty declaration when they depend on no managed object. Weaver can extract relation references from Spark SQL, but the current document contract still requires the explicit field.
+Spark SQL data documents are the exception to inference-first authoring: you still declare `Dependencies` explicitly, including an empty declaration when the document depends on no managed object. Weaver can extract relation references from Spark SQL, but the current document contract still requires the explicit field.
 
 ## Document dependencies
 
@@ -12,7 +12,7 @@ A document dependency says that one Weaver document reads another. Weaver can in
 
 Within a logical item, dependencies establish the document graph. Build uses that graph to install producers before consumers and to find downstream documents affected by a changed declaration. Load uses the installed form of the graph to order selected data-producing work.
 
-> **Design background:** [Load dependencies](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/load-dependencies/) treats every dependency as coupling: reuse and consistent logic come with paths for upstream change and failure to propagate. Weaver records dependencies to order Build and Load work, but whether a dependency is valuable and appropriately scoped remains a design decision.
+> **Design background:** [Load dependencies](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/load-dependencies/) treats every dependency as coupling: reuse and consistent logic come with paths for upstream change and failure to propagate. Weaver records dependencies to order Build and Load work, but you still decide whether a dependency is valuable and appropriately scoped.
 
 Physical relation names can point outside the managed project estate. Weaver preserves such references; Build-time project inference uses logical relationships to identify managed producers.
 
@@ -22,7 +22,7 @@ When a relationship crosses logical items, it also creates an item dependency. I
 
 Items may read one another. Cyclic data dependencies use a deterministic order: Load runs each selected member once per invocation, not repeatedly to convergence. A dependency that closes a cycle can read results from an earlier run. Health suppresses relative load-time comparisons within the cycle but still carries failed, Pending and overdue states. See [Cycles](../across-catalogues.md#cycles).
 
-The physical mutation action plan must still be free of circular waits; tolerance of data cycles does not make an impossible installation sequence executable.
+Weaver still needs a physical mutation action plan free of circular waits; tolerating data cycles does not make an impossible installation sequence executable.
 
 Document and item graphs answer different questions. The document graph identifies the affected and ordered work. The item graph ensures that physical item boundaries are crossed in a valid order.
 
@@ -40,9 +40,9 @@ Physical addresses do not establish Build-time dependencies between separate pro
 
 ## Semantic model dependencies
 
-A model’s managed source declarations connect its Tables to Lakehouse or Warehouse data. The graph reaches from source loads to the model refresh, so the model need not have a separate schedule guessing when the source has finished.
+A model’s managed source declarations connect its Tables to Lakehouse or Warehouse data. The graph reaches from source loads to the model refresh, so you do not need a separate schedule that guesses when the source has finished.
 
-Use `Weaver.Source` to declare the logical source Table. Build installs that lineage; estate-wide Load places selected source work before the model refresh. DAX validations can compare the result with source SQL, and Health uses the same edges to detect stale models or validations. See [Connect a semantic model to source data](../../semantic-models/managed-sources.md).
+You declare the logical source Table with `Weaver.Source`. Build installs that lineage; estate-wide Load places selected source work before the model refresh. DAX validations can compare the result with source SQL, and Health uses the same edges to detect stale models or validations. See [Connect a semantic model to source data](../../semantic-models/managed-sources.md).
 
 A linked Report depends on its resolved model for deployment. It has no independent data Load. An external source without a managed declaration is outside the installed dependency graph.
 
@@ -50,7 +50,7 @@ A linked Report depends on its resolved model for deployment. It has no independ
 
 Dependencies order and affect work inside the requested boundary; they do not silently add another logical item to an operation.
 
-For Build, selecting an item can rebuild changed documents and affected descendants in that item, while dependent documents in an unselected item remain unchanged. Select every item whose installed state should change.
+For Build, selecting an item can rebuild changed documents and affected descendants in that item, while dependent documents in an unselected item remain unchanged. Select every item whose installed state you want to change.
 
 For an item-wide Load, Weaver orders the selected loadable documents using the installed graph. An upstream object in an unselected item is not added to the run. Plain named Load is an operator override without expansion or dependency ordering. `--ancestors` and `--descendants` deliberately expand original seeds, independently, within requested items and order that selected graph. Their union does not recursively add the siblings of newly reached descendants. See [Run part of an estate](../selective-runs/index.md).
 

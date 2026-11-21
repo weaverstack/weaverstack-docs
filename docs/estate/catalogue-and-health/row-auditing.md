@@ -8,21 +8,21 @@ Weaver records state at three different levels:
 
 These surfaces answer different questions. Row audit columns do not replace operation history, and the latest Load status is not a list of every earlier Load.
 
-Catalogue timestamps and successful-processing bookmarks use UTC. A bookmark belongs to its consuming object, not to a shared source/query watermark: two consumers may have different clean-processing boundaries for the same upstream data.
+Catalogue timestamps and successful-processing bookmarks use UTC. Each bookmark belongs to the object that consumes the data, not to a shared source/query watermark: if two of your objects read the same upstream data, each keeps its own clean-processing boundary.
 
 ## Row audit columns describe current rows
 
-Weaver adds three managed audit timestamps to Tables: when a row was inserted, when it was last updated and its delete-lifecycle value. A live row carries a non-null maximum-date sentinel in the delete field. These columns are outside the authored business schema and cannot be used as authored business columns.
+Weaver adds three managed audit timestamps to Tables: when a row was inserted, when it was last updated and its delete-lifecycle value. A live row carries a non-null maximum-date sentinel in the delete field. These columns are outside the business schema you author, and you cannot use them as business columns.
 
-For a Python Table, `dataframe()` returns business columns by default. Pass `row_audit_columns=True` to append the three audit columns:
+In a Python Table, `dataframe()` returns business columns by default. Pass `row_audit_columns=True` to append the three audit columns:
 
 ```python
 current = Parcel__CurrentStatus(self).dataframe(row_audit_columns=True)
 ```
 
-The result still describes rows currently held by the Table. It is not an append-only record of every prior value or of rows that have already been physically removed. Use upstream history, a deliberately modelled history Table or Change Data Feed when the application needs business-row version history.
+The result still describes rows currently held by the Table. It is not an append-only record of every prior value or of rows that have already been physically removed. If your application needs business-row version history, use upstream history, a history Table you model deliberately, or Change Data Feed.
 
-The row signature used for keyed comparisons is also managed, but it is never returned by `dataframe()`. [Schemas, keys and managed columns](../../reference/weaver-documents/schemas-keys-and-columns.md) explains that boundary.
+The row signature used for keyed comparisons is also managed, but `dataframe()` never returns it. [Schemas, keys and managed columns](../../reference/weaver-documents/schemas-keys-and-columns.md) explains that boundary.
 
 ## Bookmarks are current cursor state
 
@@ -36,9 +36,9 @@ A Table and Folder with the same `Schema.Object` name remain distinct because th
 
 `_.LoadStatus` holds recorded Load state for managed source subjects and registered semantic-model refreshes. Reports have installation/binding claims but no independent data refresh. `_.TestStatus` holds the latest recorded outcome for each installed Test or Assumption. A later settled attempt replaces that object's current row.
 
-A partial run updates only the objects it reaches. Current estate state can therefore contain rows produced by several workflow identifiers. Read these tables, or Health, when the question is whether the installed estate is pending, current, failed, rejected, blocked or stale now.
+A partial run updates only the objects it reaches. Current estate state can therefore contain rows produced by several workflow identifiers. Read these tables, or run Health, when you need to know whether the installed estate is pending, current, failed, rejected, blocked or stale now.
 
-A direct source-file validation does not create installed Test history. Installed Test and Assumption execution is the boundary that updates `_.TestStatus` and appends operational evidence.
+Validating source files directly does not create installed Test history. Only executing an installed Test or Assumption updates `_.TestStatus` and appends operational evidence.
 
 ## `_.Log` and `_.LoadStatistic` answer “what happened?”
 
@@ -46,7 +46,7 @@ A direct source-file validation does not create installed Test history. Installe
 
 `_.LoadStatistic` records Load activity such as read, inserted, updated, deleted and rejected row counts, plus reload and static-skip distinctions. It exists only when Load work executed. A blocked node can therefore have a Log row and current Load status but no Load statistic; recording a row of zeroes would incorrectly imply that data work ran and moved nothing.
 
-These tables are append-oriented history. The public operations do not expose time-based retention, compaction or manual pruning. Query them read-only and copy them elsewhere if another retention policy is required.
+These tables are append-oriented history. The public operations do not expose time-based retention, compaction or manual pruning. If you need another retention policy, query them read-only and copy them elsewhere.
 
 ## Correlate a run by workflow and object
 
@@ -75,7 +75,7 @@ Build starts fresh current state for work it rebuilds:
 
 `_.Log` and `_.LoadStatistic` remain as evidence of earlier generations. An unchanged source-item Build changes neither current state nor history. Selected semantic models still deploy; catalogue-backed unchanged Report-only builds and catalogue-free redeployment have different rules. An item-scoped Build leaves unselected items outside the reset boundary.
 
-Reload is a different boundary. For each selected Table that execution reaches, Reload resets its bookmark and Load status before emptying and rereading the target. If that execution fails, the earlier bookmark and contents are not restored.
+Reload is a different boundary. For each selected Table that execution reaches, Reload resets its bookmark and Load status before emptying and rereading the target. If that execution fails, Weaver does not restore the earlier bookmark and contents.
 
 Preserving materialisation of a protected borrowed Table or Folder is not ordinary empty reconstruction: its retained bookmark survives. Wipe/Unbind and re-mirroring have their own claim/content/history boundaries, specified in [Operation behaviour](../../reference/operation-behaviour/index.md). A Build guard is not retention protection against those operations.
 

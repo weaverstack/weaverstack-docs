@@ -10,11 +10,11 @@ Build answers those questions inside the logical items you selected. It does not
 
 ## Certification is the starting point
 
-A successful Build records certification for the installed definitions and generated work in `_.Registry`. Certification connects a logical object, its installed form and a signature. A physical Table or View with the same name but no matching certification is not automatically Weaver-owned.
+A successful Build records certification for the installed definitions and generated work in `_.Registry`. Certification connects a logical object, its installed form and a signature. Weaver does not treat a physical Table or View as Weaver-owned just because its name matches a declaration; without matching certification it is not.
 
-The signature is an equality token for installable meaning. Changes to authored code, queries, relevant metadata, dependencies or generated work can move it. File modification time and source-control history do not decide equality, and the hash algorithm or encoding is not a public interface.
+Weaver uses the signature as an equality token for installable meaning. Changes you make to authored code, queries, relevant metadata or dependencies, and changes to generated work, can move it. Weaver does not compare file modification times or source-control history, and the hash algorithm and encoding are not a public interface.
 
-Build also reads the selected targets' physical inventory. A matching signature cannot prove that the certified object still exists or still has the expected physical kind. Certification and inventory are therefore reconciled before Build decides what work to retain.
+Build also reads the selected targets' physical inventory. A matching signature cannot prove that the certified object still exists or still has the expected physical kind. Build therefore reconciles certification and inventory before it decides what work to retain.
 
 ## How an object is classified
 
@@ -53,7 +53,7 @@ Lakehouse/Tracking/Parcel.Event
 Warehouse/Dispatch/Parcel.CurrentStatus
 ```
 
-Building only `Lakehouse/Tracking` can reconcile the producer, but it does not modify `Warehouse/Dispatch`. The consumer remains on its installed generation until its item is included in a later Build.
+Building only `Lakehouse/Tracking` can reconcile the producer, but it does not modify `Warehouse/Dispatch`. The consumer stays on its installed generation until you include its item in a later Build.
 
 ```bash
 weaver build \
@@ -61,19 +61,19 @@ weaver build \
   --item Warehouse/Dispatch
 ```
 
-When both items are selected, impact can cross the logical Shortcut and reach the consumer. This is why two Builds against the same source can select different object sets: the requested item set is the write boundary.
+When both items are selected, impact can cross the logical Shortcut and reach the consumer. This is why two Builds against the same source can select different object sets: the item set you request is the write boundary.
 
 ## Logical Shortcuts can reveal deferred staleness
 
 A consumer behind a logical Shortcut can become stale when its producer was installed by an earlier Build after the consumer. On the next Build that selects the consumer item, Weaver refreshes the Shortcut path and affected consumers even when their authored signatures still match.
 
-After those consumers are rebuilt against the newer producer, another identical Build settles to unchanged. The recorded installation generations make this possible; applications should not reproduce Weaver's freshness comparison or depend on its internal planning sequence.
+After those consumers are rebuilt against the newer producer, another identical Build settles to unchanged. Weaver can do this because it records installation generations. Do not reproduce its freshness comparison in your own tooling or depend on its internal planning sequence.
 
 ## Mirrored objects become local only when selected work needs them
 
 In a mirrored development estate, an unchanged borrowed object keeps its borrowed physical form. If Build selects that object as changed or impacted, successful installation replaces the borrowed form with the authored local form and marks its `_.Mirror` row deleted, retaining the record. Unrelated borrowed objects remain borrowed.
 
-This transition follows the same item boundary. Building a producer does not materialise consumers in an unselected item.
+This transition follows the same item boundary: if you build a producer, Weaver does not materialise consumers in an item you did not select.
 
 ## Rebuild starts a new current state
 

@@ -2,7 +2,7 @@
 
 Fault tolerance controls what Weaver attempts after part of an operation fails. It does not make failed work successful, erase completed work or turn an operation into a transaction.
 
-The useful distinction is between three kinds of remaining work:
+Weaver distinguishes three kinds of remaining work:
 
 - **blocked work** cannot proceed because required upstream work did not establish usable state;
 - **independent work** does not depend on the failure and may still be able to run;
@@ -26,18 +26,18 @@ Fault tolerance also applies within supported Table and Folder loads when incomi
 
 Build, Load and Test do not share one universal failure policy.
 
-Build does not offer Load's fault-tolerant execution mode. Installation work completed before a Build failure can remain physically applied, while unsuccessful installation is not certified as a successful generation.
+Build does not offer Load's fault-tolerant execution mode. Installation work completed before a Build failure can remain physically applied, while Weaver does not certify unsuccessful installation as a successful generation.
 
 Test attempts validations in its selection. Catalogue mode records outcomes; source/file mode returns outcomes without catalogue records. A failed validation is a finding about the data; a validation that could not run is a different condition. One validation does not produce data needed by another, so Test does not use Load's dependency continuation policy.
 
-A Workflow adds another boundary. An execution failure stops subsequent commands even when the command used fault-tolerant execution internally. Test/Health findings are collected while the sequence continues, and make the completed workflow unsuccessful. Earlier effects remain applied.
+A Workflow adds another boundary. An execution failure stops later commands even when the command used fault-tolerant execution internally. Weaver collects Test and Health findings while the sequence continues, and they make the completed workflow unsuccessful. Earlier effects remain applied.
 
 ## Partial state and recovery
 
 Weaver does not apply operation-wide rollback to Build, Load, Test or Workflow execution. Completed work remains completed, and a failing unit can leave operation-specific partial effects. Recorded outcomes and Health show what was established, failed, blocked or left stale.
 
-Recovery is a new operation against that remaining state. Correct the source or platform condition, inspect the affected estate, then rerun the appropriate Build, Load or Test. A retry does not resume an invisible transaction; it reconciles or executes from the state now present.
+Recovery is a new operation against that remaining state: you correct the source or platform condition, inspect the affected estate, then rerun the appropriate Build, Load or Test. A retry does not resume an invisible transaction; Weaver reconciles or executes from the state now present.
 
-This is why failure policy must be considered together with selection. A broad fault-tolerant Load can preserve progress on unrelated branches, while a narrow rerun can target recovery after the cause is fixed.
+This is why you choose a failure policy together with a selection. A broad fault-tolerant Load can preserve progress on unrelated branches, while a narrow rerun can target recovery after the cause is fixed.
 
 See [Fault and outcome vocabulary](../../reference/operation-behaviour/fault-and-outcome-vocabulary.md) for exact outcomes and operation-specific barriers. The [Build](../../reference/operation-behaviour/build.md), [Load](../../reference/operation-behaviour/load.md), [Test](../../reference/operation-behaviour/test.md) and [Workflow](../../reference/operation-behaviour/workflow.md) references define their precise failure behaviour.

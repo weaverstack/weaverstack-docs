@@ -1,12 +1,12 @@
 # Design principles
 
-Weaver is shaped around the distinction between what a project declares, what Build installs and what later operations do. These are architectural choices rather than styling preferences, and they decide whether an estate stays understandable when it spans engines, environments and failed runs. [How Weaver works](index.md) describes the operations that follow from them.
+Weaver is shaped around the distinction between what a project declares, what Build installs and what later operations do. These are architectural choices rather than styling preferences, and they decide whether your estate stays understandable when it spans engines, environments and failed runs. [How Weaver works](index.md) describes the operations that follow from them.
 
 ## Natural authoring
 
 > **Use SQL and Python as SQL and Python. What you write should still make sense to the engine and to another engineer.**
 
-A SQL body should not need a templating engine to turn macros into the statement Fabric eventually sees. In a Weaver document, the authored body remains T-SQL or Spark SQL; the declaration sits in a comment that the SQL engine already understands. Python remains a module with classes and imports, not another language encoded inside configuration.
+A SQL body should not need a templating engine to turn macros into the statement Fabric eventually sees. In a Weaver document, you write the body as T-SQL or Spark SQL; the declaration sits in a comment that the SQL engine already understands. Python remains a module with classes and imports, not another language encoded inside configuration.
 
 Weaver adds the information the lifecycle genuinely needs: a logical identity such as `Parcel.Event`, the owning item and a small amount of metadata. It does not need a second naming system to disguise relation names, or a parallel graph that repeats relationships already present in code.
 
@@ -24,7 +24,7 @@ See [Weaver documents](../../reference/weaver-documents/overview.md), [Dependenc
 
 > **Build defines the installed estate. Load and Test operate it. Installing code is not the same job as running data.**
 
-Build interprets project source, resolves its physical bindings and installs definitions and executable work. Load and Test then use that installed generation from the catalogue; they do not reinterpret whichever files happen to be on disk when a run begins. Editing source changes the intended estate, but the operating estate changes only after Build installs a new generation.
+Build interprets project source, resolves its physical bindings and installs definitions and executable work. Load and Test then use that installed generation from the catalogue; they do not reinterpret whichever files happen to be on disk when a run begins. When you edit source, you change the intended estate; the operating estate changes only after Build installs a new generation.
 
 That boundary is what makes frozen Build bundles, repeatable runtime work and inspection of the installed generation possible. It also keeps failures honest: a Build failure, a failed Load and a failed validation are different events with different remaining state, not one vague project failure. [How Weaver works](index.md) describes the lifecycle; [operation behaviour](../../reference/operation-behaviour/index.md) defines each boundary precisely.
 

@@ -44,12 +44,12 @@ A failure says that attempted work did not succeed. Staleness says that previous
 
 Build health checks the estate recorded in the catalogue. It can expose missing certifications, unresolved installed dependencies, ambiguous physical claims and certified objects absent from inventory.
 
-It does not compare that estate with files edited since the last Build. An unbuilt source change is outside Health's view; Build first to make that generation part of the installed estate.
+It does not compare that estate with files you have edited since the last Build. Health cannot see an unbuilt source change; run Build first to make that generation part of the installed estate.
 
 ## Health is a read
 
-Health leaves the estate unchanged. Its result is assembled from installed declarations, current Load and Test state, dependency relationships and optional physical inventory. In a mixed mirrored estate, borrowed objects take their current Load state from the source catalogue while local objects use destination state.
+Health leaves the estate unchanged. It assembles its result from installed declarations, current Load and Test state, dependency relationships and optional physical inventory. In a mixed mirrored estate, borrowed objects take their current Load state from the source catalogue while local objects use destination state.
 
-Selection narrows what Health reports, but freshness still follows managed ancestors needed to judge those subjects. The result is therefore a current estate view rather than a replay of one command or workflow. A partially updated estate can contain state established by several earlier runs.
+When you select items, Health narrows what it reports, but it still follows the managed ancestors it needs to judge freshness for those subjects. The result is therefore a current estate view rather than a replay of one command or workflow. A partially updated estate can contain state established by several earlier runs.
 
 Use the [Health operation reference](../../reference/operation-behaviour/health.md) for exact selection, freshness, inventory, result and exit behaviour. [Reading the catalogue](../../reference/catalogue-tour.md) explains where the underlying current state and history are recorded.

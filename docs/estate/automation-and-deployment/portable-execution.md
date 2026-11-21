@@ -2,15 +2,15 @@
 
 Portability has three separate layers in Weaver:
 
-- **Project portability** means the same Weaver documents can be read from a local checkout or a Fabric notebook's built-in Resources.
-- **Operation portability** means the public Build, Load, Test and Health operations can run through the desktop CLI or the Python API in a Fabric notebook.
+- **Project portability** means Weaver reads the same documents from a local checkout or from a Fabric notebook's built-in Resources.
+- **Operation portability** means you can run the public Build, Load, Test and Health operations through the desktop CLI or through the Python API in a Fabric notebook.
 - **Installed-artifact portability** means built Lakehouse modules and Warehouse SQL objects execute in Fabric without a desktop process reopening the project.
 
 The host supplies workspace discovery, credentials, storage and Spark. The project keeps the same logical item and document identities, and the selected catalogue remains the record of the installed source estate.
 
 ## 1. Project portability: use one source tree
 
-Notebook Resources are ordinary project source. There is no notebook-specific Weaver project format. The documentation repository includes a coherent parcel estate under `examples/parcel-portability`. Copy the contents of that directory into the notebook's built-in Resources as `project`, preserving this tree:
+Notebook Resources are ordinary project source. There is no notebook-specific Weaver project format. The documentation repository includes a coherent parcel estate under `examples/parcel-portability`. To follow this page, copy the contents of that directory into the notebook's built-in Resources as `project`, preserving this tree:
 
 ```text
 Parcel-Estate.Notebook/
@@ -51,23 +51,23 @@ if not result.succeeded:
 result.report()
 ```
 
-Replace each angle-bracketed value with an existing physical item name in the notebook's workspace. The notebook's attached runtime must contain Weaver and any libraries imported by the project. Build installs Python definitions but does not call their authored `read()` methods.
+Replace each angle-bracketed value with an existing physical item name in the notebook's workspace. The notebook's attached runtime must contain Weaver and any libraries your project imports. Build installs Python definitions but does not call their authored `read()` methods.
 
-For the ordinary top-level operation calls shown on this page, workspace discovery follows a short chain:
+For the ordinary top-level operation calls shown on this page, Weaver discovers the workspace through a short chain:
 
 1. an explicit `workspace=` or `workspace_config=` selects the base workspace;
-2. otherwise `workspace-config.yml` in the process working directory is used;
+2. otherwise Weaver uses `workspace-config.yml` in the process working directory;
 3. otherwise Weaver reads the current Fabric workspace from `notebookutils.runtime`.
 
-An explicit `catalogue=` or `environment=` overrides that value on the selected base. The source-data lifecycle shown here needs a catalogue; discovering the notebook workspace does not invent one. Standalone Power BI deployment/refresh and source/file-mode Test have catalogue-free routes documented separately. A Fabric Environment may be written as `<environment-name>` in the operation workspace or `<owner-workspace>/<environment-name>` when Fabric permits a cross-workspace attachment. The qualification changes the Environment's owner, not the operation's workspace.
+An explicit `catalogue=` or `environment=` overrides that value on the selected base. The source-data lifecycle shown here needs a catalogue; discovering the notebook workspace does not invent one. Standalone Power BI deployment/refresh and source/file-mode Test have catalogue-free routes documented separately. You can write a Fabric Environment as `<environment-name>` in the operation workspace or as `<owner-workspace>/<environment-name>` when Fabric permits a cross-workspace attachment. The qualification changes the Environment's owner, not the operation's workspace.
 
-A notebook already executing in its attached workspace uses its active Spark session and notebook identity. It does not need an `environment=` argument merely to start a remote Livy session. Its attached runtime still needs Weaver and the project's Python dependencies. From a desktop, hosted Lakehouse Build/Load/Test needs Weaver in a published Environment selected by configuration or `--environment`, including generated Spark SQL work. Spark-backed Build checks its matching runtime before mutation. Warehouse-only T-SQL and standalone Power BI do not acquire Spark merely because other operations support it.
+A notebook already executing in its attached workspace uses its active Spark session and notebook identity. It does not need an `environment=` argument merely to start a remote Livy session. Its attached runtime still needs Weaver and the project's Python dependencies. From a desktop, hosted Lakehouse Build/Load/Test needs Weaver in a published Environment that your configuration or `--environment` selects, including generated Spark SQL work. Spark-backed Build checks its matching runtime before mutation. Warehouse-only T-SQL and standalone Power BI do not acquire Spark merely because other operations support it.
 
 ## 2. Move the project both ways with Fabric Git
 
-Fabric Git can include a notebook's built-in Resources folder. The setting is optional and off by default; enable **Resources folder support in Git** for the notebook before expecting `Resources/builtin/project` in the repository. Fabric's [notebook source-control documentation](https://learn.microsoft.com/fabric/data-engineering/notebook-source-control-deployment) describes that setting and its size limit.
+Fabric Git can include a notebook's built-in Resources folder. The setting is optional and off by default; you enable **Resources folder support in Git** for the notebook before `Resources/builtin/project` appears in the repository. Fabric's [notebook source-control documentation](https://learn.microsoft.com/fabric/data-engineering/notebook-source-control-deployment) describes that setting and its size limit.
 
-**Fabric to desktop:** commit the notebook and its built-in Resources from the Fabric workspace, then clone or update the connected branch. The same project is now an ordinary local directory. Build it without conversion:
+**Fabric to desktop:** you commit the notebook and its built-in Resources from the Fabric workspace, then clone or update the connected branch. The same project is now an ordinary local directory, and you can Build it without conversion:
 
 ```bash
 weaver build \
@@ -77,9 +77,9 @@ weaver build \
 
 The selected workspace configuration must bind `Lakehouse/Landing`, `Warehouse/Operations` and the catalogue to the intended physical estate. A local checkout does not inherit the notebook's attached workspace or Environment.
 
-**Desktop to Fabric:** edit the files beneath `Resources/builtin/project`, commit and push them, then update the Fabric workspace from the connected branch. The notebook again resolves the project as `Path("builtin") / "project"` and can Build it with the first example.
+**Desktop to Fabric:** you edit the files beneath `Resources/builtin/project`, commit and push them, then update the Fabric workspace from the connected branch. The notebook again resolves the project as `Path("builtin") / "project"` and can Build it with the first example.
 
-`weaver fabric notebook push` is a different path: it transports a notebook definition, not local notebook Resources. Use Fabric Git when the project itself lives in built-in Resources. In either direction, the host changes; the Weaver documents do not.
+`weaver fabric notebook push` is a different path: it transports a notebook definition, not local notebook Resources. When the project itself lives in built-in Resources, move it with Fabric Git. In either direction, the host changes; the Weaver documents do not.
 
 ## 3. Operation portability: change the entry point
 
@@ -94,7 +94,7 @@ The CLI and top-level Python package expose the core lifecycle through both entr
 
 The entry point changes, but logical identities, catalogue selection, installed bindings and the operation's selection rules do not. This is not a claim that every CLI command has a notebook counterpart. CLI interaction, confirmation and output remain CLI concerns.
 
-Mirror and Wipe are also public Python operations. They retain their operation-specific planning and destructive boundaries, so they are not folded into the routine lifecycle shorthand above: inspect a Mirror or Wipe plan using the documented operation interface before executing it. See [Mirror behaviour](../../reference/operation-behaviour/mirror.md) and [Wipe behaviour](../../reference/operation-behaviour/wipe.md).
+Mirror and Wipe are also public Python operations. They keep their operation-specific planning and destructive boundaries, so the routine lifecycle shorthand above leaves them out: inspect a Mirror or Wipe plan using the documented operation interface before you execute it. See [Mirror behaviour](../../reference/operation-behaviour/mirror.md) and [Wipe behaviour](../../reference/operation-behaviour/wipe.md).
 
 In an attached Fabric notebook, each top-level operation discovers the current workspace and uses the active Spark runtime and notebook identity. The catalogue remains explicit because workspace discovery does not invent one. Build binds the project items to physical Fabric items; Load, Test and Health then select the installed logical items:
 
@@ -134,7 +134,7 @@ health_report = weaver.health(items, catalogue=catalogue)
 }
 ```
 
-No desktop credential or `environment=` argument is needed for this attached-workspace path. The attached runtime must still contain Weaver and the project's Python dependencies. Supplying a [Session](../../reference/python/session.md) is optional when a caller needs explicit context reuse or control.
+This attached-workspace path needs no desktop credential or `environment=` argument. The attached runtime must still contain Weaver and the project's Python dependencies. You can supply a [Session](../../reference/python/session.md) when you want explicit context reuse or control; it is optional.
 
 The corresponding desktop sequence uses the configuration that binds the same logical items and catalogue:
 
@@ -152,15 +152,15 @@ weaver health \
   --workspace-config "<path-to-workspace-config.yml>"
 ```
 
-Build records the physical bindings in the selected catalogue. Load, Test and Health use those installed bindings; changing the current `targets` mapping does not retarget an installed generation until Build installs it.
+Build records the physical bindings in the selected catalogue. Load, Test and Health use those installed bindings; if you change the current `targets` mapping, an installed generation keeps its bindings until Build installs the new ones.
 
-The rest of the CLI is deliberately not folded into this table:
+The table leaves out the rest of the CLI:
 
 - `weaver.initialise()` is a public Python function as well as a CLI setup command. It creates project files and requested Fabric items; it is not an installed-estate operation.
 - Doctor and frozen-bundle Install are CLI commands. `doctor` and `install` are not exports of the top-level `weaver` Python API.
 - Check is local project validation rather than a hosted estate operation.
 - `weaver fabric environment publish` and `weaver fabric notebook push|run` are CLI helpers for Fabric items. They have no top-level Python operation counterparts.
-- A CLI workflow is represented in Python by an explicit sequence of public operation calls. Each call can discover the attached notebook context as shown above.
+- In Python you express a CLI workflow as an explicit sequence of public operation calls. Each call can discover the attached notebook context as shown above.
 
 See [Python operations](../../reference/python/operations.md) and the [CLI reference](../../reference/cli.md) for exact signatures and selection rules.
 
@@ -230,7 +230,7 @@ The four call forms have different state boundaries:
 | Installed validation `run()` | Required | Resolves the installed validation and records Test status and log evidence. |
 | `weaver.test(...)` | Required | Selects installed validation work through the catalogue, applies normal Test operation semantics and records estate evidence. |
 
-A freestanding object can call `read()`, but `load()` and validation `run()` refuse to execute without a catalogue anchor. Direct `read()` is therefore useful for inspecting authored logic; it is not a substitute for the recorded Load or Test lifecycle.
+A freestanding object can call `read()`, but `load()` and validation `run()` refuse to execute without a catalogue anchor. Direct `read()` therefore lets you inspect authored logic; it does not replace the recorded Load or Test lifecycle.
 
 Warehouse installation is native too. The parcel Warehouse example installs the `Parcel.StatusEvent` Table, its generated load procedure and the `Parcel.CurrentStatus` View. A Warehouse Assumption becomes a validation procedure, and an authored programmable such as `Parcel.RefreshSummary` remains an ordinary stored procedure. After Build, those SQL objects live and execute in the target Warehouse; no desktop Weaver process needs to remain alive. Build, Load and Test use the generated procedures, while callers can query Views or invoke authored programmables through the Warehouse SQL endpoint.
 
@@ -250,6 +250,6 @@ weaver.build() → weaver.load() → weaver.test() → weaver.health()
 Fabric-native Lakehouse and Warehouse state
 ```
 
-Desktop Python is optional in this path. A desktop remains useful for local editing, CI/CD and remote orchestration, but the project can be stored through Fabric Git, built and operated from a Fabric notebook, and executed against the installed estate without a personal machine running Python.
+Desktop Python is optional in this path. A desktop remains useful for local editing, CI/CD and remote orchestration, but you can store the project through Fabric Git, build and operate it from a Fabric notebook, and execute it against the installed estate without a personal machine running Python.
 
-The same notebook can be run by Fabric's notebook job scheduler or from a Fabric pipeline. That makes Fabric both the execution host and the scheduler for the shown sequence; it does not change Weaver's operation semantics or replace the catalogue. Configure scheduling, identity, capacity and retry policy in Fabric rather than inferring them from a successful interactive run. See Microsoft's [Fabric job scheduler](https://learn.microsoft.com/fabric/fundamentals/job-scheduler) documentation for that platform boundary.
+Fabric's notebook job scheduler or a Fabric pipeline can run the same notebook. That makes Fabric both the execution host and the scheduler for the shown sequence; it does not change Weaver's operation semantics or replace the catalogue. You configure scheduling, identity, capacity and retry policy in Fabric; a successful interactive run does not establish them. See Microsoft's [Fabric job scheduler](https://learn.microsoft.com/fabric/fundamentals/job-scheduler) documentation for that platform boundary.

@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Use the same workspace configuration as the failed command. Preserve its report, exit status and workflow identifier, and do not edit catalogue rows to repair state.
+Start from the same workspace configuration as the failed command. Keep its report, exit status and workflow identifier, and do not edit catalogue rows to repair state.
 
 ## Check fails
 
@@ -10,13 +10,13 @@ Run Check from the project root:
 weaver check
 ```
 
-Check is local. Correct the first reported path, identity, metadata, SQL shape or dependency error, then rerun it. Do not proceed to Build until Check succeeds.
+Check is local. Correct the first path, identity, metadata, SQL shape or dependency error it reports, then rerun it. Do not proceed to Build until Check succeeds.
 
-A successful Check proves that Weaver can parse the project. It does not execute authored code or prove Fabric access, permissions or remote Python imports.
+A successful Check shows that Weaver can parse your project. It does not execute your authored code or prove Fabric access, permissions or remote Python imports.
 
 ## Build fails
 
-Read the Build report in action order. Completed actions may already have changed physical objects; Build does not roll them back when a later action fails.
+Read the Build report in action order, because completed actions may already have changed physical objects. Build does not roll them back when a later action fails.
 
 1. Run `weaver check` and correct source errors.
 2. Confirm that the selected configuration names the intended catalogue and targets.
@@ -29,11 +29,11 @@ weaver build . --workspace-config workspace-development.yml
 weaver health --workspace-config workspace-development.yml
 ```
 
-The rerun reconciles the state it finds; it does not resume the previous report. If Health reports an incomplete or incompatible catalogue, preserve the evidence rather than writing catalogue tables manually or using Wipe as an ordinary Build repair.
+The rerun reconciles the state Weaver finds; it does not resume the previous report. If Health reports an incomplete or incompatible catalogue, keep the evidence rather than writing catalogue tables manually or using Wipe as an ordinary Build repair.
 
 ## Load fails
 
-Use the report to distinguish failed, blocked and pending work. Correct the reported data, code, runtime or permission condition, then preview and rerun the intended item boundary:
+The Load report distinguishes failed, blocked and pending work. Correct the reported data, code, runtime or permission condition, then preview and rerun the intended item boundary:
 
 ```bash
 weaver load \
@@ -44,13 +44,13 @@ weaver load \
   --workspace-config workspace-development.yml
 ```
 
-A retry is a new Load against the state left by the previous run. If source changed during the correction, Build it first. Without fault tolerance, the first execution failure stops new scheduling; completed work remains applied. See [Recover failed work](../recovery/index.md) for stale catch-up and deliberate Table reconstruction.
+A retry is a new Load against the state the previous run left. If you changed source during the correction, Build it first. Without fault tolerance, the first execution failure stops new scheduling; completed work remains applied. See [Recover failed work](../recovery/index.md) for stale catch-up and deliberate Table reconstruction.
 
 ## Test cannot run
 
-A validation that could not run is different from a validation that ran and found bad data. Correct the reported query, binding, permission or runtime condition.
+A validation that could not run is different from a validation that ran and found bad data. For the former, correct the reported query, binding, permission or runtime condition.
 
-If the Test or Assumption source changed, Check and Build its owning item before rerunning Test:
+If you changed the Test or Assumption source, Check and Build its owning item before rerunning Test:
 
 ```bash
 weaver check
@@ -58,11 +58,11 @@ weaver build . --workspace-config workspace-development.yml
 weaver test --workspace-config workspace-development.yml
 ```
 
-Catalogue-mode Test executes installed validations. Source/file mode reads authored files using `--file` or a catalogue-free workspace, and records no installed history. A validation that ran and failed is a data finding; investigate the diagnostic rows and the data-producing work, then rerun Test after correction.
+Catalogue-mode Test executes installed validations. Source/file mode reads your authored files when you use `--file` or a catalogue-free workspace, and records no installed history. A validation that ran and failed is a data finding; investigate the diagnostic rows and the data-producing work, then rerun Test after correction.
 
 ## Health is Amber
 
-Amber usually means work is pending or stale rather than failed. Run Health, catch up non-Green Load work, run validations and inspect again:
+Amber usually means work is pending or stale rather than failed. Run Health, catch up non-Green Load work, run validations and check Health again:
 
 ```bash
 weaver health --workspace-config workspace-development.yml
@@ -71,7 +71,7 @@ weaver test --workspace-config workspace-development.yml
 weaver health --workspace-config workspace-development.yml
 ```
 
-A rebuilt Table or Folder remains Pending until Load settles. A rebuilt validation remains Pending until Test runs. If a validation is stale because its inputs changed, Load the data first and then rerun Test.
+A rebuilt Table or Folder remains Pending until Load settles. A rebuilt validation remains Pending until Test runs. If a validation is stale because its inputs changed, Load the data first, then rerun Test.
 
 ## Health is Red
 
@@ -85,17 +85,17 @@ Run Health again after the recovery operation. Red is not cleared by a successfu
 
 ## Runtime or authentication fails
 
-Probe the named workspace independently of the project:
+To probe the named workspace independently of the project, run Doctor:
 
 ```bash
 weaver doctor --workspace "Parcel Development"
 ```
 
-Doctor reports the authentication and Fabric capabilities it could probe. It does not read workspace configuration or prove that a later command selected the intended catalogue, targets or Environment.
+Doctor reports the authentication and Fabric capabilities it could probe. It does not read your workspace configuration or show that a later command selects the intended catalogue, targets or Environment.
 
-For authentication failures, confirm the credential path and workspace permission. Non-interactive execution does not fall back to browser sign-in.
+For authentication failures, confirm your credential path and workspace permission. Non-interactive execution does not fall back to browser sign-in.
 
-For Python Load or Test work, confirm that the selected workspace configuration names an Environment, that the Environment exists, and that its latest definition was published successfully:
+For Python Load or Test work, confirm that your workspace configuration names an Environment, that the Environment exists, and that its latest definition was published successfully:
 
 ```bash
 weaver fabric environment publish \
@@ -109,6 +109,6 @@ For exact command outcomes and catalogue evidence, use [Operation behaviour](../
 
 ## Windows output is garbled or cannot be decoded
 
-Weaver configures its stdout and stderr streams as UTF-8, including when Windows gives the process a legacy console code page. If a current Weaver command still reports an encoding failure, preserve the command, terminal host and `weaver --version`; the CLI should not require a permanent system-wide UTF-8 setting.
+Weaver configures its stdout and stderr streams as UTF-8, including when Windows gives the process a legacy console code page. If a Weaver command still reports an encoding failure, keep the command, terminal host and `weaver --version`; the CLI does not require a permanent system-wide UTF-8 setting.
 
-Programs that capture Weaver output must decode it as UTF-8. For example, use `encoding="utf-8"` with Python's `subprocess.run` rather than decoding the captured bytes with the Windows locale. If an older Python launcher or wrapper fails before Weaver configures its streams, set `PYTHONUTF8=1` for that process as a compatibility workaround, then rerun the command. This workaround is not an installation prerequisite.
+A program that captures Weaver output must decode it as UTF-8. For example, use `encoding="utf-8"` with Python's `subprocess.run` rather than decoding the captured bytes with the Windows locale. If an older Python launcher or wrapper fails before Weaver configures its streams, set `PYTHONUTF8=1` for that process as a compatibility workaround, then rerun the command. This workaround is not an installation prerequisite.

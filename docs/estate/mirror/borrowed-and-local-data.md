@@ -8,7 +8,7 @@ The result is not simply a second copy of every dataset. Weaver can represent un
 
 Immediately after mirroring, selected development items expose the source estate's installed data through local borrowed forms. A Warehouse uses Views over source relations. A Lakehouse uses shortcuts for stored Tables and Folders, with local wrapper Views where needed.
 
-Borrowed data remains owned and loaded at its source. The destination contains the installed definitions and execution work needed to reason about the estate, but a borrowed object is not a local load target.
+Borrowed data stays owned and loaded at its source. The destination holds the installed definitions and execution work Weaver needs to reason about the estate, but you cannot Load a borrowed object in development.
 
 A local object is different: its data and operational state belong to the development target. Load writes it in development, and later operations read its state from the destination catalogue.
 
@@ -20,13 +20,13 @@ Workspace configuration binds logical items to physical targets. A development c
 - the catalogue to mirror from; and
 - development targets for the same logical items used by the project.
 
-The logical identity `Warehouse/Operations`, for example, can bind to one Warehouse in production and another in development. The Weaver documents do not acquire development-specific identities. Selecting the configuration changes the physical estate in which operations work.
+The logical identity `Warehouse/Operations`, for example, can bind to one Warehouse in production and another in development. Your Weaver documents do not acquire development-specific identities; the configuration you select changes the physical estate in which operations work.
 
-Mirror settles those destination bindings before applying them. Logical Shortcuts are recreated against the final bindings, so relationships between project items continue to use logical identity rather than development target names.
+Mirror settles those destination bindings before applying them and recreates logical Shortcuts against the final bindings, so relationships between your project items continue to use logical identity rather than development target names.
 
 ## Build turns borrowed objects into local objects
 
-Build compares project source with the installed state copied from the source estate. An unchanged borrowed object keeps its borrowed representation. When Build selects a changed borrowed object, or an affected descendant within the Build selection, it replaces that representation with the authored local form.
+Build compares your project source with the installed state copied from the source estate. An unchanged borrowed object keeps its borrowed representation. When Build selects a changed borrowed object, or an affected descendant within the Build selection, it replaces that representation with the authored local form.
 
 This produces a **mixed development estate**:
 
@@ -36,9 +36,9 @@ changed objects    → local development data
 affected consumers → local development data
 ```
 
-The boundary can move with each Build. A developer can change one part of the project while unchanged dependencies continue to resolve to source data.
+The boundary can move with each Build. You can change one part of the project while unchanged dependencies continue to resolve to source data.
 
-Build selection still matters. Objects outside the selected items are not materialised merely because another item was built.
+Build selection still matters: Weaver does not materialise objects outside the items you select just because you built another item.
 
 ## `_.Mirror` records what is still borrowed
 

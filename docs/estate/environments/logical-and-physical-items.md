@@ -10,7 +10,7 @@ SemanticModel/Parcel   →     SemanticModel/Parcel_Dev
 Report/Parcel          →     Report/Parcel_Report_Dev
 ```
 
-The logical identity belongs to the project. The physical item belongs to a Fabric workspace.
+Your project owns the logical identity. A Fabric workspace owns the physical item.
 
 Item kinds remain aligned: a logical Lakehouse binds to a physical Lakehouse, and a logical Warehouse binds to a physical Warehouse.
 
@@ -34,7 +34,7 @@ Commands select logical items. Build resolves them through the chosen workspace 
 
 ## `workspace-config.yml` supplies an environment
 
-A workspace configuration can name:
+In a workspace configuration you can name:
 
 - the Fabric workspace;
 - the Warehouse containing the Weaver catalogue;
@@ -42,11 +42,11 @@ A workspace configuration can name:
 - a Fabric Environment for Python work;
 - a source catalogue to mirror when establishing a development estate.
 
-The catalogue is optional for standalone Power BI operations. When configured, its Warehouse stores Weaver state. It is separate from the physical target of a logical Warehouse unless both are deliberately hosted in the same Warehouse.
+The catalogue is optional for standalone Power BI operations. When configured, its Warehouse stores Weaver state. It is separate from the physical target of a logical Warehouse unless you deliberately host both in the same Warehouse.
 
 ## One project can bind to development and production
 
-For example, the same Warehouse project can carry these two configurations:
+For example, you can give the same Warehouse project these two configurations:
 
 ```yaml title="workspace-config.prod.yml"
 workspace: Parcel Production
@@ -64,7 +64,7 @@ targets:
   Warehouse/Operations: ParcelOperationsDev
 ```
 
-The project still authors `Warehouse/Operations` in both cases. Selecting the production configuration addresses the production workspace and catalogue and builds into `ParcelOperations`; selecting the development configuration addresses the development workspace and catalogue and builds into `ParcelOperationsDev`.
+You still author `Warehouse/Operations` in both cases. Selecting the production configuration addresses the production workspace and catalogue and builds into `ParcelOperations`; selecting the development configuration addresses the development workspace and catalogue and builds into `ParcelOperationsDev`.
 
 ```text
 same logical project + production config → production physical estate

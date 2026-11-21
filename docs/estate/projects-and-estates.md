@@ -51,15 +51,15 @@ A project can also contain workspace and workflow configuration, supporting code
 
 ## Build makes source changes operational
 
-Editing a Weaver document changes the project and its logical model. It does not change the installed or physical estate.
+When you edit a Weaver document, you change the project and its logical model. You do not change the installed or physical estate.
 
 ```text
 edit source → check source → Build → installed generation
 ```
 
-Build installs the selected change and publishes catalogue state for the resulting generation. Load and Test then use that installed state and its recorded bindings, including registered model refreshes and DAX validations. Build source-data definitions first and models/Reports in a separate call against the same project.
+Build installs the selected change and publishes catalogue state for the resulting generation. Load and Test then use that installed state and its recorded bindings, including registered model refreshes and DAX validations. You build source-data definitions first and models/Reports in a separate call against the same project.
 
-This separation allows source and installed state to differ during development. Use the project to understand the intended estate; use the catalogue and Health to understand the estate currently in operation.
+Because of this separation, your source and installed state can differ during development. Read the project for the intended estate; read the catalogue and Health for the estate currently in operation.
 
 ## Recorded operational state belongs to the installed generation
 
