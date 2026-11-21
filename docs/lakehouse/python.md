@@ -27,7 +27,7 @@ You need [Weaver installed](../getting-started/installation.md) and a disposable
 
     The Terminal wizard reads the existing bindings, so it only asks you to confirm. Choose `1`, then answer `n` to publishing the Environment.
 
-    Your Warehouse files stay as they were. Initialise also adds a separately named Warehouse Table that reads Landing; [Connect items and dependencies](../estate/connected-items.md) uses it later.
+    Your Warehouse files stay as they were. Initialise also adds a separately named Warehouse Table that reads Landing; [Connect items and dependencies](../estate/connected-items/index.md) uses it later.
 
     ```bash
     weaver initialise --workspace "Parcel Development" --project-folder . --lakehouse Landing --example Parcel
@@ -415,4 +415,4 @@ The Folder staged the file, and Weaver published it under `Files/Parcel/Events`.
 
 You now have the event history in a Table. The [Spark SQL CurrentStatus Table](spark-sql.md) answers the next question: where is each parcel now? The next page explains that generated transformation in the same project, alongside the Python Event and its Folder.
 
-Edits to either declaration take effect after Check and Build; `weaver load Lakehouse/Landing --stale` then catches up the changed installed work. Changing the `EVENTS` constant is a code change, not an external data-only incremental run. [Loading changes](incremental.md) supplies that later variation. Exact authored forms are in [Folder](../reference/weaver-documents/folder.md) and [Table](../reference/weaver-documents/table.md).
+Edits to either declaration take effect after Check and Build; `weaver load Lakehouse/Landing --stale` then catches up the changed installed work. Changing the `EVENTS` constant is a code change, not an external data-only incremental run. [Incremental load via bookmarks](incremental.md) supplies that later variation. Exact authored forms are in [Folder](../reference/weaver-documents/folder.md) and [Table](../reference/weaver-documents/table.md).

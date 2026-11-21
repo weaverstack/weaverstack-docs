@@ -33,7 +33,7 @@ PAGE_CONTEXT = {
     },
     # The page continues the Parcel estate established by the preceding guide;
     # its compact Health outputs do not repeat these two values.
-    "estate/catalogue-and-health.md": {
+    "estate/catalogue-and-health/index.md": {
         "workspace": "Parcel Development",
         "catalogue": "Warehouse/Catalogue",
     },

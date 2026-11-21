@@ -15,7 +15,7 @@ except WeaverError as exc:
 
 `WeaverError` is the common public root. The narrower classes below identify failures callers can usually classify. Other operation-specific subclasses may appear at runtime but are not top-level public imports; catch `WeaverError` when none of the exported categories fits.
 
-These are Python exceptions, not CLI exit-code categories or YAML validation records. For command-line recovery and output, use [Troubleshooting](../../basics/troubleshooting.md), [Automation](../../advanced/automation-and-execution-contexts.md), and the [CLI reference](../cli.md).
+These are Python exceptions, not CLI exit-code categories or YAML validation records. For command-line recovery and output, use [Troubleshooting](../../estate/operate/troubleshooting.md), [Sessions and execution contexts](../../estate/automation-and-deployment/sessions-and-hosts.md), and the [CLI reference](../cli.md).
 
 <!-- BEGIN GENERATED PYTHON -->
 
@@ -57,7 +57,7 @@ ConfigError(message: object, *, executor: str | None = None)
 
 Raised when workspace configuration or supplied configuration-dependent values are invalid. This category covers configuration parsing and validation, not every missing runtime prerequisite.
 
-See [Workspaces and Environments](../../estate/environments.md) for the configuration boundary.
+See [Workspaces and Environments](../../estate/environments/index.md) for the configuration boundary.
 
 ## `IdentityError`
 

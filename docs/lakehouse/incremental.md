@@ -1,4 +1,4 @@
-# Loading changes and bookmarks
+# Incremental load via bookmarks
 
 Once a carrier feed changes, reprocessing every file is not always necessary. A Folder records which files changed, and an incremental Table uses its own bookmark to read the changes since its last clean Load. This example follows an updated file and a removed file through to a Table update and an explicit deletion, without rebuilding the pipeline.
 
@@ -7,6 +7,15 @@ The starting point is the working [Landing project](tests.md), with Events, Even
 ## Let the consumer remember its progress
 
 The bookmark belongs to the consumer, not the source. It is the UTC instant immediately before that consumer's last clean Load began. Two Tables consuming the same Folder therefore read changes using separate boundaries; loading one does not move the other's bookmark. A clean no-op advances the boundary too; failed or rejected work does not.
+
+A Table that consumes a Folder reads its own boundary and asks the Folder for what changed after it:
+
+```python
+changed = source.files_since(self.bookmark())  # files inserted or updated after the bookmark
+deleted = source.deleted_since(self.bookmark())  # paths deleted after the bookmark
+```
+
+`files_since()` returns the managed files whose latest event is after the bookmark, and `deleted_since()` returns the paths deleted after it. Those two calls are the incremental read. The full Table below calls `self.bookmark()` once and passes the result to both.
 
 `Incremental: true` makes a Table's returned rows candidates for insert or update. Missing candidates do not delete existing rows. This example also returns explicit primary-key delete rows derived from removed filenames. [Table reference](../reference/weaver-documents/table.md#body-and-return-contract) owns all accepted return forms.
 
@@ -97,6 +106,8 @@ class Parcel__StatusFiles(Folder):
         staging = self.staging_folder()
         for source in sorted(source_root.glob("*.csv")):
             shutil.copy2(source, staging.path / source.name)
+        # Weaver compares this snapshot with the managed Folder and records each
+        # path's insert, update or delete time: the Folder's audit datetimes.
         return staging
 ```
 
@@ -133,7 +144,9 @@ from weaver import Table
 class Parcel__LiveStatus(Table):
     def read(self):
         source = Parcel__StatusFiles(self)
+        # Bookmark: when this Table's last clean Load began (1900-01-01 before the first).
         bookmark = self.bookmark()
+        # Audit datetimes: the Folder's insert/update and delete events after the bookmark.
         changed = source.files_since(bookmark)
         deleted = source.deleted_since(bookmark)
 
@@ -148,10 +161,12 @@ class Parcel__LiveStatus(Table):
 
         deletes = None
         if deleted:
+            # A deleted file leaves no row, so its filename becomes the delete key.
             parcel_ids = [(path.stem,) for path in sorted(deleted)]
             deletes = self.spark.createDataFrame(parcel_ids, ["Parcel ID"])
 
         if staged is None and deletes is None:
+            # Nothing after the bookmark: a no-op. The bookmark still advances.
             return None
         return staged, deletes
 ```
@@ -286,6 +301,7 @@ It should contain `P-1001` as `In transit` at `Central` and `P-1002` as `Deliver
 In a **SQL query connected to Catalogue**, record the Table's first successful boundary:
 
 ```sql
+-- This Table's bookmark: when its last clean Load began.
 select [Bookmark datetime]
 from [_].[Bookmark]
 where [Item type] = N'Lakehouse'
@@ -433,6 +449,6 @@ The Table read zero rows and made no changes. Its clean `return None` still adva
 
 The second Load changes source data only. Editing a Folder or Table instead changes the installed code only after Check and Build. For each rebuilt loadable object, Build resets current Load state and its bookmark to the initial boundary; the next Load must ask that new generation for all available history. Post-Build catch-up with `weaver load Lakehouse/Landing --stale` is therefore a different case from the data-only sequence above.
 
-With a working mutable source, [Shortcuts and existing data](shortcuts.md) explains how to choose a managed logical source or an external physical boundary. For shared run state and recovery, continue to [Catalogue and Health](../estate/catalogue-and-health.md) and [Recover failed work](../estate/recovery.md).
+With a working mutable source, [Shortcuts and existing data](shortcuts.md) explains how to choose a managed logical source or an external physical boundary. For shared run state and recovery, continue to [Catalogue and Health](../estate/catalogue-and-health/index.md) and [Recover failed work](../estate/recovery/index.md).
 
-The retained [incremental processing deep dive](../advanced/incremental-data-processing.md) covers source change evidence and other source types. [Load behaviour](../reference/operation-behaviour/load.md), [Python authored objects](../reference/python/objects.md) and [Row auditing and operational history](../advanced/row-auditing-and-operational-history.md) own exact processing and inspection rules.
+[Incremental loading](../reference/incremental-loading.md) covers source change evidence and other source types. [Load behaviour](../reference/operation-behaviour/load.md), [Python authored objects](../reference/python/objects.md) and [Row auditing and operational history](../estate/catalogue-and-health/row-auditing.md) own exact processing and inspection rules.

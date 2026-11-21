@@ -16,7 +16,7 @@ Use a Session or workflow's Fabric access timings:
 weaver session --workspace-config workspace-development.yml --timings
 ```
 
-Inside the Session, run the operation you are investigating, then exit to see its access timings. The accepted `verify` sequence from [workflows](automation-and-deployment.md#turn-the-accepted-sequence-into-a-workflow) can report timings with:
+Inside the Session, run the operation you are investigating, then exit to see its access timings. The accepted `verify` sequence from [workflows](automation-and-deployment/index.md#turn-the-accepted-sequence-into-a-workflow) can report timings with:
 
 ```bash
 weaver workflow verify --workspace-config workspace-development.yml --timings
@@ -49,5 +49,5 @@ Those measurements describe that workload, not the duration of another project. 
 ## Related tasks
 
 - [Limit simultaneous work](concurrency.md).
-- [Run only the relevant part](selective-runs.md).
-- [Inspect row auditing and operational history](../advanced/row-auditing-and-operational-history.md).
+- [Run only the relevant part](selective-runs/index.md).
+- [Inspect row auditing and operational history](catalogue-and-health/row-auditing.md).

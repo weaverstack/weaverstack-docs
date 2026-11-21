@@ -2,7 +2,7 @@
 
 Operations return frozen result and report values. Import every type on this page from `weaver`; nested implementation types named in annotations are not additional public import paths.
 
-The constructors below describe the returned shape and are useful in tests. Normal application code receives these values from the corresponding operation. Use `report()` for a consistent Notebook display. It delegates to the result's existing representation; existing `to_mapping()` and `as_dict()` names remain unchanged. These representations do not promise a version-independent JSON schema. See [Build, Load and Test](../../core-concepts/build-load-and-test.md) for lifecycle semantics and the operation's [CLI reference](../cli.md) for command behaviour.
+The constructors below describe the returned shape and are useful in tests. Normal application code receives these values from the corresponding operation. Use `report()` for a consistent Notebook display. It delegates to the result's existing representation; existing `to_mapping()` and `as_dict()` names remain unchanged. These representations do not promise a version-independent JSON schema. See [How Weaver works](../../getting-started/how-weaver-works/index.md) for lifecycle semantics and the operation's [CLI reference](../cli.md) for command behaviour.
 
 <!-- BEGIN GENERATED PYTHON -->
 
@@ -104,7 +104,7 @@ Returned by `build()`. `installation` distinguishes installed execution from pre
 
 Each value in `errors` exposes `action_id`, `error_type`, `message`, `artefact`, and `source_path`. `selection` and `installation_report` retain detailed in-memory evidence but are omitted by `to_mapping()`; the mapping contains source, items, bundle identity, installation mode, path, status and errors. It adds action counts/report path when an installation report exists and `dry_run`/`preview` for a read-only preview.
 
-See [`weaver build`](../cli/build.md) and [Build bundles and controlled installation](../../advanced/build-bundles-and-controlled-installation.md).
+See [`weaver build`](../cli/build.md) and [Build bundles and controlled installation](../../estate/automation-and-deployment/build-bundles.md).
 
 ## Mirror
 
@@ -203,7 +203,7 @@ WipeResult(
 
 Returned by `wipe()`. `items` is the item-level result; `reports` is the lower-level removal detail. `emptied` lists emptied physical targets in execution order. `unbound` contains the catalogue update result when claims were removed. `to_mapping()` includes the plan and item outcomes but not the lower-level `reports` tuple.
 
-See [`weaver wipe`](../cli/wipe.md) and [Recovery](../../estate/recovery.md) before using the destructive operation.
+See [`weaver wipe`](../cli/wipe.md) and [Recovery](../../estate/recovery/index.md) before using the destructive operation.
 
 ## Unbind
 
@@ -322,7 +322,7 @@ LoadRunReport(
 
 Returned by `load()`. `requested` preserves the requested item strings. `nodes`, `edges`, and `order` describe the settled run graph. `by_node` maps node IDs to reports. `succeeded` is true for `succeeded` and `succeeded_with_rejects` run statuses. Dry runs use the same shape, with `dry_run=True` and no execution evidence. `to_mapping()` and `from_mapping(payload)` round-trip the report.
 
-See [`weaver load`](../cli/load.md), [Incremental data processing](../../advanced/incremental-data-processing.md), and [Fault tolerance](../../core-concepts/fault-tolerance.md).
+See [`weaver load`](../cli/load.md), [Incremental loading](../incremental-loading.md), and [Fault tolerance](../../estate/recovery/fault-tolerance.md).
 
 ## Validation
 
@@ -439,4 +439,4 @@ Returned by `health()`. `sections` is `(load, tests, build)`. `status` is their 
 
 `current_load` summarises the workflow IDs, time range, and status counts behind the estate's current load state. `to_mapping()` emits the health format version, sections, this current-load summary, and load activity.
 
-See [`weaver health`](../cli/health.md) and [Run and inspect an estate](../../estate/operate.md).
+See [`weaver health`](../cli/health.md) and [Run and inspect an estate](../../estate/operate/index.md).

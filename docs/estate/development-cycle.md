@@ -8,7 +8,7 @@ Weaver gives you a consistent set of commands for that work. You can check your 
 edit → check → Build preview → Build → Load → Test → Health → repeat
 ```
 
-The example starts with the working [Landing → Operations project](connected-items.md) and `workspace-development.yml` from the mapping and Health pages. It corrects the depot on an earlier carrier event, then checks both the correction and the latest parcel statuses that should remain unchanged. The connection task sets up these items if they are not yet installed.
+The example starts with the working [Landing → Operations project](connected-items/index.md) and `workspace-development.yml` from the mapping and Health pages. It corrects the depot on an earlier carrier event, then checks both the correction and the latest parcel statuses that should remain unchanged. The connection task sets up these items if they are not yet installed.
 
 For another source-data estate, select its actual changed items in the same loop. A Warehouse-only reader can use `--item Warehouse/Operations` with the [StatusEvent project](../warehouse/tests.md). If you have added the native Parcel model and managed-source models to this project, use [the model-inclusive loop](#include-semantic-models-and-reports) below.
 
@@ -61,11 +61,11 @@ Build reconciles source against installed state, including changed definitions a
 
 Load and catalogue-mode Test use installed definitions. A source-data change needs another Load, while a changed project declaration needs Build before the installed work can use it. Source/file Tests offer an authoring check against edited validations, returning results separately from installed Test history.
 
-An item-wide run is usually the simplest starting point because it follows the installed item's dependency graph. Plain named Load has a narrower purpose: it selects matching objects without automatically adding or ordering dependencies. [Run part of an estate](selective-runs.md) explains deliberate seed expansion and its preview when item-wide work is too broad. Completed changes remain in place after a later failure; [Recovery](recovery.md) explains how to inspect partial changes and work from the state that remains.
+An item-wide run is usually the simplest starting point because it follows the installed item's dependency graph. Plain named Load has a narrower purpose: it selects matching objects without automatically adding or ordering dependencies. [Run part of an estate](selective-runs/index.md) explains deliberate seed expansion and its preview when item-wide work is too broad. Completed changes remain in place after a later failure; [Recovery](recovery/index.md) explains how to inspect partial changes and work from the state that remains.
 
 ## Include semantic models and Reports
 
-The [managed-source Parcel extension](../semantic-models/managed-sources.md) adds model work to the same loop. Its starting state includes the working Landing/Operations pipelines, the native inline `Parcel` model and linked Report, and the separate `ParcelWarehouse` model over Operations `Parcel.CurrentStatus`. The model and Report targets are already in `workspace-development.yml`, as described in [workspace mappings](environments.md#a-model-and-report-variation). Source-backed Import refresh requires an existing supported SQL connection.
+The [managed-source Parcel extension](../semantic-models/managed-sources.md) adds model work to the same loop. Its starting state includes the working Landing/Operations pipelines, the native inline `Parcel` model and linked Report, and the separate `ParcelWarehouse` model over Operations `Parcel.CurrentStatus`. The model and Report targets are already in `workspace-development.yml`, as described in [workspace mappings](environments/index.md#a-model-and-report-variation). Source-backed Import refresh requires an existing supported SQL connection.
 
 Build source-data definitions first, then changed model/Report definitions separately:
 
@@ -84,6 +84,6 @@ Use this iteration loop after deploying the model and Report targets; Build prev
 
 ## Optional: establish a mirrored development baseline
 
-[Mirror](mirror.md) provides an optional baseline for the ordinary development loop: development borrows existing source data rather than loading every unchanged object locally. It requires existing destination items, reads a source in this workspace or another, and empties the destination catalogue plus selected targets. Re-mirroring is a reset to a fresh baseline, not part of each edit.
+[Mirror](mirror/index.md) provides an optional baseline for the ordinary development loop: development borrows existing source data rather than loading every unchanged object locally. It requires existing destination items, reads a source in this workspace or another, and empties the destination catalogue plus selected targets. Re-mirroring is a reset to a fresh baseline, not part of each edit.
 
-[Run, test and inspect the estate](operate.md) is the installed-state path when no source change needs Build. [Build, Load and Test](../core-concepts/build-load-and-test.md) explains the operation boundaries behind both paths.
+[Run, test and inspect the estate](operate/index.md) is the installed-state path when no source change needs Build. [How Weaver works](../getting-started/how-weaver-works/index.md) explains the operation boundaries behind both paths.

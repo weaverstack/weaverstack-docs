@@ -117,7 +117,10 @@ sync = [
 ]
 for page, language, fixture, relative in sync:
     content = (a.docs / "examples" / fixture / relative).read_text().rstrip() + "\n"
-    assert content in blocks(a.docs / f"docs/lakehouse/{page}.md", language), (
+    assert content in blocks(
+        a.docs / f"docs/lakehouse/{page}.md",
+        language,
+    ), (
         page,
         relative,
     )

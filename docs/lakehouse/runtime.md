@@ -17,7 +17,7 @@ targets:
   Lakehouse/Landing: Landing
 ```
 
-In your project, the workspace and target names are the bindings written by Initialise. `environment` selects the Fabric Environment to attach; it does not create or publish it. [Workspace and environment mappings](../estate/environments.md) explains development and production destinations for the whole project.
+In your project, the workspace and target names are the bindings written by Initialise. `environment` selects the Fabric Environment to attach; it does not create or publish it. [Workspace and environment mappings](../estate/environments/index.md) explains development and production destinations for the whole project.
 
 Local Check needs no Fabric runtime. Desktop Lakehouse Build, Load and Test use hosted Spark, including when their source is Spark SQL. Build checks the hosted runtime before mutation; not calling authored `read()` does not remove that prerequisite. Load imports your installed Table and Folder code; Test imports or executes installed validations.
 

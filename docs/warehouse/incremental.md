@@ -1,4 +1,4 @@
-# Loading changes
+# Incremental load via bookmarks
 
 A keyed incremental Table can apply new rows, changed values and cancellations while its definition stays installed. Your SQL returns the candidate rows and delete keys; Weaver generates the target merge and records the consumer's progress.
 
@@ -62,7 +62,19 @@ It should return `P-1001` as `In transit` at `Central` and `P-1002` as `Delivere
 
 ## Let the consumer ask for its own changes
 
-The complete `Warehouse/Operations/Parcel.LiveStatus.sql` is:
+Weaver keeps each consumer's bookmark in the catalogue's `_.Bookmark` table, and every installed Warehouse sees it as a view. The Table therefore reads its own boundary with an ordinary query:
+
+```sql
+-- This Table's bookmark: when its last clean Load began.
+select [Bookmark datetime]
+from [_].[Bookmark]
+where [Item type] = N'Warehouse'
+  and [Item name] = N'Operations'
+  and [Schema name] = N'Parcel'
+  and [Object name] = N'LiveStatus';
+```
+
+The value is the UTC instant immediately before this Table's last clean Load began; before the first one it is the initial boundary, `1900-01-01`. Filtering the source on that instant is the whole incremental read: a Load asks only for what changed after it. The complete `Warehouse/Operations/Parcel.LiveStatus.sql` is:
 
 ```sql
 /*
@@ -83,6 +95,7 @@ Schema:
   Status: varchar(30)
   Depot: varchar(30)
 */
+-- Bookmark: when this Table's last clean Load began, read from the catalogue.
 declare @bookmark_datetime datetime2(6);
 set @bookmark_datetime = coalesce(
     (
@@ -93,7 +106,7 @@ set @bookmark_datetime = coalesce(
           and [Schema name] = N'Parcel'
           and [Object name] = N'LiveStatus'
     ),
-    cast('1900-01-01' as datetime2(6))
+    cast('1900-01-01' as datetime2(6))  -- initial boundary: no clean Load yet
 );
 
 -- Rows to insert or update
@@ -101,13 +114,13 @@ select [Parcel ID]
      , [Status]
      , [Depot]
 from [Source].[Parcel]
-where [Row update datetime] > @bookmark_datetime
+where [Row update datetime] > @bookmark_datetime  -- audit datetime after the bookmark
   and [Status] <> 'Cancelled';
 
 -- Keys to delete
 select [Parcel ID]
 from [Source].[Parcel]
-where [Row update datetime] > @bookmark_datetime
+where [Row update datetime] > @bookmark_datetime  -- audit datetime after the bookmark
   and [Status] = 'Cancelled';
 ```
 
@@ -223,6 +236,7 @@ order by [Parcel ID];
 It should contain the two seeded parcels. A clean Load sets the bookmark to the UTC instant immediately before that Load began. In a **SQL query connected to Catalogue**, record that boundary:
 
 ```sql
+-- This Table's bookmark: when its last clean Load began.
 select [Bookmark datetime]
 from [_].[Bookmark]
 where [Item type] = N'Warehouse'
@@ -352,4 +366,4 @@ A hard source deletion leaves no row for either SELECT. To propagate it, retain 
 
 Editing a Weaver document changes the source definition, not the installed one. Check and Build install that change; for each rebuilt loadable object, Build resets its bookmark to the initial boundary. The next Load must ask for all available history. That is why changing a VALUES constant and rebuilding it would not demonstrate this data-only loop.
 
-The [full incremental-processing explanation](../advanced/incremental-data-processing.md#the-incremental-table-contract) covers result forms and change-source design; [Load behaviour](../reference/operation-behaviour/load.md) owns exact bookmark, reload and failure rules. [Schemas, keys and protected data](schema-and-protection.md) follows from the next question: which data can you reconstruct, and which must stay outside a managed target?
+[Incremental loading](../reference/incremental-loading.md#return-contract) covers result forms and change-source design; [Load behaviour](../reference/operation-behaviour/load.md) owns exact bookmark, reload and failure rules. [Protecting data](../lakehouse/protecting-data.md) follows from the next question: which data can you reconstruct, and which must stay outside a managed target?

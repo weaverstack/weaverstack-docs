@@ -174,7 +174,7 @@ targets:
 
 The catalogue is not used as the notebook's default Lakehouse. `fabric notebook run` uses `--lakehouse` when supplied; otherwise it selects the one configured Lakehouse only when the configuration contains exactly one.
 
-If `ParcelRuntime` does not yet exist or its definition changed, publish it before the notebook run. [Configure workspaces and Fabric Environments](../../estate/environments.md) covers that boundary.
+If `ParcelRuntime` does not yet exist or its definition changed, publish it before the notebook run. [Configure workspaces and Fabric Environments](../../estate/environments/index.md) covers that boundary.
 
 ## Push the notebook definition
 
@@ -224,7 +224,7 @@ weaver fabric notebook push examples/parcel-notebook/notebooks/ParcelRefresh.py 
 
 The filename stem becomes the Fabric display name when `--name` is omitted. If that name does not exist, Weaver creates the Notebook and applies the optional description. If it exists, Weaver replaces the notebook definition; it does not update that item's existing description.
 
-Push transports only the `.py` or `.ipynb` notebook definition. It does not turn an ordinary Python file into a notebook, and local Notebook Resources are not included. If a Weaver project lives in the notebook's built-in Resources, move that project separately with Fabric Git and enable Resources-folder support there. [Portable execution between desktop and Fabric](../../advanced/portable-execution-between-desktop-and-fabric.md#2-move-the-project-both-ways-with-fabric-git) covers that project transport. Put required Python packages in the attached Environment and make other inputs available through Fabric items or services the notebook can access.
+Push transports only the `.py` or `.ipynb` notebook definition. It does not turn an ordinary Python file into a notebook, and local Notebook Resources are not included. If a Weaver project lives in the notebook's built-in Resources, move that project separately with Fabric Git and enable Resources-folder support there. [Portable execution between desktop and Fabric](../../estate/automation-and-deployment/portable-execution.md#2-move-the-project-both-ways-with-fabric-git) covers that project transport. Put required Python packages in the attached Environment and make other inputs available through Fabric items or services the notebook can access.
 
 The command reports whether it created or updated the item, its Fabric ID and the local source path. Treat a successful push as deployment evidence, not execution evidence.
 

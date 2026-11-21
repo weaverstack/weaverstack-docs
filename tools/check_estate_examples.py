@@ -41,7 +41,7 @@ def main():
         "continuous_project_checks": 0,
         "selection_plans": 0,
     }
-    for page in (root / "docs/estate").glob("*.md"):
+    for page in (root / "docs/estate").rglob("*.md"):
         text = page.read_text()
         for block in re.findall(
             r"^```bash[^\n]*\n(.*?)^```", text, re.MULTILINE | re.DOTALL
@@ -68,7 +68,7 @@ def main():
         assert all(
             sources(project).get(p) == content for p, content in original.items()
         )
-        connected = (root / "docs/estate/connected-items.md").read_text()
+        connected = (root / "docs/estate/connected-items/index.md").read_text()
         for relative, language in (
             ("Warehouse/Operations/shortcuts.yml", "yaml"),
             ("Warehouse/Operations/Parcel.LakehouseCurrentStatus.sql", "sql"),
@@ -82,7 +82,7 @@ def main():
         counts["continuous_project_checks"] += 1
         configs = re.findall(
             r"^```yaml[^\n]*\n(.*?)^```",
-            (root / "docs/estate/environments.md").read_text(),
+            (root / "docs/estate/environments/index.md").read_text(),
             re.MULTILINE | re.DOTALL,
         )
         config = next(block for block in configs if "workspace:" in block)
@@ -108,7 +108,7 @@ def main():
             ],
         }
         leading = (
-            (root / "docs/estate/selective-runs.md")
+            (root / "docs/estate/selective-runs/index.md")
             .read_text()
             .split("## Explore a larger branching selection")[0]
         )

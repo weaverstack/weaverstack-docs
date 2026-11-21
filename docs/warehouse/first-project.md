@@ -195,7 +195,7 @@ weaver check
 </figure>
 <!-- /cli-capture -->
 
-Build installs the definitions. Because Build owns `Operations`, keep data you cannot recreate in a separate item; [target ownership](schema-and-protection.md#keep-the-source-outside-the-managed-target) explains why.
+Build installs the definitions. Because Build owns `Operations`, keep data you cannot recreate in a separate item; [target ownership](../lakehouse/protecting-data.md#keep-irreplaceable-sources-outside-weaver-ownership) explains why.
 
 ```bash
 weaver build --item Warehouse/Operations

@@ -13,6 +13,8 @@ Every task uses the same `parcel` project. A later task adds to the folder you a
 
 Once two items work, [Coordinate your estate](../estate/index.md) shows how to connect them, map development and production, and read their results together.
 
+To see how Build, Load, Test and Health fit together before you start, read [How Weaver works](how-weaver-works/index.md).
+
 To have an AI coding agent do this work, see [Using Weaver with AI agents](../reference/ai-agents.md).
 
 <span id="getting-started"></span>

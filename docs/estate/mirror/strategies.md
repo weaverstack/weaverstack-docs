@@ -1,0 +1,63 @@
+# Mirror and materialisation strategies
+
+Mirror can establish more than one kind of development estate. You choose where each logical item's installed binding points, and each installed object either still reads source-owned data or has become local.
+
+## Choose the estate shape
+
+A Mirror always rebuilds a destination catalogue from an installed source catalogue. The items you select then determine which copied installations Weaver rebinds to development targets.
+
+| Strategy | Installation binding after Mirror | Data ownership |
+| --- | --- | --- |
+| Source-bound copied installation | The copied binding still names the source target. | Data and execution remain at the source target. |
+| Borrowed development target | The logical item is rebound to a development target containing borrowed physical forms and local execution work. | Rows or files remain source-owned. |
+| Local materialisation | A later Build replaces selected borrowed forms with authored local forms in the development target. | The materialised objects become development-owned and loadable there. |
+
+Unselected logical items remain source-bound in the copied catalogue. Selected items use the destination bindings settled for the Mirror. A catalogue can therefore describe both kinds at once.
+
+For a borrowed Warehouse item, source Tables and Views are exposed as local Views. For a borrowed Lakehouse item, stored Tables and Folders are exposed through OneLake shortcuts and source Views through local wrapper Views. Weaver installs the execution work needed in the development target, but borrowed data is not loadable there. `_.Mirror` records the source address and borrowed physical form for each object that remains borrowed.
+
+## Start with a catalogue-only branch
+
+A catalogue-only Mirror rebuilds the destination catalogue without emptying or rebinding an item target. Installed and current state is copied, while operational log and load-statistic history starts empty. The copied item bindings therefore continue to name source targets.
+
+This suits developing only one part of an estate locally: you fork the catalogue first, then Build the chosen item against its configured development target. Other items retain their copied source bindings.
+
+A catalogue-only branch can carry existing `_.Mirror` state because it does not add another borrowing hop. Rebinding items from an already mirrored source is refused: borrowed state records one source hop, not a chain of mirrors.
+
+## Mirror only the items that need development targets
+
+Selective mirroring rebinds the logical items you name. Within one workspace, unselected installations retain source bindings; installations left in another workspace are unclaimed by the destination catalogue. You avoid creating development copies of items you will not change.
+
+Weaver settles all selected destination bindings before it changes anything. It recreates logical Shortcuts against those final bindings and processes selected producer items before selected consumers where recorded Shortcuts require it. A selected destination cannot overlap a source read by the same run or another selected destination.
+
+The destination catalogue and targets are in the resolved Fabric workspace. The source catalogue may be in another workspace; from there only Lakehouse items can be selected, and an unselected item installed there is left unclaimed for a later Build to install in the destination. The [Mirror operation reference](../../reference/operation-behaviour/mirror.md) defines item selection, binding checks and destructive scope.
+
+## Let Build create a mixed estate
+
+Build compares your project source, the copied certification and destination inventory. An unchanged borrowed object keeps its borrowed form and its `_.Mirror` row. When a selected borrowed object changed, or is an affected selected descendant, Build replaces the borrowed form with the authored local form and, after the physical work succeeds, marks that object's mirror record deleted. The record stays as the history of the catalogue mirrored.
+
+Materialisation is therefore object-selective, not an automatic conversion of the whole mirrored estate:
+
+```text
+unchanged object             → borrowed source data
+changed selected object      → local development data
+affected selected descendant → local development data
+unselected same-workspace item → copied source binding
+unselected remote item         → unclaimed in destination
+```
+
+The result is a mixed estate. Load can run local materialised objects; borrowed objects continue to take their Load state from the catalogue where their data is owned. Health uses the installation and mirror records to inspect the corresponding state.
+
+## Retain protected borrowed contents
+
+A selected changed/impacted protected Table or Folder uses preserving materialisation rather than empty reconstruction: Warehouse CTAS, Lakehouse Delta shallow clone, or native recursive Folder copy. Its retained bookmark remains established. Protection does not make every physical shape change an in-place migration.
+
+Review the Build preview before this transition, because Weaver removes the destination wrapper/shortcut and and failed materialisation can leave partial local state without rollback. Delta shallow clones require source file retention; Folder copying does not promise an atomic point-in-time estate snapshot. Source content is not emptied by this path. [Protecting data](../../lakehouse/protecting-data.md) explains when the stronger external-ownership boundary is appropriate.
+
+## Treat re-mirroring as a reset
+
+A later Mirror does not refresh borrowed objects in place around local work. It empties and reconstructs the destination catalogue and every selected destination target in the settled plan. Local materialisations inside that boundary are replaced by a fresh branch from the source estate.
+
+Re-mirroring gives you a new source baseline; it is not an iteration step. Review the complete destination boundary first. Preflight failures leave destinations unchanged, but a failure after execution begins does not restore the previous catalogue or targets and does not undo destinations already completed.
+
+The ordinary edit, Build, Load, Test and Health loop belongs in [The development cycle](../development-cycle.md). Exact Mirror planning, confirmation and recovery behaviour is in the [Mirror operation reference](../../reference/operation-behaviour/mirror.md).

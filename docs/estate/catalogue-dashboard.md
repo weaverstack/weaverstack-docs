@@ -23,7 +23,7 @@ See the command reference for the Report’s [support status](../reference/cli/c
 
 Bring the source catalogues up to date by building their projects with the Weaver version used for Dashboard deployment. The deployment command checks the required catalogue tables and columns and identifies any that need updating before applying changes.
 
-Give the deployment identity Contributor access to the Dashboard workspace and read access to each catalogue. Binding connections requires model ownership and access to those connections; see [permissions](../reference/permissions.md). Continuing the [Parcel estate](catalogue-and-health.md), name the Dashboard and deploy it:
+Give the deployment identity Contributor access to the Dashboard workspace and read access to each catalogue. Binding connections requires model ownership and access to those connections; see [permissions](../reference/permissions.md). Continuing the [Parcel estate](catalogue-and-health/index.md), name the Dashboard and deploy it:
 
 ```bash
 weaver catalogue-dashboard --name "Catalogue Dashboard" --workspace-config workspace-development.yml
@@ -223,7 +223,7 @@ Installed items by kind, with their object counts, a status bar and when work wa
 
 ### Health
 
-The Load, Tests and Build findings, filtered by area and severity, including green rows. This page assesses what the catalogue records about itself. Physical inventory, unresolved references and a mirrored source's loads need [`weaver health`](catalogue-and-health.md).
+The Load, Tests and Build findings, filtered by area and severity, including green rows. This page assesses what the catalogue records about itself. Physical inventory, unresolved references and a mirrored source's loads need [`weaver health`](catalogue-and-health/index.md).
 
 <div class="dashboard-demo"><iframe src="../../assets/catalogue-dashboard/health.html" title="Catalogue Dashboard demo: Health" loading="lazy"></iframe></div>
 <p class="dashboard-demo-open" markdown>[Open Health full size](../assets/catalogue-dashboard/health.html){ target="_blank" }</p>
@@ -276,7 +276,7 @@ One deployed semantic model: its last refresh, DAX validations, and a bus matrix
 
 ## Beside a mirror
 
-Read a [mirror](mirror.md) together with the catalogue it mirrors, and the Dashboard compares them object by object. On the mirror's side, an object is:
+Read a [mirror](mirror/index.md) together with the catalogue it mirrors, and the Dashboard compares them object by object. On the mirror's side, an object is:
 
 - **borrowed**, drawn muted, while the mirror still borrows it from the source;
 - **changed**, marked Δ, when it was built in the mirror and its signature differs from the source object's;
@@ -285,4 +285,4 @@ Read a [mirror](mirror.md) together with the catalogue it mirrors, and the Dashb
 
 The source's copy of a borrowed or changed object is drawn the same way, and a borrowed object takes its source object's load state. The page key names both marks.
 
-Read over the mirror alone, the Dashboard marks only borrowed objects, and their loads are not observed: Health counts them as unobserved. [`weaver health`](catalogue-and-health.md) reads the source's loads.
+Read over the mirror alone, the Dashboard marks only borrowed objects, and their loads are not observed: Health counts them as unobserved. [`weaver health`](catalogue-and-health/index.md) reads the source's loads.

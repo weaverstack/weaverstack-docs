@@ -203,7 +203,7 @@ The explicit Build selection separates the outputs from their source foundation.
 
 Both models and Reports now exist, and each Report is bound to its own model. Both models return Delivery Count = 2. The deployed definitions differ as declared: ParcelOperations has Delivery Rate and the InternalCosts table; ParcelExecutive has no InternalCosts table and formats Delivery Count as `0 "delivered"`. If you added [shared policy](shared-policy.md), it applies to both outputs. No ParcelBase item was deployed.
 
-A second environment changes the outputs' destinations, not their source foundation. Its [workspace mappings](../estate/environments.md) supply the physical names; the same explicit four-item Build selection deploys the outputs there, followed by a refresh of the two models. The base needs no edit for a destination change.
+A second environment changes the outputs' destinations, not their source foundation. Its [workspace mappings](../estate/environments/index.md) supply the physical names; the same explicit four-item Build selection deploys the outputs there, followed by a refresh of the two models. The base needs no edit for a destination change.
 
 ## 4. Diagnose a missing base
 

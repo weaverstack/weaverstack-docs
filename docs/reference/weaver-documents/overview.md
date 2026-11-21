@@ -11,6 +11,10 @@ Data/validation declarations have four parts:
 3. **Metadata** — YAML in a Python module docstring or opening SQL `/* ... */` comment; shortcut, schema and programmable forms have their own schemas.
 4. **Body** — Python class, SQL program, shortcut declarations, schema YAML or one Warehouse procedure statement.
 
+For example, in `Warehouse/Operations/Parcel.Status.sql` the path assigns the document to `Warehouse/Operations`, the `Table ID` key makes it a Table named `Parcel.Status`, the rest of the opening comment is its metadata, and the query is the body Build installs as data work. Weaver checks that placement, filename, kind and declared identity agree.
+
+Semantic models and Reports are not Weaver documents in this sense. They keep their native TMDL and Report definitions, and Weaver adds its declarations through TMDL overlays and annotations, which play the role that metadata plays for SQL and Python. An overlay is a partial TMDL file beside the model, such as `Parcel.tmdl` for `Parcel.SemanticModel`; a shared `PowerBI/policy.tmdl` applies common declarations to several models, and a model's local overlay takes precedence. Build merges the native definition, shared policy and overlay, then applies annotations to the completed model. [Deploy a native model](../../semantic-models/native-tmdl.md) introduces the workflow, and [TMDL](../power-bi/tmdl.md) and [Annotations](../power-bi/annotations.md) own the syntax and precedence.
+
 Check and Build inspect data/validation Python structure statically without importing those authored classes. Power BI annotation files are a separate trusted-code surface loaded during project parsing; Build executes their transformations. Catalogue-backed Load/Test use installed definitions; source/file Test instead reads selected project validations.
 
 The first two path components are exactly `Lakehouse/<Item>` or `Warehouse/<Item>`. Lakehouse data documents live directly in `Tables/` or `Files/`; Warehouse Tables and Views live at the item root. Tests, Assumptions, schema metadata and Warehouse programmables live directly in their named directories, with no nested declaration directories.

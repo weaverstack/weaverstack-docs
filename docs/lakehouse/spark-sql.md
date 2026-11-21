@@ -76,4 +76,4 @@ The query returns:
 
 [Test these same Tables](tests.md) against an independent expected result and reject unknown event statuses.
 
-[Table reference](../reference/weaver-documents/table.md#spark-sql) owns the SQL body rules. For the shared ordering and selection model, see [Connect items and dependencies](../estate/connected-items.md).
+[Table reference](../reference/weaver-documents/table.md#spark-sql) owns the SQL body rules. For the shared ordering and selection model, see [Connect items and dependencies](../estate/connected-items/index.md).

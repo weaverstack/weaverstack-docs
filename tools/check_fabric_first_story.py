@@ -139,7 +139,7 @@ def main():
         r"^```bash[^\n]*\n(.*?)^```", reports, re.MULTILINE | re.DOTALL
     ):
         assert not re.search(r"weaver (?:load|test) Report/", block)
-    selection = (root / "docs/estate/selective-runs.md").read_text()
+    selection = (root / "docs/estate/selective-runs/index.md").read_text()
     assert all(
         term in selection.lower()
         for term in ("regex", "original", "seed", "--ancestors", "--descendants")
@@ -164,12 +164,12 @@ def main():
         root / f"docs/{name}.md"
         for name in (
             "estate/development-cycle",
-            "estate/recovery",
-            "estate/operate",
-            "core-concepts/state-and-health",
+            "estate/recovery/index",
+            "estate/operate/index",
+            "estate/catalogue-and-health/state-and-health",
             "semantic-models/native-tmdl",
             "semantic-models/validation",
-            "estate/environments",
+            "estate/environments/index",
         )
     ]
     for path in targets:
@@ -182,7 +182,7 @@ def main():
                     build_parser().parse_args(shlex.split(line)[1:])
                     counts["authored_commands_parsed"] += 1
     for name in (
-        "docs/estate/operate.md",
+        "docs/estate/operate/index.md",
         "docs/reference/cli/health.md",
     ):
         text = (root / name).read_text()
