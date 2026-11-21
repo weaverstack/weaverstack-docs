@@ -8,7 +8,7 @@ schema_type: TechArticle
 
 # Incremental loading
 
-An incremental Table or Folder applies only the changes since its own last clean Load. Three things make that work: a bookmark that records how far the consumer has processed, a return contract that turns source changes into target actions, and evidence in the source of what changed. This page specifies each. [Incremental load via bookmarks](../lakehouse/incremental.md) builds the pipeline step by step with a Lakehouse Folder source, and [the Warehouse task](../warehouse/incremental.md) does the same over a Warehouse source. [Load behaviour](operation-behaviour/load.md) owns selection, reload and failure outcomes.
+An incremental Table or Folder applies only the changes since its own last clean Load. Three things make that work: a bookmark that records how far the consumer has processed, an audit datetime on each source row or file that records when it changed, and a return contract that turns those changes into target actions. This page specifies each. [Incremental load via bookmarks](../lakehouse/incremental.md) builds the pipeline step by step with a Lakehouse Folder source, and [the Warehouse task](../warehouse/incremental.md) does the same over a Warehouse source. [Load behaviour](operation-behaviour/load.md) owns selection, reload and failure outcomes.
 
 Incremental loading and [incremental Build selection](../estate/selective-runs/build-selection.md) answer different questions. Build selection decides which definitions to install. Incremental loading decides which source changes an installed Table or Folder applies, and an ordinary data change needs no Build:
 
@@ -38,6 +38,32 @@ That holds until the target's data stops mirroring the source's changes, which i
 - **A maximum cannot tell a clean boundary from a partial one.** It reflects whatever rows the target holds, including those from a Load that applied only part of its input.
 
 A bookmark records progress rather than inferring it from the data. Weaver keeps one per consumer, sets it to the instant before a Load began, and advances it only when that Load completes cleanly, including a Load that found nothing. A change that lands while the Load is running is read again by the next one rather than missed. Weaver compares what it reads with the target and applies only genuine inserts and updates, so reading a change twice does not duplicate it.
+
+## The correct way: a bookmark and an audit datetime, kept in step
+
+Incremental loading needs two pieces of state, and they have to be maintained by the same pipeline rather than inferred from each other:
+
+- a **bookmark** for each consumer, recording how far it has processed; and
+- an **audit datetime** on each source row or file, recording when it last changed.
+
+A consumer then reads whatever changed after its bookmark: `audit datetime > bookmark`. Neither piece works alone. A bookmark without audit datetimes says when the consumer last ran but not what changed since. Audit datetimes without a bookmark say what changed but not relative to what, which is the gap the `max(...)` query tried to fill from the data.
+
+Weaver supplies both for the data it manages:
+
+| | Bookmark | Audit datetime |
+| --- | --- | --- |
+| Belongs to | The consumer: a Table or a Folder | Each source row or file |
+| Says | How far this consumer has processed | When this row or file last changed |
+| Weaver records | `_.Bookmark`: the UTC instant immediately before the consumer's latest clean Load began | On every managed Table row: insert, update and delete datetimes. For every managed Folder path: the time of its latest insert, update or delete event. |
+| Read with | `self.bookmark()` in Python, or a `select` from `[_].[Bookmark]` in SQL | `files_since()` and `deleted_since()` for a Folder; `[Row update datetime]` for a Warehouse Table, or `dataframe(row_audit_columns=True)` for a Python Table |
+
+Three properties keep them in step:
+
+- **The same basis.** Both are UTC, and Weaver writes both as part of the Load itself, so neither depends on someone remembering to maintain a column.
+- **Producers load before consumers.** Within a run, dependency order finishes the upstream Table or Folder before the consumer starts, so everything it wrote carries an audit datetime earlier than the consumer's new bookmark.
+- **The bookmark leads, and only a clean Load moves it.** It is set to the instant before the Load began, so a change that lands during the Load is later than the bookmark and is read by the next one. Failed, rejected and blocked Loads leave it where it was, so the consumer asks again for the same window.
+
+When the source is not a Weaver-managed Table or Folder, such as an external database, a CDC feed or an API, the source has to supply the audit datetime, with the conditions described under [source change evidence](#source-change-evidence). Weaver still supplies the bookmark.
 
 ## Worked example: files, a Delta Table and a Warehouse Table
 
@@ -99,7 +125,7 @@ The Folder is not incremental, and it does not need to be. Each Load hands Weave
 
 The source check runs before Weaver issues or populates staging, so an unavailable source raises `FileNotFoundError`, while an existing but empty directory is a valid empty snapshot.
 
-The first Load publishes both files. The Folder reports two insertions.
+The first Load publishes both files. The Folder reports two insertions, and each path now carries the time of its insert event. That time is the Folder's audit datetime.
 
 ### Lakehouse Delta Table: the consumer
 
@@ -153,7 +179,7 @@ class Parcel__LiveStatus(Table):
         return staged, deletes
 ```
 
-Three things in this code do the work:
+Both pieces of state are Weaver's here: the audit datetimes are the Folder's file events and the bookmark is the Table's own. Three things in this code do the work:
 
 - `self.bookmark()` is read once and passed to both calls. On the first Load it is `1900-01-01`, so `files_since()` returns both files.
 - A removed file leaves no row behind, so the Table derives the delete key from its filename: `P-1002.csv` becomes the `Parcel ID` `P-1002`.
@@ -195,7 +221,7 @@ Run the same Load again without changing the source. The Folder reports no chang
 
 ### Warehouse Table: a SQL consumer
 
-A Warehouse has no Folder history, so the source carries its own change evidence: each row in `[Source].[Parcel]`, held in a separate `ParcelSource` Warehouse that Weaver does not manage, carries a `[Row update datetime]`. A physical Shortcut presents it inside `Warehouse/Operations` as the item-local View `[Source].[Parcel]`:
+A Warehouse has no Folder history, so the source has to carry its own audit datetime. This source is not managed by Weaver: `[Source].[Parcel]` lives in a separate `ParcelSource` Warehouse, and its `[Row update datetime]` is maintained by whoever writes to it. Here Weaver supplies only the bookmark. A physical Shortcut presents it inside `Warehouse/Operations` as the item-local View `[Source].[Parcel]`:
 
 ```yaml title="Warehouse/Operations/shortcuts.yml"
 physical:
@@ -254,7 +280,7 @@ where [Row update datetime] > @bookmark_datetime
 Four details differ from the Lakehouse stage:
 
 - **The Table reads the bookmark itself.** Every installed Warehouse sees the catalogue's `_.Bookmark` as a view, so the `select [Bookmark datetime] from [_].[Bookmark]` is an ordinary query on the four-part key. The `coalesce` supplies the initial boundary if no row exists yet.
-- **The source's audit column does the work that `files_since()` did.** `[Row update datetime]` says when a source row changed and `@bookmark_datetime` says how far this Table has read, so comparing them selects the window.
+- **The source's audit column does the work that `files_since()` did.** `[Row update datetime]` says when a source row changed and `@bookmark_datetime` says how far this Table has read, so comparing them selects the window. Over a Weaver-managed Table in the same item the predicate is the same, `where [Row update datetime] > @bookmark_datetime`, but the column is then Weaver's managed audit column and needs no upkeep.
 - **A cancellation is a delete claim, not a row.** The first result set filters `Cancelled` out, and the second returns those parcels' keys. A parcel absent from the first result set is left alone, because absence is not a delete.
 - **`Dependencies: []` is required.** T-SQL inference does not resolve `[Source].[Parcel]` to a physical Shortcut. The override removes a managed producer edge that does not exist; it does not remove the need to read the source.
 
