@@ -57,7 +57,7 @@ Weaver supplies both for the data it manages:
 | Belongs to | The consumer: a Table or a Folder | Each source row or file |
 | Says | How far this consumer has processed | When this row or file last changed |
 | Weaver records | `_.Bookmark`: the UTC instant immediately before the consumer's latest clean Load began | On every managed Table row: insert, update and delete datetimes. For every managed Folder path: the time of its latest insert, update or delete event. |
-| Read with | `self.bookmark()` in Python, or a `select` from `[_].[Bookmark]` in SQL | `files_since()` and `deleted_since()` for a Folder; `[Row update datetime]` for a Warehouse Table or `row_update_datetime` for a Lakehouse Table; `dataframe(row_audit_columns=True)` for a Python Table |
+| Read with | `self.bookmark()` in Python, or a `select` from the item's `_.Bookmark` in Spark SQL and T-SQL | `files_since()` and `deleted_since()` for a Folder; `[Row update datetime]` for a Warehouse Table or `row_update_datetime` for a Lakehouse Table; `dataframe(row_audit_columns=True)` for a Python Table |
 
 Weaver keeps the two in step through three properties:
 
@@ -100,10 +100,21 @@ Your consumer tracks its own progress through its bookmark, and you read it in w
 | Authored in | Read it with |
 | --- | --- |
 | Python Table or Folder | `self.bookmark()`, a timezone-aware UTC `datetime`. It requires a catalogue. |
-| Python Folder source | `files_since(bookmark)` and `deleted_since(bookmark)` on the source Folder |
+| Spark SQL Table | A `select` from `_.Bookmark` on the four-part key. Each installed Lakehouse has the catalogue tables in its `_` schema as OneLake shortcuts. |
 | T-SQL Table | A `select` from `[_].[Bookmark]` on the four-part key. Each installed Warehouse sees `_.Bookmark` as a view. |
 
-`files_since()` returns the Folder's current managed files whose latest event is strictly after the bookmark. `deleted_since()` returns paths whose latest event is a deletion after it; those paths normally no longer exist, so your Table maps them to its own keys. `latest_files()` returns the current files from the newest change that left files in place.
+The key is the item type, item name, schema name and object name. A Lakehouse Table's schema name carries its area, so `Landing`'s `Parcel.LiveStatus` is `Tables/Parcel`. In Spark SQL you quote the catalogue's column names with backticks:
+
+```sql
+select `Bookmark datetime`
+from _.Bookmark
+where `Item type` = 'Lakehouse'
+  and `Item name` = 'Landing'
+  and `Schema name` = 'Tables/Parcel'
+  and `Object name` = 'LiveStatus'
+```
+
+Before the object's first clean Load the value is the initial boundary, `1900-01-01`.
 
 ## Tracking the incoming data
 
