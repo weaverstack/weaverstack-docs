@@ -121,7 +121,9 @@ class Parcel__StatusFiles(Folder):
         return staging
 ```
 
-You do not declare this Folder as incremental, and you do not need to. Each Load hands Weaver the complete current snapshot. Weaver compares it with the managed Folder and records what changed: which paths were inserted, which were updated and which were deleted, each with the time of the event. A byte-identical file is not an update. That record is the change feed. The Folder produces it, and each consumer reads it with its own bookmark.
+The Folder declares `Incremental: false`. For a Folder, that setting says how your `read()` and Weaver reconcile files, not whether changes are tracked. With `false`, `read()` stages a complete copy of the source on every Load, and Weaver makes the managed Folder match it, deleting any managed file the snapshot no longer contains. (With `Incremental: true`, or if you omit the key, files missing from staging are kept unless `read()` names them for deletion.) You pick the snapshot form here because it is the simpler contract: you copy everything and let Weaver work out the differences.
+
+Weaver compares each snapshot with the managed Folder and records what changed: which paths were inserted, which were updated and which were deleted, each with the time of the event. A byte-identical file is not an update. That record is the change feed. The Folder produces it, and each consumer reads it with its own bookmark. The incremental part of this pipeline is the Table that reads the feed, not the Folder.
 
 Weaver checks the source before it issues or populates staging, so an unavailable source raises `FileNotFoundError`, while an existing but empty directory is a valid empty snapshot.
 
