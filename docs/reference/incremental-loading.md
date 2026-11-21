@@ -39,17 +39,266 @@ That holds until the target's data stops mirroring the source's changes, which i
 
 A bookmark records progress rather than inferring it from the data. Weaver keeps one per consumer, sets it to the instant before a Load began, and advances it only when that Load completes cleanly, including a Load that found nothing. A change that lands while the Load is running is read again by the next one rather than missed. Weaver compares what it reads with the target and applies only genuine inserts and updates, so reading a change twice does not duplicate it.
 
-## One consumer across three Loads
+## Worked example: files, a Delta Table and a Warehouse Table
 
-The Warehouse task loads two parcels, changes the source so that `P-1001` is delivered and `P-1002` is cancelled, then loads again without changing anything. The bookmark moves like this:
+The same idea runs through three consumers: a Folder that snapshots files in a Lakehouse, a Delta Table that reads that Folder's changes, and a Warehouse Table that reads a changing Warehouse source. Each stage below shows the declaration, one source change and what the next Load did, so the bookmark can be followed from the first Load to the empty window. Provisioning the external source, Build and the dry-run previews are in the two tasks, [Incremental load via bookmarks](../lakehouse/incremental.md) for the Lakehouse stages and [for the Warehouse stage](../warehouse/incremental.md); this section picks up from the installed definitions.
 
-| Load | Source changes after the bookmark | Target action | Bookmark afterwards |
-| --- | --- | --- | --- |
-| First | Everything: the bookmark is `1900-01-01`. `P-1001` is In transit and `P-1002` is Delivered. | Insert both rows. | t₁, the instant before this Load began. |
-| Second | `P-1001` is now Delivered and `P-1002` is Cancelled. | Update `P-1001`. Delete `P-1002` by key. | t₂, a later instant. |
-| Third | None after t₂. | None. | t₃, advanced by the empty window. |
+The data is the same in every stage: two parcels, `P-1001` in transit at Central and `P-1002` delivered at South. The source then changes so that `P-1001` is delivered and `P-1002` is gone. The change leaves the declarations untouched, so no stage runs Build between its two Loads.
 
-The source's `[Row update datetime]` says when a source row changed. The bookmark says how far this consumer has processed. They are different quantities, and a query compares one with the other.
+### Lakehouse files: a snapshot Folder
+
+Carrier status arrives as one CSV file per parcel in an external archive Lakehouse, `ParcelSourceArchive`, outside Weaver's targets. A physical Folder Shortcut presents that archive inside the managed `Landing` Lakehouse:
+
+```python title="Lakehouse/Landing/shortcuts.py"
+from weaver import Shortcut
+
+
+Parcel__StatusSource = Shortcut(
+    shortcut_type="folder",
+    target_type="physical",
+    target="Lakehouse/ParcelSourceArchive/Files/parcel-status",
+)
+```
+
+The Folder copies that source into Weaver's staging area on every Load:
+
+```python title="Lakehouse/Landing/Files/Parcel__StatusFiles.py"
+"""
+Folder ID: Parcel.StatusFiles
+
+Description: Current parcel status snapshots, one CSV file per parcel.
+
+Lineage: A carrier snapshot represented by this example.
+
+File key: "*.csv"
+
+Incremental: false
+"""
+
+import shutil
+
+from shortcuts import Parcel__StatusSource
+from weaver import Folder
+
+
+class Parcel__StatusFiles(Folder):
+    def read(self):
+        source_root = Parcel__StatusSource(self).path()
+        if not source_root.is_dir():
+            raise FileNotFoundError(
+                f"Parcel status source directory not found: {source_root}"
+            )
+
+        staging = self.staging_folder()
+        for source in sorted(source_root.glob("*.csv")):
+            shutil.copy2(source, staging.path / source.name)
+        return staging
+```
+
+The Folder is not incremental, and it does not need to be. Each Load hands Weaver the complete current snapshot, and Weaver compares it with the managed Folder and records what changed: which paths were inserted, which were updated and which were deleted, each with the time of the event. A byte-identical file is not an update. That record is the change feed. The Folder produces it, and a consumer reads it with its own bookmark.
+
+The source check runs before Weaver issues or populates staging, so an unavailable source raises `FileNotFoundError`, while an existing but empty directory is a valid empty snapshot.
+
+The first Load publishes both files. The Folder reports two insertions.
+
+### Lakehouse Delta Table: the consumer
+
+`Parcel.LiveStatus` keeps one row per parcel. It asks the Folder for everything that changed after its own bookmark and turns removed files into explicit delete keys:
+
+```python title="Lakehouse/Landing/Tables/Parcel__LiveStatus.py"
+"""
+Table ID: Parcel.LiveStatus
+
+Description: The latest status supplied for each parcel.
+
+Lineage: Parcel status snapshots managed by Parcel.StatusFiles.
+
+Primary key: Parcel ID
+
+Incremental: true
+
+Schema:
+  Parcel ID: string
+  Status: string
+  Depot: string
+"""
+
+from Files.Parcel__StatusFiles import Parcel__StatusFiles
+from weaver import Table
+
+
+class Parcel__LiveStatus(Table):
+    def read(self):
+        source = Parcel__StatusFiles(self)
+        bookmark = self.bookmark()
+        changed = source.files_since(bookmark)
+        deleted = source.deleted_since(bookmark)
+
+        staged = None
+        if changed:
+            root = source.spark_path()
+            staged = (
+                self.spark.read.option("header", True)
+                .csv([f"{root}/{path.name}" for path in sorted(changed)])
+                .select(*self.columns())
+            )
+
+        deletes = None
+        if deleted:
+            parcel_ids = [(path.stem,) for path in sorted(deleted)]
+            deletes = self.spark.createDataFrame(parcel_ids, ["Parcel ID"])
+
+        if staged is None and deletes is None:
+            return None
+        return staged, deletes
+```
+
+Three things in this code do the work:
+
+- `self.bookmark()` is read once and passed to both calls. On the first Load it is `1900-01-01`, so `files_since()` returns both files.
+- A removed file leaves no row behind, so the Table derives the delete key from its filename: `P-1002.csv` becomes the `Parcel ID` `P-1002`.
+- When nothing changed, `read()` returns `None`. The Load succeeds without touching the target, and the bookmark still advances.
+
+The Folder import establishes the managed dependency, so an item-wide Load runs `Parcel.StatusFiles` before `Parcel.LiveStatus`.
+
+After the first Load, the Table holds both parcels. In a **SQL query connected to the catalogue Warehouse**, the Table's bookmark is the instant just before that read began. A Lakehouse Table is addressed in the catalogue by schema name `Tables/Parcel`:
+
+```sql
+select [Bookmark datetime]
+from [_].[Bookmark]
+where [Item type] = N'Lakehouse'
+  and [Item name] = N'Landing'
+  and [Schema name] = N'Tables/Parcel'
+  and [Object name] = N'LiveStatus';
+```
+
+Now change the source and leave both declarations alone. In a notebook with `ParcelSourceArchive` attached as its default Lakehouse, replace one file and delete the other:
+
+```python
+from pathlib import Path
+
+source_root = Path("/lakehouse/default/Files/parcel-status")
+(source_root / "P-1001.csv").write_text(
+    "Parcel ID,Status,Depot\nP-1001,Delivered,Central\n",
+    encoding="utf-8",
+)
+(source_root / "P-1002.csv").unlink()
+```
+
+```bash
+weaver load Lakehouse/Landing
+```
+
+The Folder snapshot now differs from the managed Folder by one updated path and one deleted path, and the Folder reports one update and one deletion. The Table's window, everything after its previous boundary, contains both events. `files_since()` returns `P-1001.csv`, which becomes an update, and `deleted_since()` returns `P-1002.csv`, which becomes a delete by primary key. The Table also reports one update and one deletion, and its only row is `P-1001`, now `Delivered`. The Folder's and the Table's counts are summed in the Load summary, so the summary shows two updates and two deletions for what is one business change.
+
+Run the same Load again without changing the source. The Folder reports no changes, `read()` returns `None`, the Table's rows stay as they were and its bookmark advances to the new instant.
+
+### Warehouse Table: a SQL consumer
+
+A Warehouse has no Folder history, so the source carries its own change evidence: each row in `[Source].[Parcel]`, held in a separate `ParcelSource` Warehouse that Weaver does not manage, carries a `[Row update datetime]`. A physical Shortcut presents it inside `Warehouse/Operations` as the item-local View `[Source].[Parcel]`:
+
+```yaml title="Warehouse/Operations/shortcuts.yml"
+physical:
+  "Warehouse/Operations/Source.Parcel": "Warehouse/ParcelSource/Source.Parcel"
+```
+
+The consumer is a T-SQL Table. The SQL reads its own bookmark from the catalogue and returns two result sets, the rows to upsert and the keys to delete:
+
+```sql title="Warehouse/Operations/Parcel.LiveStatus.sql"
+/*
+Table ID: Parcel.LiveStatus
+
+Description: Current state of active parcels.
+
+Lineage: Parcel records supplied through the physical Source.Parcel Shortcut.
+
+Primary key: Parcel ID
+
+Incremental: true
+
+Dependencies: []
+
+Schema:
+  Parcel ID: varchar(20)
+  Status: varchar(30)
+  Depot: varchar(30)
+*/
+declare @bookmark_datetime datetime2(6);
+set @bookmark_datetime = coalesce(
+    (
+        select [Bookmark datetime]
+        from [_].[Bookmark]
+        where [Item type] = N'Warehouse'
+          and [Item name] = N'Operations'
+          and [Schema name] = N'Parcel'
+          and [Object name] = N'LiveStatus'
+    ),
+    cast('1900-01-01' as datetime2(6))
+);
+
+-- Rows to insert or update
+select [Parcel ID]
+     , [Status]
+     , [Depot]
+from [Source].[Parcel]
+where [Row update datetime] > @bookmark_datetime
+  and [Status] <> 'Cancelled';
+
+-- Keys to delete
+select [Parcel ID]
+from [Source].[Parcel]
+where [Row update datetime] > @bookmark_datetime
+  and [Status] = 'Cancelled';
+```
+
+Four details differ from the Lakehouse stage:
+
+- **The Table reads the bookmark itself.** Every installed Warehouse sees the catalogue's `_.Bookmark` as a view, so the `select [Bookmark datetime] from [_].[Bookmark]` is an ordinary query on the four-part key. The `coalesce` supplies the initial boundary if no row exists yet.
+- **The source's audit column does the work that `files_since()` did.** `[Row update datetime]` says when a source row changed and `@bookmark_datetime` says how far this Table has read, so comparing them selects the window.
+- **A cancellation is a delete claim, not a row.** The first result set filters `Cancelled` out, and the second returns those parcels' keys. A parcel absent from the first result set is left alone, because absence is not a delete.
+- **`Dependencies: []` is required.** T-SQL inference does not resolve `[Source].[Parcel]` to a physical Shortcut. The override removes a managed producer edge that does not exist; it does not remove the need to read the source.
+
+The first Load reads both source rows, because the boundary is `1900-01-01`, and inserts them. The catalogue then holds this Table's bookmark, which can be read with the same query the Table itself uses.
+
+Change the source. Each update sets the row's audit datetime, which is later than the bookmark:
+
+```sql
+update [Source].[Parcel]
+set [Status] = 'Delivered',
+    [Row update datetime] = sysutcdatetime()
+where [Parcel ID] = 'P-1001';
+
+update [Source].[Parcel]
+set [Status] = 'Cancelled',
+    [Row update datetime] = sysutcdatetime()
+where [Parcel ID] = 'P-1002';
+```
+
+```bash
+weaver load Warehouse/Operations
+```
+
+The window contains both rows. `P-1001` arrives in the first result set and updates the target to `Delivered`. `P-1002` arrives in the second, as a delete key, so a source update becomes a target deletion. The Load reports one update and one deletion, and the target holds one row:
+
+| Parcel ID | Status | Depot |
+| --- | --- | --- |
+| P-1001 | Delivered | Central |
+
+`ParcelSource` still holds `P-1002` as `Cancelled`; Weaver deletes from its own target, never from the source. A further Load with no source change reads an empty window, leaves the target unchanged and advances the bookmark again.
+
+One limit applies to this query and to any audit-datetime predicate. A hard deletion in the source leaves no row for either result set, so it can never reach the target. Propagating it needs retained evidence: a tombstone, an audit table or CDC, kept until the consumer has read it.
+
+### What differs between the consumers
+
+| | Lakehouse Delta Table | Warehouse Table |
+| --- | --- | --- |
+| Change evidence | The Folder's record of inserted, updated and deleted paths | `[Row update datetime]` on each source row |
+| Reads its bookmark with | `self.bookmark()` | `select … from [_].[Bookmark]` |
+| Bookmark key in `_.Bookmark` | Schema name `Tables/Parcel` | Schema name `Parcel` |
+| Delete claim from | The filename of a deleted path | A cancelled row |
+| Empty window | `read()` returns `None` | Both result sets are empty |
+
+In both, the declarations stayed as they were, the second Load saw only the window since the first one's boundary, and each consumer's bookmark moved independently of the source's own timestamps.
 
 ## Return contract
 
@@ -84,33 +333,9 @@ A bookmark is the UTC instant immediately before a consumer's latest clean Load 
 | --- | --- |
 | Python Table or Folder | `self.bookmark()`, a timezone-aware UTC `datetime`. It requires a catalogue. |
 | Python Folder source | `files_since(bookmark)` and `deleted_since(bookmark)` on the source Folder |
-| T-SQL Table | a `select` from `[_].[Bookmark]` on the four-part key |
+| T-SQL Table | A `select` from `[_].[Bookmark]` on the four-part key. Each installed Warehouse sees `_.Bookmark` as a view. |
 
-In Python, a Table that consumes a managed Folder passes its own bookmark to the Folder:
-
-```python
-changed = source.files_since(self.bookmark())
-deleted = source.deleted_since(self.bookmark())
-```
-
-`files_since()` returns the Folder's current managed files whose latest event is strictly after the bookmark. `deleted_since()` returns paths whose latest event is a deletion after it; those paths normally no longer exist, so the Table maps them to its own keys, usually from the filename. `latest_files()` returns the current files from the newest change that left files in place.
-
-In a Warehouse, the catalogue's `_.Bookmark` is projected as a view in each installed Warehouse, so the Table's own query can read its boundary. The `coalesce` supplies the initial boundary when no row exists yet:
-
-```sql
-declare @bookmark_datetime datetime2(6);
-set @bookmark_datetime = coalesce(
-    (
-        select [Bookmark datetime]
-        from [_].[Bookmark]
-        where [Item type] = N'Warehouse'
-          and [Item name] = N'Operations'
-          and [Schema name] = N'Parcel'
-          and [Object name] = N'LiveStatus'
-    ),
-    cast('1900-01-01' as datetime2(6))
-);
-```
+`files_since()` returns the Folder's current managed files whose latest event is strictly after the bookmark. `deleted_since()` returns paths whose latest event is a deletion after it; those paths normally no longer exist, so the Table maps them to its own keys. `latest_files()` returns the current files from the newest change that left files in place.
 
 ## Source change evidence
 
@@ -128,14 +353,6 @@ One consumer owns one bookmark, but a query over several sources interprets that
 Each approach has a condition. The source has to keep a row or other evidence of every change until the consumer has read it, and audit datetimes have to share the bookmark's UTC time basis. A hard source deletion leaves no row for either result set, so propagating it needs retained evidence such as a tombstone, an audit table or CDC.
 
 > **Design background:** [Tracking changes](https://principlesofdataengineering.org/docs/efficient-stable-pipeline/tracking-changes/) covers how a source can record what changed. The contract on this page is self-contained.
-
-## Folders
-
-A Folder that is not incremental takes a complete snapshot of its source on every successful Load, so a source file that disappears is retired from the managed Folder. Weaver records the inserted, updated and deleted managed paths, and a byte-identical file is not an update.
-
-The source check runs before Weaver issues or populates staging. An unavailable source raises `FileNotFoundError`. An existing but empty source directory passes and is a valid empty snapshot.
-
-A Table that reads such a Folder gets a managed dependency from the Folder import, so an item-wide Load runs the Folder first. A physical Shortcut import inside the Folder records an external boundary, not a managed producer.
 
 ## Declaration changes
 
