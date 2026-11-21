@@ -153,6 +153,7 @@ nav:
           - Sessions and execution contexts: estate/automation-and-deployment/sessions-and-hosts.md
           - Build bundles and controlled installation: estate/automation-and-deployment/build-bundles.md
           - Portable execution between desktop and Fabric: estate/automation-and-deployment/portable-execution.md
+  - Reference:
       - reference/index.md
       - Permissions: reference/permissions.md
       - Using Weaver with AI agents: reference/ai-agents.md
