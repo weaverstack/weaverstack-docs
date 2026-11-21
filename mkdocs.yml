@@ -89,9 +89,7 @@ nav:
       - A first Lakehouse pipeline (Python): lakehouse/python.md
       - Working with Spark SQL: lakehouse/spark-sql.md
       - Testing Lakehouse data: lakehouse/tests.md
-      - Loading changes and bookmarks:
-          - lakehouse/incremental/index.md
-          - Incremental data processing: lakehouse/incremental/processing.md
+      - Loading changes and bookmarks: lakehouse/incremental.md
       - Shortcuts and existing data: lakehouse/shortcuts.md
       - Running Python in Fabric: lakehouse/runtime.md
   - Warehouse:
@@ -222,6 +220,7 @@ nav:
           - Workflow: reference/operation-behaviour/workflow.md
           - Session and runtime: reference/operation-behaviour/session-runtime.md
           - Fault and outcome vocabulary: reference/operation-behaviour/fault-and-outcome-vocabulary.md
+      - Incremental loading: reference/incremental-loading.md
       - Reading the catalogue: reference/catalogue-tour.md
       - Catalogue schema: reference/catalogue-schema.md
       - Build bundle format: reference/build-bundle-format.md

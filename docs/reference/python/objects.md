@@ -57,7 +57,7 @@ status = Parcel__CurrentStatus(spark, catalogue="Warehouse/Catalogue")
 assert status.object_id == "Parcel.CurrentStatus"
 ```
 
-The module-level metadata attached to an authored class remains part of the Python document. See [Build a Lakehouse pipeline with Python](../../lakehouse/python.md) for a complete document and [Incremental data processing](../../lakehouse/incremental/processing.md) for return forms across changed and unchanged inputs.
+The module-level metadata attached to an authored class remains part of the Python document. See [Build a Lakehouse pipeline with Python](../../lakehouse/python.md) for a complete document and [Incremental loading](../incremental-loading.md) for return forms across changed and unchanged inputs.
 
 ## `Folder`
 
@@ -125,7 +125,7 @@ load(
 
 `load()` requires a catalogue anchor and records the outcome before returning. `reload=True` resets the selected table's bookmark and load state, empties the target, then calls `read()`. `ignore_stability_threshold=True` waives declared delete and update limits for that invocation.
 
-See [Incremental data processing](../../lakehouse/incremental/processing.md) for bookmark, delete-claim, and reload behaviour.
+See [Incremental loading](../incremental-loading.md) for bookmark, delete-claim, and reload behaviour.
 
 ## `SparkSqlTable`
 

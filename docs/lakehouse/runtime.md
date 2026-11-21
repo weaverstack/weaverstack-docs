@@ -2,7 +2,7 @@
 
 Python and Spark SQL work runs in Fabric Spark, so it needs Weaver's packages in a published Fabric Environment. That runtime changes less often than your project: editing a Table or validation normally needs Check and Build, not another Environment publication. The Environment binding is separate from the Lakehouse and catalogue bindings in your workspace configuration.
 
-The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. This page explains that runtime setup and later package changes. The [incremental extension](incremental/index.md) uses the same published Environment and Landing binding.
+The [first Python task](python.md) creates `Environment/Weaver.Environment` and publishes it before Build. This page explains that runtime setup and later package changes. The [incremental extension](incremental.md) uses the same published Environment and Landing binding.
 
 ## Bind the runtime you will use
 

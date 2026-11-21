@@ -62,7 +62,18 @@ It should return `P-1001` as `In transit` at `Central` and `P-1002` as `Delivere
 
 ## Let the consumer ask for its own changes
 
-The complete `Warehouse/Operations/Parcel.LiveStatus.sql` is:
+Weaver keeps each consumer's bookmark in the catalogue's `_.Bookmark` table, and every installed Warehouse sees it as a view. The Table therefore reads its own boundary with an ordinary query:
+
+```sql
+select [Bookmark datetime]
+from [_].[Bookmark]
+where [Item type] = N'Warehouse'
+  and [Item name] = N'Operations'
+  and [Schema name] = N'Parcel'
+  and [Object name] = N'LiveStatus';
+```
+
+The value is the UTC instant immediately before this Table's last clean Load began; before the first one it is the initial boundary, `1900-01-01`. Filtering the source on that instant is the whole incremental read: a Load asks only for what changed after it. The complete `Warehouse/Operations/Parcel.LiveStatus.sql` is:
 
 ```sql
 /*
@@ -352,4 +363,4 @@ A hard source deletion leaves no row for either SELECT. To propagate it, retain 
 
 Editing a Weaver document changes the source definition, not the installed one. Check and Build install that change; for each rebuilt loadable object, Build resets its bookmark to the initial boundary. The next Load must ask for all available history. That is why changing a VALUES constant and rebuilding it would not demonstrate this data-only loop.
 
-[Incremental data processing](../lakehouse/incremental/processing.md#the-incremental-table-contract) covers result forms and change-source design; [Load behaviour](../reference/operation-behaviour/load.md) owns exact bookmark, reload and failure rules. [Schemas, keys and protected data](schema-and-protection/index.md) follows from the next question: which data can you reconstruct, and which must stay outside a managed target?
+[Incremental loading](../reference/incremental-loading.md#return-contract) covers result forms and change-source design; [Load behaviour](../reference/operation-behaviour/load.md) owns exact bookmark, reload and failure rules. [Schemas, keys and protected data](schema-and-protection/index.md) follows from the next question: which data can you reconstruct, and which must stay outside a managed target?

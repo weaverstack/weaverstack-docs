@@ -2,7 +2,7 @@
 
 Existing Fabric data does not need another authored source Table just to make it available locally. A Shortcut exposes it through a name in your Lakehouse. A physical Shortcut points to externally owned data; a logical Shortcut retains the producer's identity when another Weaver item owns it.
 
-The Landing pipeline remains unchanged. This optional task adds access to a separate carrier archive. The [incremental variation](incremental/index.md) uses this same physical boundary alongside the existing pipeline in `Lakehouse/Landing`, then snapshots the files and consumes their changes. That variation covers the complete loadable pipeline; this page explains the connection itself.
+The Landing pipeline remains unchanged. This optional task adds access to a separate carrier archive. The [incremental variation](incremental.md) uses this same physical boundary alongside the existing pipeline in `Lakehouse/Landing`, then snapshots the files and consumes their changes. That variation covers the complete loadable pipeline; this page explains the connection itself.
 
 ## Expose an external carrier archive
 
@@ -38,7 +38,7 @@ assert shortcut_root.is_dir(), f"Shortcut source not visible: {shortcut_root}"
 print(sorted(path.name for path in shortcut_root.glob("*.csv")))
 ```
 
-The path should expose the archive's current CSV files. That readback, not local Check, establishes source access. An unavailable directory is not an empty snapshot; the [incremental Folder](incremental/index.md#declare-the-snapshot-folder) guards this distinction before staging anything.
+The path should expose the archive's current CSV files. That readback, not local Check, establishes source access. An unavailable directory is not an empty snapshot; the [incremental Folder](incremental.md#declare-the-snapshot-folder) guards this distinction before staging anything.
 
 In installed Python `read()` code, use the generated reader for this local destination:
 
@@ -67,4 +67,4 @@ This declaration maps destination to source. It reuses the Event already loaded 
 
 This is an optional cross-item extension, not a requirement for the Lakehouse journey. [Connect items and dependencies](../estate/connected-items/index.md) owns the complete setup, source-before-consumer order and selection boundaries. Dependencies do not silently add an unselected item to Build or Load; select each item whose installed work should change. [Workspace mappings](../estate/environments/index.md) owns environment switching.
 
-Use [Shortcut reference](../reference/weaver-documents/shortcut.md) for accepted Folder, Table, schema and View forms. Warehouse physical View Shortcuts are restricted to the configured workspace; their YAML has no workspace override. To process this archive into rows, follow the [complete mutable-source variation](incremental/index.md).
+Use [Shortcut reference](../reference/weaver-documents/shortcut.md) for accepted Folder, Table, schema and View forms. Warehouse physical View Shortcuts are restricted to the configured workspace; their YAML has no workspace override. To process this archive into rows, follow the [complete mutable-source variation](incremental.md).

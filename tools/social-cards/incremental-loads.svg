@@ -17,5 +17,5 @@
     <path d="M73 0 L60 78" stroke="#1d44d4"/>
   </g>
   <rect x="76" y="548" width="1048" height="2" fill="#0c1520" opacity="0.17"/>
-  <text x="76" y="589" fill="#4b5661" font-family="Inter, Arial, sans-serif" font-size="20">docs.weaverstack.dev/lakehouse/incremental/processing/</text>
+  <text x="76" y="589" fill="#4b5661" font-family="Inter, Arial, sans-serif" font-size="20">docs.weaverstack.dev/reference/incremental-loading/</text>
 </svg>

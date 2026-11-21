@@ -48,7 +48,7 @@ Because Load does not reopen project source, a Table edited after the last Build
 
 Each consumer keeps its own bookmark of successful processing, so a failed node does not discard the progress of independent work that finished. Views, Tests, Assumptions, Shortcuts, Warehouse programmables and schema metadata have no Load step of their own, though loadable work can read from them. A Report has no Load or Test either; it uses its model's data.
 
-[Dependencies](../../estate/connected-items/dependencies.md) explains the graph, [Loading changes and bookmarks](../../lakehouse/incremental/index.md) shows bookmarks at work, and [Fault tolerance](../../estate/recovery/fault-tolerance.md) covers what happens when a node fails.
+[Dependencies](../../estate/connected-items/dependencies.md) explains the graph, [Loading changes and bookmarks](../../lakehouse/incremental.md) and [Loading changes](../../warehouse/incremental.md) show bookmarks at work, [Incremental loading](../../reference/incremental-loading.md) specifies the contract, and [Fault tolerance](../../estate/recovery/fault-tolerance.md) covers what happens when a node fails.
 
 ## Test checks the data
 

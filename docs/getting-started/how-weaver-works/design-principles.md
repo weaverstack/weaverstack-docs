@@ -38,7 +38,7 @@ Development follows the same rule. A code branch should not require another full
 
 This principle is not a universal “incremental” slogan. `Incremental` has specific Table and Folder meanings, with document-specific defaults. Rebuilding loadable work resets its current Load state and bookmark, and reload explicitly reconstructs selected Tables. Re-mirroring is also a deliberate reset: it reconstructs the selected destination boundary from a new source baseline rather than refreshing around local work.
 
-The detailed mechanisms are [incremental Build selection](../../estate/selective-runs/build-selection.md), [incremental data processing](../../lakehouse/incremental/processing.md) and [Mirror and materialisation strategies](../../estate/mirror/strategies.md).
+The detailed mechanisms are [incremental Build selection](../../estate/selective-runs/build-selection.md), [Incremental loading](../../reference/incremental-loading.md) and [Mirror and materialisation strategies](../../estate/mirror/strategies.md).
 
 ## Fabric-native by construction
 

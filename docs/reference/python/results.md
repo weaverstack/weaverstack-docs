@@ -322,7 +322,7 @@ LoadRunReport(
 
 Returned by `load()`. `requested` preserves the requested item strings. `nodes`, `edges`, and `order` describe the settled run graph. `by_node` maps node IDs to reports. `succeeded` is true for `succeeded` and `succeeded_with_rejects` run statuses. Dry runs use the same shape, with `dry_run=True` and no execution evidence. `to_mapping()` and `from_mapping(payload)` round-trip the report.
 
-See [`weaver load`](../cli/load.md), [Incremental data processing](../../lakehouse/incremental/processing.md), and [Fault tolerance](../../estate/recovery/fault-tolerance.md).
+See [`weaver load`](../cli/load.md), [Incremental loading](../incremental-loading.md), and [Fault tolerance](../../estate/recovery/fault-tolerance.md).
 
 ## Validation
 
