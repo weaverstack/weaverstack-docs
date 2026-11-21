@@ -15,7 +15,7 @@ Fabric workspace roles are Admin, Member, Contributor and Viewer.
 | `weaver initialise` | Creates the catalogue Warehouse, the Environment, Lakehouses and Warehouses that are missing. | Contributor | The workspace must already exist. |
 | `weaver fabric environment publish` | Publishes Weaver into a Fabric Environment. | Contributor | Updating the contents of an Environment selected as the workspace default requires workspace Admin, as does changing that default. Using the published Environment does not require Admin. |
 | `weaver build` | Creates and replaces objects in Lakehouses and Warehouses, creates missing semantic models and Reports, and records them in the catalogue. | Contributor | Read access to the data a [shortcut](weaver-documents/shortcut.md) points at. Binding semantic-model connections requires model ownership and access to the existing connection. |
-| `weaver load`, `weaver test` | Runs Spark through the Livy API, runs Warehouse procedures, refreshes semantic models and records results in the catalogue. | Contributor | Read access to source data. Across [several catalogues](../estate/catalogue-and-health.md), Contributor in each workspace whose objects run; a catalogue read only for context needs read access. |
+| `weaver load`, `weaver test` | Runs Spark through the Livy API, runs Warehouse procedures, refreshes semantic models and records results in the catalogue. | Contributor | Read access to source data. Across [several catalogues](../estate/catalogue-and-health/index.md), Contributor in each workspace whose objects run; a catalogue read only for context needs read access. |
 | `weaver health` | Reads the catalogue over T-SQL and lists Lakehouse storage. | Viewer for the catalogue; Contributor to list Lakehouse storage | Read access to each further catalogue given. |
 | `weaver execute` | Runs one T-SQL, Spark SQL, Python or DAX request against one item. | Viewer for a T-SQL `SELECT`; Contributor for anything that writes or runs Spark | DAX needs model Read and Build permissions and the Execute Queries setting below. |
 | `weaver wipe`, `weaver unbind` | Empties named destinations, or removes the catalogue's claims. | Contributor | None |
@@ -39,7 +39,7 @@ These settings are under **Tenant settings** in the Fabric admin portal. An admi
 
 | Setting | Section | Needed for |
 | --- | --- | --- |
-| Service principals can call Fabric public APIs | Developer settings | Running Weaver as a [service principal](../estate/automation-and-deployment.md). Weaver does not create workspaces or connections, so the separate setting for those is not needed. |
+| Service principals can call Fabric public APIs | Developer settings | Running Weaver as a [service principal](../estate/automation-and-deployment/index.md). Weaver does not create workspaces or connections, so the separate setting for those is not needed. |
 | Users can access data stored in OneLake with apps external to Fabric | OneLake settings | Running Weaver from a desktop or CI job, which reaches OneLake from outside Fabric. A Fabric notebook does not need it. |
 | Semantic Model Execute Queries REST API | Integration settings | DAX: semantic model Tests and Assumptions, `weaver execute dax`, `weaver doctor --semantic-model` and `weaver catalogue-dashboard export`. |
 | Allow visuals created using the Power BI SDK | Power BI visuals | The Catalogue Dashboard Report, which uses the HTML Content visual from AppSource. |

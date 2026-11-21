@@ -338,4 +338,4 @@ This edits the additional model’s measure, not Warehouse data or the native Pa
 
 ## Read the estate result
 
-In a catalogue-backed project, `weaver test` without item selectors runs installed Lakehouse, Warehouse and model validations. [Run and inspect the estate](../estate/operate.md) combines those outcomes with source loads and model refreshes. Exact diagnostics and recording boundaries belong in [Test behaviour](../reference/operation-behaviour/test.md).
+In a catalogue-backed project, `weaver test` without item selectors runs installed Lakehouse, Warehouse and model validations. [Run and inspect the estate](../estate/operate/index.md) combines those outcomes with source loads and model refreshes. Exact diagnostics and recording boundaries belong in [Test behaviour](../reference/operation-behaviour/test.md).

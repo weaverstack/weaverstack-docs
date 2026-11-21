@@ -21,7 +21,7 @@ Parcel__StatusEvent = Shortcut(
 )
 ```
 
-The Planning team's `Capacity` Warehouse then reads that Table through a logical Shortcut in `Warehouse/Capacity/shortcuts.yml`, as in [Connect items and dependencies](connected-items.md):
+The Planning team's `Capacity` Warehouse then reads that Table through a logical Shortcut in `Warehouse/Capacity/shortcuts.yml`, as in [Connect items and dependencies](connected-items/index.md):
 
 ```yaml
 logical:

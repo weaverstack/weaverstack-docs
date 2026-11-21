@@ -112,4 +112,4 @@ Without `--item`, every catalogue is reported with its whole installed estate. W
 
 **Report.** The Python operation returns `JoinedHealthReport`. Its status is the worst catalogue's status; `is_healthy` and CLI exit `0` require Green. Human output gives each catalogue's report under its label and reference, in the order given, then **Cycles across catalogues**. `--json` emits `format_version` `1`, `generated_at`, `as_of`, `status`, `complete` (every catalogue was assessed), `catalogues` (each with `label`, `catalogue`, `status`, `report` and `error`) and `cycles`. A cycle within one catalogue is that catalogue's `dependency_cycle` finding; `cycles` lists each cycle whose members span catalogues, once, by qualified node.
 
-See [`weaver health`](../cli/health.md), [Load](load.md), [Test](test.md), [State and health](../../core-concepts/state-and-health.md), and [Catalogue schema](../catalogue-schema.md).
+See [`weaver health`](../cli/health.md), [Load](load.md), [Test](test.md), [State and Health](../../estate/catalogue-and-health/state-and-health.md), and [Catalogue schema](../catalogue-schema.md).

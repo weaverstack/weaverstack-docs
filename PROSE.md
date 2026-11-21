@@ -10,7 +10,7 @@ Write for an engineer trying to complete a task, understand Weaver or look up an
 
 1. **State the current model.** Describe implemented behaviour directly. Do not document the cleaner product you wish existed.
 2. **Use plain, public vocabulary.** Name Weaver documents, logical and physical items, the catalogue, operations and Fabric surfaces as users encounter them. Do not derive public categories from modules or classes.
-3. **Give each page one job.** Getting started offers setup; item tasks produce one useful result; estate tasks coordinate working items; Reference owns exact interfaces and behaviour. Retained concept/deep-dive pages explain decisions at the point of use.
+3. **Give each page one job.** Getting started offers setup; item tasks produce one useful result; estate tasks coordinate working items; Reference owns exact interfaces and behaviour. Concept and deep-dive pages are sub-pages of the task that raises the question, and explain decisions at the point of use.
 4. **Explain the work before directing it.** Introduce the subject, the relevant situation and what the example will help the reader understand. Within worked steps, give the action and its observable result. A list of operations is not an introduction.
 5. **Put precision with its owner.** Link to Reference for syntax, defaults, selection, state transitions, outcomes and failure boundaries instead of repeating partial contracts.
 6. **Define meaningful scope once.** Distinguish host-specific behaviour, examples and versioned interfaces where the distinction changes a decision. Describe the supported scope directly; keep review provenance in maintainer evidence.
@@ -76,7 +76,7 @@ Do not mistake placing existing pages in new groups for a connected journey.
 Introduce normal TMDL first, then one useful built-in annotation in the native
 model task. Shared policy follows naturally; custom Python and composition are
 later model tasks. Overlays and annotations remain the model counterpart to SQL/
-Python engineering declarations, explained in the retained document concept.
+Python engineering declarations, explained in the Weaver documents reference.
 
 Weaver is Fabric-first. Present authoring tasks in the order Lakehouse, Warehouse,
 semantic model, Report. Use Fabric before Power BI when naming the platforms.
@@ -119,10 +119,11 @@ Start with two working items and the practical need to connect, map or inspect
 these together. Teach ordinary development before optional Mirror; keep destructive
 scope beside the action. Link exact execution and failure rules to Reference.
 
-### Retained concepts and deeper mechanisms
+### Concepts and deeper mechanisms
 
-Keep complete explanations searchable and link them from the task that creates
-the question. Stable URLs are useful; relocating everything is not a goal.
+Place a complete explanation as a sub-page of the task that creates the question,
+and link it from that task. A concept that specifies behaviour belongs in Reference.
+Do not collect concepts into one section of their own.
 
 ### Reference
 

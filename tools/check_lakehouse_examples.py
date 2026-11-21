@@ -63,7 +63,12 @@ counts = {
     "generated_modules": 0,
 }
 pages = sorted((a.docs / "docs/lakehouse").glob("*.md"))
-pages = [page for page in pages if page.stem != "index"]
+pages += [a.docs / "docs/lakehouse/incremental/index.md"]
+pages = [
+    page
+    for page in pages
+    if page.stem != "index" or page.parent.name == "incremental"
+]
 assert len(pages) == 6
 for page in pages:
     counts["pages"] += 1
@@ -117,7 +122,15 @@ sync = [
 ]
 for page, language, fixture, relative in sync:
     content = (a.docs / "examples" / fixture / relative).read_text().rstrip() + "\n"
-    assert content in blocks(a.docs / f"docs/lakehouse/{page}.md", language), (
+    assert content in blocks(
+        a.docs
+        / (
+            f"docs/lakehouse/{page}/index.md"
+            if page == "incremental"
+            else f"docs/lakehouse/{page}.md"
+        ),
+        language,
+    ), (
         page,
         relative,
     )
@@ -203,7 +216,7 @@ with (
             print("authored dependency edges:", sorted(expected_edges))
         counts["checkpoints"] += 1
     # Add the complete changing-source task alongside the generated pipeline.
-    snippets = blocks(a.docs / "docs/lakehouse/incremental.md", "python")
+    snippets = blocks(a.docs / "docs/lakehouse/incremental/index.md", "python")
     for filename, needle in (
         ("shortcuts.py", "from weaver import Shortcut"),
         ("Files/Parcel__StatusFiles.py", "class Parcel__StatusFiles"),

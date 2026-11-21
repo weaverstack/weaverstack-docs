@@ -13,7 +13,7 @@ A Session fixes the Fabric workspace. Operation arguments may supply a catalogue
 - `health` reads catalogue and physical state. `inventories=False` omits physical inventory reads.
 - `execute` runs ad hoc T-SQL, Spark SQL, Python or DAX against one item and records nothing. See [`weaver execute`](../cli/execute.md).
 
-The operation model and state transitions are in [Build, Load and Test](../../core-concepts/build-load-and-test.md). For command output, interaction policy and exit status, use the [CLI reference](../cli.md).
+The operation model and state transitions are in [How Weaver works](../../getting-started/how-weaver-works/index.md). For command output, interaction policy and exit status, use the [CLI reference](../cli.md).
 
 ## Plan before changing state
 

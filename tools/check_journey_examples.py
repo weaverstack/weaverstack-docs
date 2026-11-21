@@ -64,8 +64,13 @@ def main():
     pages = sorted((docs / "semantic-models").glob("*.md"))
     pages += sorted((docs / "reports").glob("*.md"))
     pages += [
-        docs / "estate" / f"{name}.md"
-        for name in ("selective-runs", "concurrency", "performance", "environments")
+        docs / "estate" / name
+        for name in (
+            "selective-runs/index.md",
+            "concurrency.md",
+            "performance.md",
+            "environments/index.md",
+        )
     ]
     pages += sorted((docs / "warehouse").glob("*.md"))
     assert len(pages) == 20

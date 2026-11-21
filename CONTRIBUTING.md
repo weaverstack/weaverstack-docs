@@ -24,11 +24,9 @@ Source and tests outrank design prose. Maintained projects are realism checks, n
 | Coordinate your estate | Work with connected items | Dependencies, environment mappings, state, development, operation, recovery and tuning. |
 | Reference | Look up precise behaviour | Syntax, defaults, selection, state changes, failures and API signatures. |
 
-Retained concept and deep-dive URLs stay searchable and are linked contextually.
-Before moving material, extend `acceptance/docs-item-first-2026-10/route-map.md`.
+A concept or deep-dive page is a sub-page of the task page that raises its question, linked from that task page. Material that specifies behaviour belongs in Reference. Old URLs are not preserved: when you move or merge a page, repoint every link to its new home and delete the old file rather than leaving a redirect stub.
 Record prior/next example checkpoints, direct-entry fixture and any intentional
-source-mode change. Retired routes preserve meaningful fragments as direct links,
-never chains. Human reader acceptance is separate from compiler/browser checks.
+source-mode change. Human reader acceptance is separate from compiler/browser checks.
 
 ## Write and connect the page
 

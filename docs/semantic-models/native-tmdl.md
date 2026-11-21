@@ -59,7 +59,7 @@ table Delivery
 
 `ParcelStatus.tmdl`, in the same native tables folder, carries the Warehouse-shaped sample. Later, [`Weaver.Source`](managed-sources.md#connect-the-existing-native-model) can connect that table to the Warehouse without changing its columns or the linked Report.
 
-`workspace-config.yml` already binds `SemanticModel/Parcel` and `Report/Parcel` to their physical names, alongside any existing source bindings. [Environment mappings](../estate/environments.md) covers choosing other physical destinations without changing the source.
+`workspace-config.yml` already binds `SemanticModel/Parcel` and `Report/Parcel` to their physical names, alongside any existing source bindings. [Environment mappings](../estate/environments/index.md) covers choosing other physical destinations without changing the source.
 
 ## 2. Check the project
 
@@ -311,4 +311,4 @@ The rule hides the many-side key from the field list, not the one-side key.
 
 When this convention belongs on several models, [share it in `PowerBI/policy.tmdl`](shared-policy.md). The next task keeps Parcel and its local overlay, adding common formatting and a calculation group.
 
-[Validate the model](validation.md) to add a repeatable DAX Assumption that the delivery count stays positive, or [connect a managed Fabric source](managed-sources.md) by adding a source-backed model alongside this inline model. [Weaver documents](../core-concepts/weaver-documents.md#native-models-overlays-and-annotations) explains how overlays fit beside native definitions.
+[Validate the model](validation.md) to add a repeatable DAX Assumption that the delivery count stays positive, or [connect a managed Fabric source](managed-sources.md) by adding a source-backed model alongside this inline model. [Weaver documents](../reference/weaver-documents/overview.md#document-model) explains how overlays fit beside native definitions.

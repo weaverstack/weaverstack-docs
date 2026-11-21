@@ -4,7 +4,7 @@ Independent branches can run at the same time, but they also share service and c
 
 ## Limit one run
 
-The example uses the Landing/Operations project from [selective runs](selective-runs.md) and its existing `workspace-development.yml`. This command caps the Landing Load at two scheduled nodes:
+The example uses the Landing/Operations project from [selective runs](selective-runs/index.md) and its existing `workspace-development.yml`. This command caps the Landing Load at two scheduled nodes:
 
 ```bash
 weaver load Lakehouse/Landing --concurrency 2 --workspace-config workspace-development.yml
@@ -167,5 +167,5 @@ For a fixed workload, waits, outcomes and resource usage show whether a higher l
 ## Related tasks
 
 - [Investigate performance and scale](performance.md).
-- [Run part of an estate](selective-runs.md).
+- [Run part of an estate](selective-runs/index.md).
 - [Look up Build, Load and Test options](../reference/cli.md).

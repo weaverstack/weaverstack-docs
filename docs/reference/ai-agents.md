@@ -39,9 +39,9 @@ Use an identity with write access to the development workspace and only the requ
 
 Review destructive plans before authorising them. `--yes` accepts the confirmation prompts for `wipe`, `unbind`, `mirror` and `workflow`. Build, Load and submitted SQL or Python can also change data, so apply the same permission and review policy to that work. Keep the agent's operations in development.
 
-With a desktop sign-in, the agent uses that sign-in's existing permissions. Use a service principal where appropriate for automation; see [Unattended execution](../estate/automation-and-deployment.md).
+With a desktop sign-in, the agent uses that sign-in's existing permissions. Use a service principal where appropriate for automation; see [Unattended execution](../estate/automation-and-deployment/index.md).
 
-For development against real data, [Mirror](../estate/mirror.md) lets the development workspace borrow production's Lakehouse data through shortcuts. **Mirror empties and reconstructs the destination catalogue and selected targets**; review that reset scope before creating a baseline. Unchanged data stays borrowed while edited objects can become local. Give the effective source-reading identity read access only. Shortcut identity depends on the access path; see [shortcut permissions](permissions.md#workspace-roles).
+For development against real data, [Mirror](../estate/mirror/index.md) lets the development workspace borrow production's Lakehouse data through shortcuts. **Mirror empties and reconstructs the destination catalogue and selected targets**; review that reset scope before creating a baseline. Unchanged data stays borrowed while edited objects can become local. Give the effective source-reading identity read access only. Shortcut identity depends on the access path; see [shortcut permissions](permissions.md#workspace-roles).
 
 ## Instructions for the agent
 

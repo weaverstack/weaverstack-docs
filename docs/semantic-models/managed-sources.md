@@ -39,7 +39,7 @@ table CurrentStatus
 
 The additional model composes the native Parcel foundation, so existing modelling policy still has its original Delivery/Depot tables to refine. `Weaver.Source` asks Build to generate this model’s CurrentStatus table from the managed Warehouse View. Its Import partition and columns are generated from the resolved source metadata. This is an additional model: it does not substitute a Warehouse partition into the native Delivery table. [Author from TMDL](from-tmdl.md#3-generate-from-a-managed-source-only-when-needed) explains source generation in detail.
 
-The project’s `targets` choose physical items. Optional `data_sources` mappings can independently choose which supported physical source a logical expression reads; see [workspace mappings](../estate/environments.md). Neither setting grants SQL access or creates a service connection.
+The project’s `targets` choose physical items. Optional `data_sources` mappings can independently choose which supported physical source a logical expression reads; see [workspace mappings](../estate/environments/index.md). Neither setting grants SQL access or creates a service connection.
 
 ## 2. Build and load the Warehouse first
 
@@ -186,7 +186,7 @@ CurrentStatus
 
 The model returns the same two rows as the Warehouse View: P-1001 / In transit / Central and P-1002 / Delivered / South.
 
-Adding a Lakehouse works the same way: Initialise retains both pipelines and adds `ParcelLakehouse` over Landing’s CurrentStatus Table. With Lakehouse and Warehouse selected, separately named Warehouse integration objects also connect the Lakehouse Event Table without replacing StatusEvent or changing the original View. [Connect items and dependencies](../estate/connected-items.md) follows that path.
+Adding a Lakehouse works the same way: Initialise retains both pipelines and adds `ParcelLakehouse` over Landing’s CurrentStatus Table. With Lakehouse and Warehouse selected, separately named Warehouse integration objects also connect the Lakehouse Event Table without replacing StatusEvent or changing the original View. [Connect items and dependencies](../estate/connected-items/index.md) follows that path.
 
 ## Connect the existing native model
 
@@ -202,7 +202,7 @@ table ParcelStatus
 ```
 <!-- /parcel-native-source -->
 
-If you followed [Connect items and dependencies](../estate/connected-items.md), use `Warehouse/Operations/Parcel.LakehouseCurrentStatus` here to continue the Lakehouse-to-Warehouse flow. Both sources have the same columns.
+If you followed [Connect items and dependencies](../estate/connected-items/index.md), use `Warehouse/Operations/Parcel.LakehouseCurrentStatus` here to continue the Lakehouse-to-Warehouse flow. Both sources have the same columns.
 
 Build the changed model, then refresh it after its source:
 
@@ -308,4 +308,4 @@ Load summary
 
 With the sample partition removed, `Weaver.Source` supplies the Warehouse partition at Build: the deployed ParcelStatus partition now navigates to `Parcel.CurrentStatus` in Operations. The columns, the Delivery data and the Report's binding to **Parcel** stay the same.
 
-[Compare DAX with source SQL](validation.md#compare-dax-with-source-sql) to validate a source-backed model in the same project. [Run and inspect the estate](../estate/operate.md) combines source Load, model refresh, Test and Health.
+[Compare DAX with source SQL](validation.md#compare-dax-with-source-sql) to validate a source-backed model in the same project. [Run and inspect the estate](../estate/operate/index.md) combines source Load, model refresh, Test and Health.

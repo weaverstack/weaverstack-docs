@@ -37,7 +37,7 @@ The repository is public. Committed files, acceptance evidence and pull-request 
 
 ## Public site structure
 
-The reader-facing navigation is **Getting started → Lakehouse → Warehouse → Semantic models → Reports → Coordinate your estate → Reference**. Home exposes the four items, estate coordination and a quiet Start here link. Item groups teach first success, validation and later useful capabilities. Estate coordination owns shared dependencies, mappings, state, development, recovery and tuning. Reference owns exact interfaces. Concepts and deeper mechanisms remain available through contextual links at stable URLs; Core/Basics/Advanced are no longer reader-facing destinations.
+The reader-facing navigation is **Getting started → Lakehouse → Warehouse → Semantic models → Reports → Coordinate your estate → Reference**. Home exposes the four items, estate coordination and a quiet Start here link. Item groups teach first success, validation and later useful capabilities. Estate coordination owns shared dependencies, mappings, state, development, recovery and tuning. Reference owns exact interfaces. A concept or deeper mechanism is a sub-page of the task page that raises the question, or sits in Reference when it specifies behaviour. There are no Core, Basics or Advanced sections, and old paths are not kept as redirects.
 
 Use the full collapsible navigation tree on the left, with the current section expanded and the page headings on the right. Do not restore horizontal section tabs or hide other top-level groups on desktop. Mobile retains the theme’s drawer and back controls.
 

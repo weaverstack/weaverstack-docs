@@ -2,7 +2,7 @@
 
 These classes are the public Python surface for Lakehouse object modules and authored shortcut declarations. Import them from `weaver`; the separately documented [semantic extension modules](semantic-models.md) are additional supported imports, not a blanket public surface for all internal modules.
 
-Python object classes are not the YAML metadata, SQL document, or CLI forms of the same concepts. See [Weaver documents](../../core-concepts/weaver-documents.md) for the document model, [Lakehouse pipeline](../../lakehouse/python.md) for an end-to-end authoring path, and [Shortcuts](../../lakehouse/shortcuts.md) for shortcut target forms.
+Python object classes are not the YAML metadata, SQL document, or CLI forms of the same concepts. See [Weaver documents](../weaver-documents/overview.md) for the document model, [Lakehouse pipeline](../../lakehouse/python.md) for an end-to-end authoring path, and [Shortcuts](../../lakehouse/shortcuts.md) for shortcut target forms.
 
 <!-- BEGIN GENERATED PYTHON -->
 
@@ -57,7 +57,7 @@ status = Parcel__CurrentStatus(spark, catalogue="Warehouse/Catalogue")
 assert status.object_id == "Parcel.CurrentStatus"
 ```
 
-The module-level metadata attached to an authored class remains part of the Python document. See [Build a Lakehouse pipeline with Python](../../lakehouse/python.md) for a complete document and [Incremental data processing](../../advanced/incremental-data-processing.md) for return forms across changed and unchanged inputs.
+The module-level metadata attached to an authored class remains part of the Python document. See [Build a Lakehouse pipeline with Python](../../lakehouse/python.md) for a complete document and [Incremental data processing](../../lakehouse/incremental/processing.md) for return forms across changed and unchanged inputs.
 
 ## `Folder`
 
@@ -125,7 +125,7 @@ load(
 
 `load()` requires a catalogue anchor and records the outcome before returning. `reload=True` resets the selected table's bookmark and load state, empties the target, then calls `read()`. `ignore_stability_threshold=True` waives declared delete and update limits for that invocation.
 
-See [Incremental data processing](../../advanced/incremental-data-processing.md) for bookmark, delete-claim, and reload behaviour.
+See [Incremental data processing](../../lakehouse/incremental/processing.md) for bookmark, delete-claim, and reload behaviour.
 
 ## `SparkSqlTable`
 

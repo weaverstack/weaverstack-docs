@@ -44,7 +44,7 @@ class ReviewPreparation(unittest.TestCase):
             self.assertNotIn("--no-example", page.read_text(), str(page))
 
     def test_rerun_heading_keeps_its_original_anchor(self):
-        text = (ROOT / "docs/estate/selective-runs.md").read_text()
+        text = (ROOT / "docs/estate/selective-runs/index.md").read_text()
         self.assertNotIn("## 8. Choose the right kind of rerun", text)
         self.assertIn(
             "## Choose the right kind of rerun {#8-choose-the-right-kind-of-rerun}",

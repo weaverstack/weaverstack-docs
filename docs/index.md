@@ -116,7 +116,7 @@ A Weaver project is ordinary Python, SQL, TMDL and configuration files organised
 </figure>
 </div>
 
-Dependencies connect the work; Weaver handles building, loading, testing and tracking its state. [Projects and estates](core-concepts/projects-and-estates.md) · [Connect items and dependencies](estate/connected-items.md).
+Dependencies connect the work; Weaver handles building, loading, testing and tracking its state. [Projects and estates](estate/projects-and-estates.md) · [Connect items and dependencies](estate/connected-items/index.md).
 
 - [Lakehouse](lakehouse/index.md): files and Python or Spark SQL transformations, with managed Tables and dependency ordering.
 - [Warehouse](warehouse/index.md): T-SQL SELECTs with the Table structure and load machinery generated around them.

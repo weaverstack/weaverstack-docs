@@ -8,7 +8,7 @@ This example starts with the linked pair from [Deploy a native Report](deploy.md
 
 The two configurations below describe an inline-model project in two existing disposable workspaces; neither destination needs a source workload. An estate with Lakehouse or Warehouse items also needs its working catalogue, runtime and source bindings. In that case, a copy of the working configuration provides the starting point, with only the intended destinations changed.
 
-Create `workspace-development.yml` and `workspace-production.yml` as shown below for the inline project. If these files already exist from the [estate pages](../estate/environments.md), add the two targets to each instead of replacing the files. Use disposable workspaces: the production label here illustrates a destination mapping, not a live release.
+Create `workspace-development.yml` and `workspace-production.yml` as shown below for the inline project. If these files already exist from the [estate pages](../estate/environments/index.md), add the two targets to each instead of replacing the files. Use disposable workspaces: the production label here illustrates a destination mapping, not a live release.
 
 ```yaml title="workspace-development.yml"
 workspace: Parcel Development
@@ -189,7 +189,7 @@ Each model returns Delivery Count = 2, and each Report's card shows **2**. Those
 
 An unrelated authored `byConnection` with no local model association stays as authored. Weaver does not reverse-map that external connection to a development or production model. The linked-pair behaviour above applies to the local association; [Report binding rules](../reference/power-bi/requirements-and-compatibility.md#report-binding) also describe same-name model precedence and the catalogue-backed Report-only case.
 
-The Report now follows its model into each workspace without a source edit. When you also need to move its Lakehouse or Warehouse sources, use [workspace and environment mappings](../estate/environments.md) for the whole project. Destination names alone do not change source expressions or credentials. For changes to the model itself, return to [native TMDL and overlays](../semantic-models/native-tmdl.md).
+The Report now follows its model into each workspace without a source edit. When you also need to move its Lakehouse or Warehouse sources, use [workspace and environment mappings](../estate/environments/index.md) for the whole project. Destination names alone do not change source expressions or credentials. For changes to the model itself, return to [native TMDL and overlays](../semantic-models/native-tmdl.md).
 
 ## Remove only the example items
 
